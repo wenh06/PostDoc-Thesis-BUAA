@@ -1,0 +1,21 @@
+%%%%%%%%%%%%%%%%%%%%%定义英文目录命令%%%%%%%%%%%%%%%
+\makeatletter
+\newcommand\engcontentsname{Contents}
+\newcommand\tableofengcontents{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\engcontentsname
+        \@mkboth{%
+           \MakeUppercase\engcontentsname}{\MakeUppercase\engcontentsname}}%
+    \@starttoc{toe}% !!!!Define a new contents!!!!
+    \if@restonecol\twocolumn\fi
+    }
+
+\newcommand\addengcontents[2]{%
+    \addcontentsline{toe}{#1}{\protect\numberline{\csname the#1\endcsname}#2}}
+\makeatother
+
+\newcommand\esection[1]{\addengcontents{section}{#1}}

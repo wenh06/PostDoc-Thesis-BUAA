@@ -1,0 +1,37 @@
+\documentclass[a4paper, 14pt]{book}
+
+\input{setup/package}
+\input{setup/Definition}
+\graphicspath{{figures/}}
+
+\setCJKmainfont[Path = fonts/, BoldFont = simhei.ttf]{simsun.ttc}
+\setCJKsansfont[Path = fonts/, BoldFont = simhei.ttf]{simsun.ttc}
+
+\begin{document}
+
+\input{setup/Englishlist}
+\input{preface/cover}
+
+\pagenumbering{Roman}
+
+\newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
+
+\baselineskip 18.8pt
+
+\include{body/abstract1}
+\include{body/abstract2}
+
+%\include{body/fuhao}
+
+\tableofcontents
+\tableofengcontents
+\mainmatter
+
+\include{body/chapter0}
+\include{body/chapter1}
+
+\backmatter
+\include{appendix/pub}
+\include{appendix/ack}
+
+\end{document}

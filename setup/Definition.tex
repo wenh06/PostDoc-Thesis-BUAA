@@ -1,0 +1,298 @@
+%===================== 重定义字体、字号命令 =============================%
+\newCJKfontfamily\simfang{simfang.ttf}[Extension = .ttf, Path=fonts/]
+\newCJKfontfamily\simhei{simhei.ttf}[Extension = .ttf, Path=fonts/]
+\newCJKfontfamily\simkai{simkai.ttf}[Extension = .ttf, Path=fonts/]
+\newCJKfontfamily\simsun{simsun.ttc}[Extension = .ttc, Path=fonts/]
+
+\newcommand{\song}{\simsun}     % 宋体   (Windows自带simsun.ttf)
+\newcommand{\fs}{\simfang}      % 仿宋体 (Windows自带simfs.ttf)
+\newcommand{\kai}{\simkai}      % 楷体   (Windows自带simkai.ttf)
+\newcommand{\hei}{\simhei}      % 黑体   (Windows自带simhei.ttf)
+% \newcommand{\li}{\CJKfamily{li}}        % 隶书   (Windows自带simli.ttf)
+% \newcommand{\you}{\CJKfamily{you}}      % 幼圆   (Windows自带simyou.ttf)
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}           % 字号设置
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont}       % 字号设置
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}            % 字号设置
+\newcommand{\erhao}{\fontsize{22pt}{\baselineskip}\selectfont}            % 字号设置
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}        % 字号设置
+\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}        % 字号设置
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}            % 字号设置
+%\newcommand{\xiaosihao}{\fontsize{12pt}{20pt}\selectfont}                % 字号设置
+\newcommand{\xiaosihao}{\fontsize{12pt}{14pt}\selectfont}                 % 字号设置
+\newcommand{\wuhao}{\fontsize{10.5pt}{12.6pt}\selectfont}                 % 字号设置
+\newcommand{\xiaowuhao}{\fontsize{9pt}{11pt}{\baselineskip}\selectfont}   % 字号设置
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}        % 字号设置
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}          % 字号设置
+%\iffalse
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%将目录中的第一章改成第1 章%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\chaptername}{第~\@arabic\c@chapter~章}
+\renewcommand{\@makechapterhead}[1]{%
+   \vspace*{-\baselineskip}%
+   {\normalfont \flushleft\Large\bfseries%
+   \chaptername \quad #1 \par\nobreak%
+   \vspace{1.5\baselineskip}
+   }}
+\renewcommand{\@makeschapterhead}[1]{%
+   \vspace*{-\baselineskip}%
+   {\normalfont \flushleft\Large\bfseries #1 \par\nobreak%
+   \vspace{1.5\baselineskip}
+   }}
+
+\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
+                        \if@mainmatter
+                          \refstepcounter{chapter}%
+                          \typeout{第~\thechapter~章}%
+                          \addcontentsline{toc}{chapter}%
+                                    {\protect\numberline{}%
+                                     第~\expandafter\noexpand\thechapter~ 章\hspace{0.8em}#1}%
+                        \else
+                          \addcontentsline{toc}{chapter}{#1}%
+                        \fi
+                     \else
+                       \addcontentsline{toc}{chapter}{#1}%
+                     \fi
+                     \chaptermark{#1}%
+                     \addtocontents{lof}{\protect\addvspace{10\p@}}%
+                     \addtocontents{lot}{\protect\addvspace{10\p@}}%
+                     \if@twocolumn
+                       \@topnewpage[\@makechapterhead{#2}]%
+                     \else
+                       \@makechapterhead{#2}%
+                       \@afterheading
+                     \fi}
+
+\makeatother
+
+%画两条页眉线
+%\pagestyle{plain}
+ \pagestyle{fancy}
+\newcommand{\makeheadrule}{%
+    \makebox[0pt][l]{\rule[.7\baselineskip]{\headwidth}{0.5pt}}%
+    \rule[.6\baselineskip]{\headwidth}{0.5pt}\vskip-.8\baselineskip}
+
+\makeatletter
+\renewcommand{\headrule}{%
+    {\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
+     \makeheadrule}}
+
+%定义普通页眉
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{第\thechapter 章\ #1}{}}
+\fancyhead[CO]{\song \leftmark}
+\fancyhead[CE]{\song 北京航空航天大学博士后出站报告}
+\fancyfoot[CE, CO]{\thepage}
+
+%定义章首页的页眉和页脚.
+\fancypagestyle{plain}{%
+\fancyhead{} % clear all header fields
+\fancyhead[CO]{\song \leftmark}
+\fancyhead[CE]{\song 北京航空航天大学博士后研究工作报告}
+\fancyfoot[CE, CO]{\thepage}}
+
+%定义标题格式
+\titleformat{\chapter}
+   % {\normalfont\bfseries\huge\filcenter\CJKfamily{hei}}
+    {\normalfont\LARGE\filcenter\rm}
+    %{\huge{\chaptertitlename}}
+    %{第~\CJKnumber{\thechapter}~章}
+    {\bf 第\,{\thechapter}\,章}
+    {18pt}{\rm}
+\titlespacing{\chapter}{0pt}{-3ex  plus .1ex minus .2ex}{1.5ex plus .1ex minus .2ex}
+
+\titleformat{\section}[hang]{\Large\bf}% add \bfseries if you want to use bold fonts
+    {\Large \ \thesection}{1em}{}{}
+\titlespacing{\section}%
+    {0pt}{1.5ex plus .1ex minus .2ex}{\wordsep}%{1ex plus .1ex minus .2ex}
+
+\titleformat{\subsection}[hang]{\large\bf}
+    {\large\ \thesubsection}{1em}{}{}
+\titlespacing{\subsection}%
+    {0pt}{1.5ex plus .1ex minus .2ex}{\wordsep}
+
+\raggedbottom
+\parskip 0.1cm
+\parindent 0.8cm
+
+\numberwithin{equation}{section}
+\newtheorem{theorem}{{\heiti 定理}}[section]
+\newtheorem{definition}{{\heiti 定义}}[section]
+\newtheorem{lemma}{{\heiti 引理}}[section]
+\newtheorem{corollary}{{\heiti 推论}}[section]
+\newtheorem{property}{{\heiti 性质}}[section]
+\newtheorem{prop}{{\heiti 命题}}[section]
+\newtheorem{assu}{{\heiti 假设}}[section]
+\newtheorem{Proof}{{\heiti 证明}}[section]
+\newtheorem{rem}{{\heiti 注记}}[section]
+\newtheorem{con}{{\heiti 条件}}[section]
+\newtheorem{example}{{\heiti 例}}[section]
+
+
+
+\newcommand{\nc}{\newcommand}
+%定义特殊短语
+\newcommand{\tbc}{\red{TO BE CONTINUED...}}
+\newcommand{\opp}{\red{OPEN PROBLEMS}.~}
+%定义颜色
+\newcommand{\red}{\textcolor{red}}
+% open questions
+\newcommand{\blue}{\textcolor{blue}}
+% suspicious result or derivation
+\newcommand{\green}{\textcolor{green}}
+\newcommand{\white}{\textcolor{white}}
+%定义空心大写字母
+ \nc{\bbA}{\mathbb{A}} \nc{\bbB}{\mathbb{B}} \nc{\bbC}{\mathbb{C}}
+ \nc{\bbD}{\mathbb{D}} \nc{\bbE}{\mathbb{E}} \nc{\bbF}{\mathbb{F}}
+ \nc{\bbG}{\mathbb{G}} \nc{\bbH}{\mathbb{H}} \nc{\bbI}{\mathbb{I}}
+ \nc{\bbJ}{\mathbb{J}} \nc{\bbK}{\mathbb{K}} \nc{\bbL}{\mathbb{L}}
+ \nc{\bbM}{\mathbb{M}} \nc{\bbN}{\mathbb{N}} \nc{\bbO}{\mathbb{O}}
+ \nc{\bbP}{\mathbb{P}} \nc{\bbQ}{\mathbb{Q}} \nc{\bbR}{\mathbb{R}}
+ \nc{\bbS}{\mathbb{S}} \nc{\bbT}{\mathbb{T}} \nc{\bbU}{\mathbb{U}}
+ \nc{\bbV}{\mathbb{V}} \nc{\bbW}{\mathbb{W}} \nc{\bbX}{\mathbb{X}}
+ \nc{\bbZ}{\mathbb{Z}}
+ %定义特殊符号
+ \newcommand{\bra}[1]{\langle#1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\proj}[1]{| #1\rangle\!\langle #1 |}
+\newcommand{\ketbra}[2]{|#1\rangle\!\langle#2|}
+\newcommand{\braket}[2]{\langle#1|#2\rangle}
+\newcommand{\wetw}[2]{|#1\rangle\wedge|#2\rangle}
+\newcommand{\weth}[3]{|#1\rangle\wedge|#2\rangle\wedge|#3\rangle}
+\newcommand{\wefo}[4]{|#1\rangle\wedge|#2\rangle\wedge|#3\rangle\wedge|#4\rangle}
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\abs}[1]{|#1|}
+%定义特殊运算符
+\def\xr{X_\r}
+\def\xrg{X_{\r^\G}}
+\def\axr{\abs{X_\r}}
+\def\axrg{\abs{X_{\r^\G}}}
+
+\def\bigox{\bigotimes}
+\def\dg{\dagger}
+\def\es{\emptyset}
+\def\la{\leftarrow}
+\def\La{\Leftarrow}
+\def\lra{\leftrightarrow}
+\def\Lra{\Leftrightarrow}
+\def\lc{\lceil}
+\def\rc{\rceil}
+\def\lf{\lfloor}
+\def\rf{\rfloor}
+\def\op{\oplus}
+\def\ox{\otimes}
+
+\def\bma{\begin{bmatrix}}
+\def\ema{\end{bmatrix}}
+%2=alphabet
+
+\def\a{\alpha}
+\def\b{\beta}
+\def\g{\gamma}
+\def\d{\delta}
+\def\e{\epsilon}
+\def\ve{\varepsilon}
+\def\z{\zeta}
+\def\h{\eta}
+\def\t{\theta}
+\def\i{\iota}
+\def\k{\kappa}
+\def\l{\lambda}
+\def\m{\mu}
+\def\n{\nu}
+\def\x{\xi}
+\def\p{\pi}
+\def\r{\rho}
+\def\s{\sigma}
+\def\ta{\tau}
+\def\u{\upsilon}
+\def\ph{\varphi}
+\def\c{\chi}
+\def\ps{\psi}
+\def\o{\omega}
+\def\G{\Gamma}
+
+
+\def\locc{\mathop{\rm LOCC}}
+\def\lu{\mathop{\rm LU}}
+\def\max{\mathop{\rm max}}
+\def\min{\mathop{\rm min}}
+\def\mspec{\mathop{\rm mspec}}
+\def\oghz{\mathop{\overline{\ghz}}}
+\def\per{\mathop{\rm per}}
+\def\ppt{\mathop{\rm PPT}}
+\def\pr{\mathop{\rm pr}}
+%\bQ, \bR, \bZ denotes the set of rational, real and integer numbers.
+\newcommand{\pp}[2]{{\partial #1\over\partial #2}}
+
+\nc{\cA}{{\cal A}} \nc{\cB}{{\cal B}} \nc{\cC}{{\cal C}}
+\nc{\cD}{{\cal D}} \nc{\cE}{{\cal E}} \nc{\cF}{{\cal F}}
+\nc{\cG}{{\cal G}} \nc{\cH}{{\cal H}} \nc{\cI}{{\cal I}}
+\nc{\cJ}{{\cal J}} \nc{\cK}{{\cal K}} \nc{\cL}{{\cal L}}
+\nc{\cM}{{\cal M}} \nc{\cN}{{\cal N}} \nc{\cO}{{\cal O}}
+\nc{\cP}{{\cal P}} \nc{\cQ}{{\cal Q}} \nc{\cR}{{\cal R}}
+\nc{\cS}{{\cal S}} \nc{\cT}{{\cal T}} \nc{\cU}{{\cal U}}
+\nc{\cV}{{\cal V}} \nc{\cW}{{\cal W}} \nc{\cX}{{\cal X}}
+\nc{\cZ}{{\cal Z}}
+
+%符号
+\def\ra{\rightarrow}
+\def\Ra{\Rightarrow}
+\def\su{\subset}
+\def\sue{\subseteq}
+\def\sm{\setminus}
+\def\we{\wedge}
+\def\Ps{\Psi}
+\def\Ph{\Phi}
+
+
+\def\diag{\mathop{\rm diag}}
+\def\dim{\mathop{\rm Dim}}
+\def\epr{\mathop{\rm EPR}}
+\def\ev{\mathop{\rm EV}}
+\def\tr{\mathop{\rm Tr}}
+\def\lin{\mathop{\rm span}}
+\def\rank{\mathop{\rm rank}}
+
+\def\ba{\begin{array}}
+	\def\ea{\end{array}}
+\def\be{\begin{equation}}
+\def\ee{\end{equation}}
+\def\bg{\begin{aligned}}
+	\def\eg{\end{aligned}}
+
+
+
+
+
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\catcode`@=11 \@addtoreset{equation}{section} \catcode`@=12
+
+ \allowdisplaybreaks
+%\setlength{\topskip}{0.3in}   %%%%%%表示正文和页眉的间距
+%\baselineskip 24pt            %%%%%%表示正文行距
+\makeatletter
+\renewenvironment{thebibliography}[1]
+%org     {\chapter*{\bibname
+%org    \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}}%
+     {\def\chaptername{}\chapter*{\bibname\@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}}%                            !!!
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \small%                                               !!!
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\makeatother
