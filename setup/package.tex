@@ -20,13 +20,23 @@
 \usepackage{float}
 \usepackage{diagbox}
 \usepackage{booktabs}%
-\usepackage{cite}
+% \usepackage{cite}
 \usepackage{bm} %
 \usepackage{arydshln}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{setspace}
-\usepackage{epstopdf}
+
+% 参考文献工具，加载biblatex宏包，
+% 其后端backend使用biber，%标注(引用)样式citestyle，
+% 著录样式 bibstyle都采用gb7714-2015样式，
+% 两者相同时可以合并为一个选项style
+% https://ctan.org/pkg/biblatex-gb7714-2015?lang=en
+% https://www.overleaf.com/learn/latex/Articles/Getting_started_with_BibLaTeX
+\usepackage[backend=biber,style=gb7714-2015]{biblatex}
+\addbibresource[location=local]{references.bib}
+
+
 \numberwithin{algorithm}{section}%让算法按节编号！
 \floatname{algorithm}{算法}%将Algorithm替换为‘算法’
 
