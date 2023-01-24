@@ -5,29 +5,41 @@
 Introduction and Preliminaries }}\numberline\,}
 \markboth{第\,1\,章\ \
 绪论及预备知识}{北京航空航天大学博士后研究工作报告}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{绪论}
 \addcontentsline{toe}{section}{{1.1\ \ Introduction}\numberline\,}
 \label{sec:introduction}
 
-% almost finished
+% finished
 
-随着人工智能、大数据等技术的飞速发展，特别是物联网(Internet of Things, IoT)的快速普及，可用于机器学习研究的数据呈爆发式增长，其来源与分布的形式也越来越多样化。这种变化趋势给机器学习的研究与应用带来了前所未有的挑战，也提供了崭新的发展机遇。
+随着人工智能(Artificial Intelligence, AI)、大数据(Big Data)等技术的飞速发展，特别是物联网(Internet of Things, IoT)的快速普及，可用于机器学习研究的数据呈爆发式增长，其来源与分布的形式，以及来自实际应用的需求也越来越多样化。这种变化趋势给机器学习的研究与应用带来了前所未有的挑战，也提供了崭新的发展机遇。
 
-传统上来说，机器学习的范式是将要研究的数据集中到一起，例如一个数据中心，进行建模方法、优化算法等方面的研究。然而随着上文提到的研究数据来源与分布的形式的多样化，将数据集中到一起面临越来越大的困难。举例来说，执行某一类任务的物联网设备往往数量庞大，数量级以百万乃至千万计，其产生的数据总量巨大。但是物联网设备的通信带宽往往不高，相互之间的通信，以及与数据中心之间的通信往往会有较高的延迟。在这种场景下，将感兴趣的数据集中到一起进行研究，是极其困难，成本非常高的。与此同时，随着人们的隐私保护意识越来越强，相关的法律法规，例如欧盟2018年正式生效的《General Data Protection Regulation》，越来越严格，收集用户的数据也越来越困难\citep{Albrecht_2016}。例如，用户的键盘输入数据可以用于训练输入自动补全的模型，提高用户输入效率\citep{fl_keyboard}。一般来说，通信带宽不是这类数据共享的瓶颈，但是基于隐私法律法规的限制，收集此类数据限制极大。还有一些类型的数据是具有高度机密性的数据，例如医疗、金融数据。相关的医疗机构之间或者金融机构之间往往不会进行数据共享。
+传统上来说，机器学习的范式是将要研究的数据集中到一起，例如一个数据中心，进行统计分析、建模方法、优化算法等方面的研究。然而随着上文提到的研究数据来源与分布的形式的多样化，以及法律法规等其他因素的制约，将数据集中到一起面临越来越大的困难。举例来说，执行某一类任务的物联网设备往往数量庞大，数量级以百万乃至千万计，其产生的数据总量巨大。但是物联网设备的通信带宽往往不高，相互之间的通信，以及与数据中心之间的通信往往会有较高的延迟。在这种场景下，将感兴趣的数据集中到一起进行研究，是极其困难，成本非常高的。与此同时，随着人们的隐私保护意识越来越强，相关的法律法规，例如欧盟2018年正式生效的《General Data Protection Regulation》，越来越严格，收集用户的数据也越来越困难\citep{Albrecht_2016}。例如，用户的键盘输入数据可以用于训练输入自动补全的模型，提高用户输入效率\citep{fl_keyboard}。一般来说，通信带宽不是这类数据共享的瓶颈，但是基于隐私法律法规的限制，收集此类数据限制极大。还有一些类型的数据是具有高度机密性的数据，例如医疗、金融数据。相关的医疗机构之间或者金融机构之间往往不会进行数据共享。
 
 在很多场景下，数据孤岛的效应比较突出：各个数据持有方持有的数据量严重不平衡，分布差异性大。如果各个数据持有方仅仅依赖各自拥有的本地数据进行模型训练，得到的机器学习模型往往是严重过拟合的，实际使用效果往往不佳。
 
-因此，如何在尽可能地保证质量的前提下，高效率地进行分布式的机器学习模型的训练，这一问题的重要性越来越突出。因为场景的多样性，或者说数据分布的多样性，以及相应需求的多样性，一个普适的、能满足所有需求的分布式机器学习模型训练的范式是不存在的，很多时候必须有侧重地针对某一部分需求设计相应的分布式学习方法，例如侧重隐私性的差分隐私方法（Differential Privacy）\citep{Dwork_2008_DP}, 侧重模型训练效果的优化算法设计\citep{boyd2011distributed}等。这些问题还有很多亟待改进与完善，具有关阔的研究前景与巨大的应用价值。
+因此，如何在尽可能地保证质量以及不进行敏感数据传输的前提下，高效率地进行分布式的机器学习模型的训练，同时使得每一个参与方都获得模型效果提升等形式的收益，最大限度的利用大数据带来的便利与优势，这一问题的重要性越来越突出。因为场景的多样性，或者说数据分布的多样性，以及相应需求的多样性，一个普适的、能满足所有需求的分布式机器学习模型训练的范式是不存在的，很多时候必须有侧重地针对某一部分需求设计相应的分布式学习方法，例如侧重隐私性的差分隐私方法（Differential Privacy）\citep{Dwork_2008_DP}, 侧重模型训练效果的优化算法设计\citep{boyd2011distributed}等。这些问题还有很多亟待改进与完善，具有关阔的研究前景与巨大的应用价值。
 
 \section{联邦学习的起源与发展}
 \addcontentsline{toe}{section}{{1.2\ \ Origin and Development of Federal Learning}\numberline\,}
 \label{sec:fl_origin}
 
-联邦学习 Federated Learning 这个名词首次由Google的研究人员McMahan等人于2016年在文章 \emph{Communication-Efficient Learning of Deep Networks from Decentralized Data}\cite{mcmahan2017fed_avg} 中提出。综述文章 \emph{Advances and open problems in federated learning}\cite{kairouz2019advances_fl} 给联邦学习下过如下的定义
+联邦学习 Federated Learning 这个名词首次由Google的研究人员McMahan等人于2016年在文章 \emph{Communication-Efficient Learning of Deep Networks from Decentralized Data}\cite{mcmahan2017fed_avg} 中提出，最初目的是希望能利用用户手机端的数据改进安卓手机上输入法的预测，是在防止数据泄露的前提下，基于分布在多个设备上的数据集构建机器学习模型。具有里程碑意义的综述文章 \emph{Advances and open problems in federated learning}\cite{kairouz2019advances_fl} 给联邦学习下过如下的定义
 
 \begin{quote}
     ``Federated learning is a machine learning setting where multiple entities (clients) collaborate in solving a machine learning problem, under the coordination of a central server or service provider. Each client's raw data is stored locally and not exchanged or transferred; instead, focused updates intended for immediate aggregation are used to achieve the learning objective.''
 \end{quote}
+
+也就是说，联邦学习是一种新的机器学习范式，适用于有中心节点居中协调，多个子节点进行协作参与，进行联合建模的场景。在这种场景下，联邦学习的方法能够在每个参与方不进行原始数据，或者说敏感数据的交换的情况下，完成联合建模的任务。尽管分布式优化、等问题在联邦学习这一概念被提出之前就有学者进行了研究\cite{boyd2011distributed, dist_pca_2014_nips, Gentry_2009_FHE, Nikolaenko_2013}, 但是直到联邦学习被正式提出，以上关于联邦学习独有的一些特性以及需求才真正被学界所重视，相关的研究才开始蓬勃发展。
+
+
+
+
+
+\section{联邦学习的应用与发展前景}
+\addcontentsline{toe}{section}{{1.3\ \ Application and Future Perspective of Federal Learning}\numberline\,}
+\label{sec:fl_application}
 
 待写。。。。
