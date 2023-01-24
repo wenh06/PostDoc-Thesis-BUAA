@@ -1,8 +1,11 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{xeCJK}
 \usepackage{amsmath, amsthm, amscd, amssymb, graphicx}
 \usepackage{mathrsfs}%
 % \usepackage{citesort}
-%\usepackage[numbers, sort&compress]{natbib}
+% \usepackage[numbers, sort&compress]{natbib}
 \usepackage{anysize}
 \marginsize{3cm}{3cm}{2.9cm}{2.8cm} \baselineskip 22pt
 \usepackage[sf]{titlesec}
@@ -10,7 +13,8 @@
 \usepackage{graphics}
 \usepackage{graphicx}
 \usepackage{subfigure}
-\usepackage{ccaption}%
+% \usepackage{caption}
+% \usepackage{ccaption}%
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{multicol}
@@ -27,6 +31,9 @@
 \usepackage{algorithmic}
 \usepackage{setspace}
 
+\usepackage{tikz}
+\usetikzlibrary{trees,arrows,decorations.pathmorphing,decorations.pathreplacing,shapes,shapes.geometric,backgrounds,positioning,calc,tikzmark,external}
+
 % 参考文献工具，加载biblatex宏包，
 % 其后端backend使用biber，%标注(引用)样式citestyle，
 % 著录样式 bibstyle都采用gb7714-2015样式，
@@ -36,6 +43,22 @@
 \usepackage[backend=biber,style=gb7714-2015]{biblatex}
 \addbibresource[location=local]{references.bib}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Chinese fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setCJKmainfont[Path = fonts/, BoldFont = simhei.ttf]{simsun.ttc}
+\setCJKsansfont[Path = fonts/, BoldFont = simhei.ttf]{simsun.ttc}
+
+\newCJKfontfamily\kaishu[Path=fonts/]{simkai.ttf}
+\newCJKfontfamily\songti[Path=fonts/]{simsun.ttf}
+\newCJKfontfamily\heiti[Path=fonts/]{simhei.ttf}
+\newCJKfontfamily\fangsong[Path=fonts/]{simfang.ttf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% miscelaneous settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \numberwithin{algorithm}{section}%让算法按节编号！
 \floatname{algorithm}{算法}%将Algorithm替换为‘算法’
