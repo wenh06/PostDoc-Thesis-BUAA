@@ -4,6 +4,7 @@
 \usepackage{xeCJK}
 \usepackage{amsmath, amsthm, amscd, amssymb, graphicx}
 \usepackage{mathrsfs}%
+\usepackage{mathtools}
 % \usepackage{citesort}
 % \usepackage[numbers, sort&compress]{natbib}
 \usepackage{anysize}
@@ -27,12 +28,15 @@
 % \usepackage{cite}
 \usepackage{bm} %
 \usepackage{arydshln}
-\usepackage{algorithm}
-\usepackage{algorithmic}
 \usepackage{setspace}
+\usepackage{boxedminipage}
+
+\usepackage[ruled,linesnumbered,algosection]{algorithm2e}
+\renewcommand*{\algorithmcfname}{算法}
+\renewcommand*{\algorithmautorefname}{算法}
 
 \usepackage{tikz}
-\usetikzlibrary{trees,arrows,decorations.pathmorphing,decorations.pathreplacing,shapes,shapes.geometric,backgrounds,positioning,calc,tikzmark,external}
+\usetikzlibrary{trees,arrows.meta,decorations.pathmorphing,decorations.pathreplacing,shapes,shapes.geometric,backgrounds,positioning,calc,tikzmark,external}
 
 % 参考文献工具，加载biblatex宏包，
 % 其后端backend使用biber，%标注(引用)样式citestyle，
@@ -60,10 +64,13 @@
 % miscelaneous settings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\numberwithin{algorithm}{section}%让算法按节编号！
-\floatname{algorithm}{算法}%将Algorithm替换为‘算法’
+% \numberwithin{algorithm}{section}%让算法按节编号！
+% \floatname{algorithm}{算法}%将Algorithm替换为‘算法’
 
 \newcommand{\citeu}[1]{$^{\mbox{\protect \scriptsize \cite{#1}}}$}
+\newcommand{\eqabove}[1]{\stackrel{\mathclap{\normalfont\mbox{#1}}}{=}}
+\newcommand{\neqabove}[1]{\stackrel{\mathclap{\normalfont\mbox{#1}}}{\neq}}
+
 \newcommand{\p}{\partial}
 %\newtheorem{exam}{\hei 算例}[chapter]
 \newcommand\CJKprechaptername{第}
@@ -74,4 +81,8 @@
 
 \def\Def{~\overset{def}{=}~}  %def
 \setlength{\unitlength}{1.2cm} %
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\expectation}{\mathbb{E}}
 

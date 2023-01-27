@@ -13,6 +13,18 @@ Optimization Algorithms in Federated Learning }}\numberline\,}
 
 优化算法自从联邦学习这一概念诞生起，便一直是其中心问题。联邦学习开创性的文章\cite{mcmahan2017fed_avg}中最重要也是最为人所熟知的便是优化算法FedAvg的提出。
 
+待写。。。。
+
+一般来说，联邦学习中我们考虑的是如下的优化问题
+\begin{equation}
+\label{eq:fl-basic}
+\begin{array}{cl}
+\text{minimize} & f(x) = \expectation\limits_{i \sim {\mathcal{P}}} [f_i(x)] \\
+\text{where} & f_i(x) = \expectation\limits_{z \sim \mathcal{D}_i} [\ell_i(x; z)]
+\end{array}
+\end{equation}
+这里的$\mathcal{P}$为节点的分布，$\mathcal{D}_i$为节点$i$上 的数据分布，$\ell_i$为损失函数。
+
 \section{联邦学习中的原始对偶算法}
 \addcontentsline{toe}{section}{{2.2\ \ Primal-Dual Algorithms in Federated Learning}\numberline\,}
 

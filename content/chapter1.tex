@@ -36,49 +36,32 @@ Introduction and Preliminaries }}\numberline\,}
 
 随后，我国杨强教授领导的香港科技大学以及微众银行的AI研究团队，从经济金融行业实践出发，将文献\parencite{mcmahan2017fed_avg}考虑的联邦学习经典的应用场景扩展到了多个数据不互通的数据中心的场景\cite{Yang_2019_VFL}。前者被抽象为了\textbf{跨设备}(cross-device)的场景，后者被抽象为了\textbf{跨(数据)仓库}(cross-silo)的场景\cite{kairouz2019advances_fl}。跨设备的场景具有子节点数量多，每个子节点持有数据量少，算力低，通信带宽低且不稳定，对通信开销非常敏感等特点；跨仓库的场景具有子节点数量少，每个子节点持有数据量大，算力高，对数据的安全性、保密性要求高等特点。这两种经过高度抽象的场景基本涵盖了联邦学习面临的所有的场景。
 
-文献\parencite{Yang_2019_VFL}的另一个突出的贡献是从数据分布的角度，具体来说，是样本特征空间(Sample Feature Space)以及样本编号空间(Sample ID Space)的角度，将联邦学习分为三类：横向联邦学习(Horizontal Federated Learning)、纵向联邦学习(Vertical Federated Learning)和联邦迁移学习(Federated Transfer Learning)。横向联邦学习是最常见的一类联邦学习，即每个参与方数据的特征空间基本是一致的，但各自拥有的样本编号基本是不重叠的。一般情况下，我们谈论的联邦学习，以及跨设备的联邦学习，都是横向联邦学习。纵向联邦学习则正好与横向联邦学习相反，纵向联邦学习的每个参与方有重叠度较高的样本编号空间，但是参与方之间拥有的每个样本的特征的重叠度很低。这在金融风控等领域是非常常见的，
+文献\parencite{Yang_2019_VFL}的另一个突出的贡献是从数据分布的角度，具体来说，是样本特征空间(Sample Feature Space)以及样本编号空间(Sample ID Space)的角度，将联邦学习分为三类：横向联邦学习(Horizontal Federated Learning, HFL)、纵向联邦学习(Vertical Federated Learning, VFL)和联邦迁移学习(Federated Transfer Learning, FTL)。
 
-\begin{figure}
-\centering
-\begin{minipage}{0.29\textwidth}
-\begin{tikzpicture}
-\draw (0, 0) rectangle (3.8, 4.5);
-\node at (1.95, 5.5) {横向联邦学习};
-\draw[fill=pink] (0, 0) rectangle (3.5, 1.1) node[pos=.5] {client $i$};
-\draw[fill=green] (0.2, 3.3) rectangle (3.8, 4.5) node[pos=.5] {client $j$};
-\draw[fill=yellow] (0.3, 0.9) rectangle (3.7, 3.6) node[pos=.4] {client $k$};
-\node at (1.95, -0.4) {样本特征空间};
-\end{tikzpicture}
-\end{minipage}
-\begin{minipage}{0.29\textwidth}
-\begin{tikzpicture}
-\draw (0,0) rectangle (3.8, 4.5);
-\node at (1.95, 5.5) {纵向联邦学习};
-\draw[fill=pink] (0, 0) rectangle (1.4, 4.2) node[pos=.5, rotate=-90] {client $i$};
-\draw[fill=green] (1.95, 0) rectangle (3.8, 4.5) node[pos=.5, rotate=-90] {client $j$};
-\draw[fill=yellow] (1.3, 0.2) rectangle (2.1, 4.4) node[pos=.4, rotate=-90] {client $k$};
-\node at (1.95, -0.4) {样本特征空间};
-\end{tikzpicture}
-\end{minipage}
-\begin{minipage}{0.29\textwidth}
-\begin{tikzpicture}
-\draw (0,0) rectangle (3.8, 4.5);
-\node at (1.95, 5.5) {联邦迁移学习};
-\draw[fill=pink] (0, 0) rectangle (1.3, 1.6) node[pos=.5] {client $i$};
-\draw[fill=green] (1.9, 3.6) rectangle (3.8, 4.5) node[pos=.5] {client $j$};
-\draw[fill=yellow] (0.9, 1.2) rectangle (2.2, 4.1) node[pos=.5] {client $k$};
-\node at (1.95, -0.4) {样本特征空间};
-\end{tikzpicture}
-\end{minipage}
-\begin{minipage}{0.1\textwidth}
-\begin{tikzpicture}
-% \coordinate (sample_node) at (0,0);
-% \node[text width=1, left=0.5cm of sample_node.west] at () {样本维度};
-\node[rotate=-90] () {样本编号空间};
-\end{tikzpicture}
-\end{minipage}
-\caption{三类联邦学习的样本特征空间与样本编号空间分布的示意图}
-\end{figure}
+横向联邦学习是最常见的一类联邦学习，即每个参与方数据的特征空间基本是一致的，但各自拥有的样本编号基本是不重叠的。一般情况下，我们谈论的联邦学习，以及跨设备的联邦学习，都是横向联邦学习。纵向联邦学习则正好与横向联邦学习相反，纵向联邦学习的每个参与方有重叠度较高的样本编号空间，但是参与方之间拥有的每个样本的特征的重叠度很低。这在金融风控等领域是非常常见的。联邦迁移学习。。。。
+
+一般来说，假设一个联邦学习系统有$K$个参与方，每个参与方拥有的数据分布记作$\mathcal{D}_k.$ $\mathcal{D}_k$有分解
+\begin{equation*}
+\mathcal{D}_k \subseteq \mathcal{X}_k \times \mathcal{Y}_k \times \mathcal{I}_k,
+\end{equation*}
+其中$\mathcal{X}_k$为数据样本的特征空间，$\mathcal{Y}_k$为数据样本的标签空间(Label Space)，$\mathcal{I}_k$为数据样本编号空间。那么
+\begin{itemize}
+\item 横向联邦学习:
+\begin{equation*}
+\mathcal{X}_i \eqabove{d} \mathcal{X}_j, ~ \mathcal{Y}_i \eqabove{d} \mathcal{Y}_j, ~ \mathcal{I}_i \neqabove{d} \mathcal{I}_j, ~ \forall i \neq j;
+\end{equation*}
+\\item 纵向联邦学习:
+\begin{equation*}
+\mathcal{X}_i \neqabove{d} \mathcal{X}_j, ~ \mathcal{Y}_i \neqabove{d} \mathcal{Y}_j, ~ \mathcal{I}_i \eqabove{d} \mathcal{I}_j, ~ \forall i \neq j;
+\end{equation*}
+\\item 联邦迁移学习:
+\begin{equation*}
+\mathcal{X}_i \neqabove{d} \mathcal{X}_j, ~ \mathcal{Y}_i \neqabove{d} \mathcal{Y}_j, ~ \mathcal{I}_i \neqabove{d} \mathcal{I}_j, ~ \forall i \neq j;
+\end{equation*}
+\end{itemize}
+其中$\eqabove{d}$表示相应的概率空间是同分布的。我们可以以图\ref{fig:three-types-fl}来表示这三类联邦学习。
+
+\input{tikz-figures/chap1-3types-fl.tex}
 
 \section{联邦学习的应用与发展前景}
 \addcontentsline{toe}{section}{{1.3\ \ Application and Future Perspective of Federal Learning}\numberline\,}
