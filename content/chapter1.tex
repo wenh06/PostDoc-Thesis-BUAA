@@ -26,45 +26,70 @@ Introduction and Preliminaries }}\numberline\,}
 \addcontentsline{toe}{section}{{1.2\ \ Origin and Development of Federal Learning}\numberline\,}
 \label{sec:fl_origin}
 
-联邦学习 Federated Learning 这个名词首次由Google的研究人员McMahan等人于2016年在文章 \emph{Communication-Efficient Learning of Deep Networks from Decentralized Data}\cite{mcmahan2017fed_avg} 中提出，最初目的是希望能利用用户手机端的数据改进安卓手机上输入法的预测，是在防止数据泄露的前提下，基于分布在多个设备上的数据集构建机器学习模型。具有里程碑意义的综述文章 \emph{Advances and Open Problems in Federated Learning}\cite{kairouz2019advances_fl} 给联邦学习下过如下的定义
-
+联邦学习 Federated Learning 这个名词首次由Google的研究人员McMahan等人于2016年在文章 \emph{Communication-Efficient Learning of Deep Networks from Decentralized Data}\cite{mcmahan2017fed_avg} 中提出：
+\begin{quote}
+    ``We term our approach Federated Learning, since the learning task is solved by a loose federation of participating devices (which we refer to as clients) which are coordinated by a central server.''
+\end{quote}
+文章\parencite{mcmahan2017fed_avg}最初目的，是希望能利用用户手机端的数据改进安卓手机上输入法的预测，在防止数据泄露的前提下，基于分布在多个设备上的数据集构建机器学习模型。具有里程碑意义的综述文章 \emph{Advances and Open Problems in Federated Learning}\cite{kairouz2019advances_fl} 给联邦学习下过如下的定义
 \begin{quote}
     ``Federated learning is a machine learning setting where multiple entities (clients) collaborate in solving a machine learning problem, under the coordination of a central server or service provider. Each client's raw data is stored locally and not exchanged or transferred; instead, focused updates intended for immediate aggregation are used to achieve the learning objective.''
 \end{quote}
+也就是说，联邦学习是一种新的机器学习范式，适用于有中心节点居中协调，多个子节点进行协作参与，进行联合建模的场景。在这种场景下，联邦学习的方法能够在每个参与方不暴露己方拥有的数据的情况下，完成联合建模的任务。一般来说，在联邦学习的框架下，数据拥有方在不用给出己方数据的情况下，也可进行模型训练得到公共的模型$M_{fed}$，使得模型$M_{fed}$，与将数据集中到一起进行训练能得到的模型$M$，二者的预测值的偏差的期望能足够小。
+\begin{equation}
+\label{eq:general-fl}
+\expectation_{z\sim\mathcal{D}} \lVert M_{fed}(z) - M(z) \rVert \leqslant \delta.
+\end{equation}
+其中$\mathcal{D}$是总体训练数据的分布，$\delta$是某个我们能够接受的偏差的上界。尽管分布式优化、加密计算等问题在联邦学习这一概念被提出之前就有学者进行了研究\cite{boyd2011distributed, dist_pca_2014_nips, Gentry_2009_FHE, Nikolaenko_2013}, 但是直到联邦学习被正式提出\cite{mcmahan2017fed_avg}，以上关于联邦学习独有的一些特性以及需求才真正被学界以及工业界所重视，相关的研究才开始蓬勃发展。
 
-也就是说，联邦学习是一种新的机器学习范式，适用于有中心节点居中协调，多个子节点进行协作参与，进行联合建模的场景。在这种场景下，联邦学习的方法能够在每个参与方不暴露己方拥有的数据的情况下，完成联合建模的任务。尽管分布式优化、加密计算等问题在联邦学习这一概念被提出之前就有学者进行了研究\cite{boyd2011distributed, dist_pca_2014_nips, Gentry_2009_FHE, Nikolaenko_2013}, 但是直到联邦学习被正式提出\cite{mcmahan2017fed_avg}，以上关于联邦学习独有的一些特性以及需求才真正被学界以及工业界所重视，相关的研究才开始蓬勃发展。
-
-随后，我国杨强教授领导的香港科技大学以及微众银行的AI研究团队，从经济金融行业实践出发，将文献\parencite{mcmahan2017fed_avg}考虑的联邦学习经典的应用场景扩展到了多个数据不互通的数据中心的场景\cite{Yang_2019_VFL}。前者被抽象为了\textbf{跨设备}(cross-device)的场景，后者被抽象为了\textbf{跨(数据)仓库}(cross-silo)的场景\cite{kairouz2019advances_fl}。跨设备的场景具有子节点数量多，每个子节点持有数据量少，算力低，通信带宽低且不稳定，对通信开销非常敏感等特点；跨仓库的场景具有子节点数量少，每个子节点持有数据量大，算力高，对数据的安全性、保密性要求高等特点。这两种经过高度抽象的场景基本涵盖了联邦学习面临的所有的场景。
+我国杨强教授领导的香港科技大学以及微众银行的AI研究团队，从经济金融行业实践出发，将文献\parencite{mcmahan2017fed_avg}考虑的联邦学习经典的应用场景扩展到了多个数据不互通的数据中心的场景\cite{Yang_2019_VFL}。前者被抽象为了\textbf{跨设备}(cross-device)的场景，后者被抽象为了\textbf{跨(数据)仓库}(cross-silo)的场景\cite{kairouz2019advances_fl}。跨设备的场景具有子节点数量多，每个子节点持有数据量少，算力低，通信带宽低且不稳定，对通信开销非常敏感等特点；跨仓库的场景具有子节点数量少(数量级通常在$10^2$以内)，每个子节点持有数据量大，算力高，对数据的安全性、保密性要求高等特点，子节点与中心节点的通信开销与子节点本身的算力都可能成为瓶颈。这两种经过高度抽象的场景基本涵盖了联邦学习面临的所有的场景。文献\parencite{kairouz2019advances_fl}的Table 1对于这两种场景的联邦学习的特点进行了全面的总结与对比。
 
 文献\parencite{Yang_2019_VFL}的另一个突出的贡献是从数据分布的角度，具体来说，是样本特征空间(Sample Feature Space)以及样本编号空间(Sample ID Space)的角度，将联邦学习分为三类：横向联邦学习(Horizontal Federated Learning, HFL)、纵向联邦学习(Vertical Federated Learning, VFL)和联邦迁移学习(Federated Transfer Learning, FTL)。
 
-横向联邦学习是最常见的一类联邦学习，即每个参与方数据的特征空间基本是一致的，但各自拥有的样本编号基本是不重叠的。一般情况下，我们谈论的联邦学习，以及跨设备的联邦学习，都是横向联邦学习。纵向联邦学习则正好与横向联邦学习相反，纵向联邦学习的每个参与方有重叠度较高的样本编号空间，但是参与方之间拥有的每个样本的特征的重叠度很低。这在金融风控等领域是非常常见的。联邦迁移学习。。。。
+横向联邦学习是最常见的一类联邦学习，即每个参与方数据的特征空间基本是一致的，但各自拥有的样本编号基本是不重叠的。一般情况下，我们谈论的联邦学习，以及跨设备的联邦学习，都是横向联邦学习。纵向联邦学习则正好与横向联邦学习相反，纵向联邦学习的每个参与方有重叠度较高的样本编号空间，但是参与方之间拥有的每个样本的特征的重叠度很低。这在金融风控等领域是非常常见的。联邦迁移学习则是迁移学习(Transfer Learning)这一概念在联邦学习这一范畴内的具体应用，首先于文献\parencite{liu_2020_transfer_fl}中被系统地研究。联邦迁移学习的核心思想是，源领域和目标领域之间的相似性，将机器学习模型从源领域学习到的知识迁移应用到目标领域。联邦迁移学习天然适合于智慧医疗领域，例如不同医疗机构的医学影像数据一般都是不同的，但基础都是影像特征的提取与利用。
 
 一般来说，假设一个联邦学习系统有$K$个参与方，每个参与方拥有的数据分布记作$\mathcal{D}_k.$ $\mathcal{D}_k$有分解
 \begin{equation*}
 \mathcal{D}_k \subseteq \mathcal{X}_k \times \mathcal{Y}_k \times \mathcal{I}_k,
 \end{equation*}
-其中$\mathcal{X}_k$为数据样本的特征空间，$\mathcal{Y}_k$为数据样本的标签空间(Label Space)，$\mathcal{I}_k$为数据样本编号空间。那么
+其中$\mathcal{X}_k$为数据样本的特征空间(Sample Feature Space)，$\mathcal{Y}_k$为数据样本的标签空间(Sample Label Space)，$\mathcal{I}_k$为数据样本编号空间(Sample Feature Space)。那么有\cite{Yang_2019_VFL,vfl}
 \begin{itemize}
 \item 横向联邦学习:
 \begin{equation*}
 \mathcal{X}_i \eqabove{d} \mathcal{X}_j, ~ \mathcal{Y}_i \eqabove{d} \mathcal{Y}_j, ~ \mathcal{I}_i \neqabove{d} \mathcal{I}_j, ~ \forall i \neq j;
 \end{equation*}
-\\item 纵向联邦学习:
+横向联邦学习一般可以建模为如下的最优化问题
+\begin{equation}
+\label{eq:general-hfl}
+\begin{array}{cl}
+\text{minimize} & f(\theta) = \expectation\limits_{k \sim {\mathcal{P}}} [f_k(\theta)] = \sum_{k=1}^K w_k f_k(\theta), \\
+\text{where} & f_k(\theta) = \expectation\limits_{(x, y) \sim \mathcal{D}_k} [\ell_k(\theta; x, y)],
+\end{array}
+\end{equation}
+其中
+\item 纵向联邦学习:
 \begin{equation*}
 \mathcal{X}_i \neqabove{d} \mathcal{X}_j, ~ \mathcal{Y}_i \neqabove{d} \mathcal{Y}_j, ~ \mathcal{I}_i \eqabove{d} \mathcal{I}_j, ~ \forall i \neq j;
 \end{equation*}
-\\item 联邦迁移学习:
+\item 联邦迁移学习:
 \begin{equation*}
 \mathcal{X}_i \neqabove{d} \mathcal{X}_j, ~ \mathcal{Y}_i \neqabove{d} \mathcal{Y}_j, ~ \mathcal{I}_i \neqabove{d} \mathcal{I}_j, ~ \forall i \neq j;
 \end{equation*}
 \end{itemize}
-其中$\eqabove{d}$表示相应的概率空间是同分布的。我们可以以图\ref{fig:three-types-fl}来表示这三类联邦学习。
+其中$\eqabove{d}$表示相应的概率空间是同分布的。我们可以用图\ref{fig:three-types-fl}来表示这三类联邦学习在以上几种概率空间上的特点。
 
 \input{tikz-figures/chap1-3types-fl.tex}
+
+
 
 \section{联邦学习的应用与发展前景}
 \addcontentsline{toe}{section}{{1.3\ \ Application and Future Perspective of Federal Learning}\numberline\,}
 \label{sec:fl_application}
+
+待写。。。。
+
+
+\section{本文结构}
+\addcontentsline{toe}{section}{{1.4\ \ Structure of the Thesis}\numberline\,}
+\label{sec:structure}
 
 待写。。。。
