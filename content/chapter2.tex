@@ -9,21 +9,29 @@ Optimization Algorithms in Federated Learning }}\numberline\,}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{联邦学习中的优化算法}
-\addcontentsline{toe}{section}{{2.1\ \ To write}\numberline\,}
+\addcontentsline{toe}{section}{{2.1\ \ Overview of Optimization Algorithms in Federated Learning}\numberline\,}
 
-优化算法自从联邦学习这一概念诞生起，便一直是其中心问题。联邦学习开创性的文章\cite{mcmahan2017fed_avg}中，最重要也是最为人所熟知的便是优化算法\texttt{FederatedAveraging}（简记为\texttt{FedAvg}）的提出。
+优化算法自从联邦学习这一概念诞生起，便一直是相关研究的中心问题。联邦学习开创性的文章\cite{mcmahan2017fed_avg}中，最重要也是最为人所熟知的便是优化算法\texttt{FederatedAveraging}（简记为\texttt{FedAvg}）的提出。
 
 待写。。。。
 
-一般来说，联邦学习中我们考虑的是如下的优化问题
+沿用式\eqref{eq:general-hfl}中的记号，本文考虑联邦学习中的优化问题，其最基本的格式如下
+\begin{equation}
+\label{eq:fl-basic-dist}
+\begin{array}{cl}
+\minimize\limits_{\theta \in \R^d} & f(\theta) = \expectation\limits_{k \sim {\mathcal{P}}} [f_k(\theta)], \\
+\text{where} & f_k(\theta) = \expectation\limits_{(x, y) \sim \mathcal{D}_k} [\ell_k(\theta; x, y)],
+\end{array}
+\end{equation}
+假设我们令$\mathcal{P} = \{1, 2, \ldots, K\},$ 则上述模型可以简记为
 \begin{equation}
 \label{eq:fl-basic}
 \begin{array}{cl}
-\text{minimize} & f(x) = \expectation\limits_{i \sim {\mathcal{P}}} [f_i(x)] \\
-\text{where} & f_i(x) = \expectation\limits_{z \sim \mathcal{D}_i} [\ell_i(x; z)]
+\minimize\limits_{\theta \in \R^d} & f(\theta) = \sum\limits_{k=1}^K w_k f_k(\theta).
 \end{array}
 \end{equation}
-这里的$\mathcal{P}$为节点的分布，$\mathcal{D}_i$为节点$i$上 的数据分布，$\ell_i$为损失函数。
+对于$f_k,$ 我们一般都假设它满足如下几条性质
+
 
 \section{联邦学习中的原始对偶算法}
 \addcontentsline{toe}{section}{{2.2\ \ Primal-Dual Algorithms in Federated Learning}\numberline\,}
