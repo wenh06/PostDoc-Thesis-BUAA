@@ -6,7 +6,7 @@
 
 联邦学习优化算法最重要的设计原则，是计算效率以及通信效率并重，甚至很多时候通信效率是更重要的一个方面。这也是联邦学习与传统的分布式优化(Distributed Optimization)最显著的区别之一。实际上，分布式优化在联邦学习被提出之前就是一个被研究得比较多的问题，从具体的问题，例如分布式主成分分析(Principal Component Analysis, PCA)\cite{dist_pca_2014_nips}，到一般的算法理论\cite{boyd2011distributed}都有研究人员进行了研究。当时这些研究往往仅从计算效率以及效果出发，往往不考虑通信效率、通信保密性等问题。文献\cite{mcmahan2017fed_avg}正是从实际问题出发，发现了这些需求，基于一种分布式梯度下降算法\cite{chen2016_revisit}(该算法在文献\cite{mcmahan2017fed_avg}中被称作\texttt{FedSGD}算法)，做了上文提到的改进而提出了\texttt{FedAvg}算法。
 
-待写。。。。
+这里还需要强调的是，\texttt{FedAvg}相对于\texttt{FedSGD}的另一个关键的改进是，子节点与中心节点之间传输的信息，从梯度改为了模型参数。这在某种程度上规避了从梯度泄露联邦学习参与方私密训练数据\cite{zhu2019deep_leakage}的潜在风险。
 
 沿用式\eqref{eq:general-hfl}中的记号，本文考虑联邦学习中的优化问题，其最基本的格式如下
 \begin{equation}
@@ -23,17 +23,35 @@
 \minimize\limits_{\theta \in \R^d} & f(\theta) = \sum\limits_{k=1}^K w_k f_k(\theta).
 \end{array}
 \end{equation}
-对于$f_k,$ 我们一般都假设它满足如下几条性质
+对于$f$以及$f_k,$ 我们一般都假设它满足如下几条最基本的性质
 \begin{itemize}
-    \item 待写
-    \item 待写
-    \item 待写
+    \item[(A1)] $f$以及$f_k$都是$L-$光滑的($L-$smooth)，即
+    \begin{equation}
+    \label{eq:l-smooth}
+    \begin{array}{c}
+    \lVert \nabla f (\theta) - f (\theta') \rVert \leqslant L \lVert \theta - \theta' \rVert, \\
+    \lVert \nabla f_k (\theta) - f_k (\theta') \rVert \leqslant L \lVert \theta - \theta' \rVert,
+    \end{array}
+    ~ \forall \theta, \theta' \in \R^d, k = 1, \ldots, K.
+    \end{equation}
+    \item[(A2)] $f$下有界(Lower Bounded)：存在常数$c \in \R,$ 使得
+    \begin{equation}
+    \label{eq:lower-bounded}
+    f(\theta) \geqslant c > -\infty, ~ \forall \theta \in \R^d.
+    \end{equation}
+    很多时候，为了方便收敛性的分析，
+    \item[(A2)] 
 \end{itemize}
 
 更方便与自然的做法，是将问题\eqref{eq:fl-basic}写成约束优化问题的格式：
 \begin{equation}
 \label{eq:fl-basic-constraint}
 \begin{array}{cl}
-xxx
+\begin{array}{cl}
+\minimize\limits_{\theta \in \R^d} & f(\theta) = \expectation\limits_{k \sim {\mathcal{P}}} [f_k(\theta)], \\
+\text{where} & f_k(\theta) = \expectation\limits_{(x, y) \sim \mathcal{D}_k} [\ell_k(\theta; x, y)],
+\end{array}
 \end{array}
 \end{equation}
+
+这里还应当着重指出的是，待写。。。。
