@@ -83,3 +83,15 @@ $\varphi$是一个所谓的翻译函数(Translator Function)，用于对$u_i^B$�
 我们可以用图\ref{fig:three-types-fl}来概括地表示这三类联邦学习在以上几种概率空间上的特点。
 
 \input{tikz-figures/chap1-3types-fl.tex}
+
+一般来说，一个完整的联邦学习的迭代流程可以归纳如下
+\begin{itemize}
+    \item 子节点选取(Client Selection)；
+    \item 中心节点将子节点计算需要的信息(例如模型参数、梯度等)下发到被选取的子节点(Parameter Broadcast)；
+    \item {\bfseries 子节点执行本地计算，更新本地模型参数(Local Parameter Update);}
+    \item 子节点将更新后的信息返回中心节点，中心节点将收集到的信息进行聚合(Parameter Aggregation);
+    \item {\bfseries 中心节点执行计算，更新全局模型(Global Parameter Update)。}
+\end{itemize}
+可以看到，这一流程关于模型参数的更新完全是解耦合的，因此子节点模型更新方法与中心节点的全局模型的更新方法可以做相对灵活的组合，只要中心节点与子节点之间定义好了传输信息的协议。我们可以把以上的流程用图\ref{fig:broadcast-local-update}~与图\ref{fig:agg-global-update}~来进行简单的示意。
+
+\input{tikz-figures/chap1-fl-process.tex}

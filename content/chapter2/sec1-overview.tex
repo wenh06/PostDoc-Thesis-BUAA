@@ -25,39 +25,59 @@
 \end{equation}
 对于$f$以及$f_k,$ 我们一般都假设它满足如下几条最基本的性质
 \begin{itemize}
-    \item[(A1)] $f$以及$f_k$都是$L-$光滑的($L-$smooth)，即
-    \begin{equation}
-    \label{eq:l-smooth}
-    \begin{array}{c}
-    \lVert \nabla f (\theta) - f (\theta') \rVert \leqslant L \lVert \theta - \theta' \rVert, \\
-    \lVert \nabla f_k (\theta) - f_k (\theta') \rVert \leqslant L \lVert \theta - \theta' \rVert,
-    \end{array}
-    ~ \forall \theta, \theta' \in \R^d, k = 1, \ldots, K.
-    \end{equation}
-    \item[(A2)] $f$下有界(Lower Bounded)：存在常数$c \in \R,$ 使得
-    \begin{equation}
-    \label{eq:lower-bounded}
-    f(\theta) \geqslant c > -\infty, ~ \forall \theta \in \R^d.
-    \end{equation}
+\item[(A1)] $f$以及$f_k$都是$L-$光滑的($L-$smooth)，即
+\begin{equation}
+\label{eq:l-smooth}
+\begin{array}{c}
+\lVert \nabla f (\theta) - f (\theta') \rVert \leqslant L \lVert \theta - \theta' \rVert, \\
+\lVert \nabla f_k (\theta) - f_k (\theta') \rVert \leqslant L \lVert \theta - \theta' \rVert,
+\end{array}
+~ \forall \theta, \theta' \in \R^d, k = 1, \ldots, K.
+\end{equation}
+\item[(A2)] $f$下有界(Lower Bounded)：存在常数$c \in \R,$ 使得
+\begin{equation}
+\label{eq:lower-bounded}
+f(\theta) \geqslant c > -\infty, ~ \forall \theta \in \R^d.
+\end{equation}
 \end{itemize}
 很多时候，为了方便收敛性的分析，我们还会对目标函数的梯度进行一些假设
 \begin{itemize}
-    \item[(A3)] 梯度有界性(Bounded Gradient)：存在常数$G > 0,$ 使得
-    \begin{equation*}
-        \lVert \nabla f_k (\theta) \rVert^2 \leqslant G^2, ~ \forall \theta \in \R^d, ~ k = 1, \ldots K.
-    \end{equation*}
+\item[(A3)] 梯度有界性(Bounded Gradient)：存在常数$G > 0,$ 使得
+\begin{equation}
+\label{eq:bdd_grad}
+\lVert \nabla f_k (\theta) \rVert^2 \leqslant G^2, ~ \forall \theta \in \R^d, ~ k = 1, \ldots K.
+\end{equation}
 \end{itemize}
-数据分布的特征是处理联邦学习问题避免不了要考虑的问题，这也是
+数据分布的特征(是否独立同分布，以及非独立同分布的程度)是联邦学习避免不了要考虑的问题，这也是联邦学习区别于传统的分布式优化的重要特征，这也是我们在\S\ref{sec:chap1-fl-applications}~中着重讨论过的问题。
+\begin{itemize}
+\item[(A4-1)] 数据独立同分布(I.I.D.)：
+\begin{equation}
+\label{eq:iid-1}
+\expectation\limits_{(x, y) \sim \mathcal{D}_k}[\nabla \ell_k(\theta; x, y)] = \nabla f(\theta), ~ \forall \theta \in \R^d, ~ k = 1, \ldots K,
+\end{equation}
+% 或者
+% \begin{equation}
+% \label{eq:iid-2}
+% \sum\limits_{k=1}^K \expectation\limits_{(x, y) \sim \mathcal{D}_k}[\nabla f_k(\theta; x, y)] = \nabla f(\theta), \forall \theta \in \R^d, ~ k = 1, \ldots K,
+% \end{equation}
+\item[(A4-2)] 数据非独立同分布(Non-I.I.D.)，这个时候我们需要有一个量，用来度量这种统计上的异质性的程度。这个量可以有多种定义方式，本文采用文献\parencite{karimireddy2020scaffold}以及文献\cite{zhang2020fedpd}中定义的梯度差异有界性(Bounded Gradient Dissimilarity)，记作$(G; B)$-BGD. 具体来说，存在常数$G > 0,$ 以及$B \geqslant 0,$ 满足
+\begin{equation}
+\label{eq:bdd_grad_dissim}
+\dfrac{1}{K} \sum\limits_{k=1}^K \lVert \nabla f_k(\theta) \rVert^2 \leqslant G^2 + B^2 \lVert \nabla f(\theta) \rVert^2, ~ \forall \theta \in \R^d.
+\end{equation}
+需要注意的是，如果令$B = 0,$ 那么梯度差异有界性条件\eqref{eq:bdd_grad_dissim}就退化为了梯度有界性条件\eqref{eq:bdd_grad}。
+\end{itemize}
 
 更方便以及自然的做法，是将问题\eqref{eq:fl-basic}写成约束优化问题的格式：
 \begin{equation}
 \label{eq:fl-basic-constraint}
 \begin{array}{cl}
 \begin{array}{cl}
-\minimize\limits_{\theta \in \R^d} & f(\theta) = \expectation\limits_{k \sim {\mathcal{P}}} [f_k(\theta)], \\
-\text{where} & f_k(\theta) = \expectation\limits_{(x, y) \sim \mathcal{D}_k} [\ell_k(\theta; x, y)],
+\minimize\limits_{\theta \in \R^d} & f(\theta) = \sum\limits_{k=1}^K w_k f_k(\theta_k), \\
+\text{subject to} & \theta_k = \theta, ~ k = 1, \ldots, K.
 \end{array}
 \end{array}
 \end{equation}
+我们很容易看出\eqref{eq:fl-basic-constraint}与\eqref{eq:fl-basic}这两种格式的等价性。格式\eqref{eq:fl-basic-constraint}再分布式优化中被称作共识问题(Consensus Problem)。
 
-这里还应当着重指出的是，待写。。。。
+% 这里还应当着重指出的是，待写。。。。
