@@ -1,0 +1,21 @@
+\begin{algorithm}[ht]
+% \SetAlgoNoLine
+% \DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+\Input{parameters $\theta^{(0)}$, methods {\bfseries ServerOpt, ClientOpt}, learning rates (schedule) $\eta_g, \eta_l$}
+\For{each round $t = 0, 1, \cdots, T-1$}{
+    $S^{(t)} \gets$ (random set of clients)\;
+    \For{each client $k \in S^{(t)}$ {\bfseries in parallel}}{
+        $\theta_k^{(t, 0)} \gets \theta^{(t)}$\;
+        \For{local step $r = 0, 1, \cdots, R-1$}{
+            Compute unbiased estimate $g_k^{(t, r)}$ of $\nabla f_k(\theta_k^{(t, r)})$\;
+            $\theta_k^{(t, r+1)} \gets$ {\bfseries ClientOpt}$(\theta_k^{(t, r)}, g_k^{(t, r)}, \eta_l, t)$\;
+        }
+        $\Delta_{k}^{(t)} \gets \theta_k^{(t, R)} - \theta^{(t)}$
+    }
+    $\Delta^{(t)} \gets \operatorname{aggregate} \left( \left\{ \Delta_{k}^{(t)} \right\}_{k \in \mathcal{S}_t} \right) \quad \left( \text{e.g.} \frac{1}{|\mathcal{S}_t|} \sum\limits_{k \in \mathcal{S}_t} \Delta_{k}^{(t)} \right)$\;
+    $\theta^{(t+1)} \gets$ {\bfseries ServerOpt}$(\theta^{(t)}, \Delta^{(t)}, \eta_g, t)$\;
+}
+\caption{FedOpt\cite{reddi2020fed_opt}算法的伪代码}
+\label{algo:fedopt}
+\end{algorithm}

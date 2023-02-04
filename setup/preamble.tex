@@ -20,21 +20,37 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{multicol}
-\usepackage{longtable}
+% \usepackage{longtable}
 % \usepackage{slashbox}
-\usepackage{supertabular}
+% \usepackage{supertabular}
 \usepackage{float}
-\usepackage{diagbox}
-\usepackage{booktabs}
+% \usepackage{diagbox}
+% \usepackage{booktabs}
 % \usepackage{cite}
 \usepackage{bm}
 \usepackage{arydshln}
-\usepackage{setspace}
+% \usepackage{setspace}
 \usepackage{boxedminipage}
 
-\usepackage[ruled,linesnumbered,algosection]{algorithm2e}
+\usepackage[ruled,linesnumbered,algosection,nofillcomment]{algorithm2e}
 \renewcommand*{\algorithmcfname}{算法}
 \renewcommand*{\algorithmautorefname}{算法}
+
+\makeatletter
+\renewcommand{\Indentp}[1]{%
+  \advance\leftskip by #1
+  \advance\skiptext by -#1
+  \advance\skiprule by #1}%
+\renewcommand{\Indp}{\algocf@adjustskipindent\Indentp{\algoskipindent}}
+\renewcommand{\Indpp}{\Indentp{0.5em}}%
+\renewcommand{\Indm}{\algocf@adjustskipindent\Indentp{-\algoskipindent}}
+\renewcommand{\Indmm}{\Indentp{-0.5em}}%
+\makeatother
+
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+
+\DontPrintSemicolon
 
 \usepackage{tikz}
 \usetikzlibrary{trees,arrows.meta,decorations.pathmorphing,decorations.pathreplacing,shapes,shapes.geometric,backgrounds,positioning,calc,tikzmark,external}

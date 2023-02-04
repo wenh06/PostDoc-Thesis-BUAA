@@ -1,0 +1,21 @@
+\begin{algorithm}[ht]
+% \SetAlgoNoLine
+% \DontPrintSemicolon
+{\bfseries Input:} $T, R, S, \lambda, \eta, \beta, \theta^{(0)}$\;
+\For{each round $t = 0, \cdots, T-1$}{
+    Server sends $\theta^{(t)}$ to all clients\;
+    \For{each client $k = 1, \cdots, K$ in parallel}{
+        $\theta_{k}^{(t, 0)} = \theta^{(t)}$\;
+        \For{$r = 0,\cdots, R-1$}{
+            Sample a mini-batch $b_r$\;
+            find an approximate $\theta_k(\theta_{k}^{(t, r)})$ to the problem $\text{min} \{ \ell_k(\theta_k; b_r) + \frac{\lambda}{2} \left\lVert \theta_k - \theta_{k}^{(t, r)} \right\rVert^2 \}$\;
+            Local update $\theta_{k}^{(t, r+1)} = \theta_{k}^{(t, r)} - \eta \lambda \left( \theta_{k}^{(t, r)} - \theta_k(\theta_{k}^{(t, r)}) \right)$\;
+        }
+        Server uniformly samples a subset of clients $\mathcal{S}^{(t)}$,\;
+        each client in $\mathcal{S}^{(t)}$ sends the local $\theta_{k}^{(t, R)}$ to the server\;
+    }
+    Sever update $\theta^{(t+1)} = (1-\beta)\theta^{(t)} + \beta \sum \frac{\theta_{k}^{(t, R)}}{\# \mathcal{S}^t}$
+}
+\caption{pFedMe\cite{t2020pfedme}算法伪代码}
+\label{algo:pfedme}
+\end{algorithm}
