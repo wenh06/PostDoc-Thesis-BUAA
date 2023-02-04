@@ -42,7 +42,7 @@
 \text{where} & f_k(\theta) = \expectation\limits_{(x, y) \sim \mathcal{D}_k} [\ell_k(\theta; x, y)],
 \end{array}
 \end{equation}
-其中符号$\expectation$表示关于分布的期望，$\theta$是模型参数，也就是我们的学习目标；$\mathcal{P}$是参与训练的节点的分布，这里我们假设了总共有$K$个节点；$w_k$是节点$k$的权重，一般与节点持有的数据量正相关；$\ell_k$是节点$k$上模型训练的损失函数(Loss Function)；$x, y$分别表示数据的特征与数据的标签。这里，我们忽略了数据样本编号空间，将数据分布简写为了$(x, y) \sim \mathcal{D}_k \subseteq \mathcal{X}_k \times \mathcal{Y}_k.$
+其中符号$\expectation$表示关于分布的期望，$\theta$是模型参数，也就是我们的学习目标；$\mathcal{P}$是参与训练的节点的分布，这里我们假设了总共有$K$个节点；$w_k$是节点$k$的权重，一般与节点持有的数据量正相关；$\ell_k$是节点$k$上模型训练的损失函数(Loss Function)；$x, y$分别表示数据的特征与数据的标签。$f_k$以及$f$则被称作局部目标函数(Objective Function)以及全局目标函数。这里，我们忽略了数据样本编号空间，将数据分布简写为了$(x, y) \sim \mathcal{D}_k \subseteq \mathcal{X}_k \times \mathcal{Y}_k.$
 \item 纵向联邦学习:
 \begin{equation*}
 \mathcal{X}_i \neqabove{d} \mathcal{X}_j, ~ \mathcal{Y}_i \neqabove{d} \mathcal{Y}_j, ~ \mathcal{I}_i \eqabove{d} \mathcal{I}_j, ~ \forall i \neq j;
