@@ -11,7 +11,7 @@
     \For{each client $k \in \mathcal{S}^{(t)}$ {\bfseries in parallel}}{
         $\theta_k^{(t)} \gets$ {\bfseries ClientUpdate}$(k, \theta^{(t)})$\;
         }
-    $\theta^{(t+1)} \gets \frac{1}{|\mathcal{S}_t|}\sum_{k\in \mathcal{S}_t} \theta_k^{(t)}$\;
+    $\theta^{(t+1)} \gets \frac{1}{\lvert \mathcal{S}^{(t)} \rvert} \sum\limits_{k\in \mathcal{S}^{(t)}} \theta_k^{(t)}$\;
 }
 \Indm
 \vspace{0.2em}

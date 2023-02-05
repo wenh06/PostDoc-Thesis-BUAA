@@ -35,15 +35,15 @@
 \label{fig:broadcast-local-update}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 \begin{tikzpicture}[scale=2.1]
-\node[client] at (0, 0) (server) {server $x$};
-\node[client, below left = 1.5cm and 3.5cm of server.south] (client-1) {client $x_1$};
-\node[client, right = 0.4cm of client-1.east] (client-2) {client $x_2$};
-\node[client, right = 0.4cm of client-2.east] (client-3) {client $x_3$};
+\node[client] at (0, 0) (server) {server $\theta$};
+\node[client, below left = 1.5cm and 3.5cm of server.south] (client-1) {client $\theta_1$};
+\node[client, right = 0.4cm of client-1.east] (client-2) {client $\theta_2$};
+\node[client, right = 0.4cm of client-2.east] (client-3) {client $\theta_3$};
 \node[client missing, right = 0.1cm of client-3.east] (client-missing) {};
-\node[client, right = 0.1cm of client-missing.east] (client-n) {client $x_n$};
+\node[client, right = 0.1cm of client-missing.east] (client-n) {client $\theta_K$};
 \path[-{Stealth}] ([yshift=0.15cm]client-1.north) edge ([xshift=-0.5cm,yshift=-0.1cm]server.south);
 \path[-{Stealth}] ([yshift=0.15cm]client-2.north) edge ([xshift=-0.2cm,yshift=-0.1cm]server.south);
 \path[-{Stealth}] ([yshift=0.15cm]client-3.north) edge ([xshift=0.05cm,yshift=-0.1cm]server.south);

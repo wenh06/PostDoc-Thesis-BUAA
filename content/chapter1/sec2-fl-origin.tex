@@ -11,12 +11,18 @@
 \begin{quote}
     ``Federated learning is a machine learning setting where multiple entities (clients) collaborate in solving a machine learning problem, under the coordination of a central server or service provider. Each client's raw data is stored locally and not exchanged or transferred; instead, focused updates intended for immediate aggregation are used to achieve the learning objective.''
 \end{quote}
-也就是说，联邦学习是一种新的机器学习范式，适用于有中心节点居中协调，多个子节点进行协作参与，进行联合建模的场景。在这种场景下，联邦学习的方法能够在每个参与方不暴露己方拥有的数据的情况下，完成联合建模的任务。一般来说，在联邦学习的框架下，数据拥有方在不用给出己方数据的情况下，也可进行模型训练得到公共的模型$M_{fed}$，使得模型$M_{fed}$，与将数据集中到一起进行训练能得到的模型$M$，二者的预测值的偏差的期望能足够小。
+也就是说，联邦学习是一种新的机器学习范式，适用于有中心节点(Server)居中协调，多个子节点(Client)进行协作参与，进行联合建模的场景。在这种场景下，联邦学习的方法能够在每个参与方不暴露己方拥有的数据的情况下，完成联合建模的任务。一般来说，在联邦学习的框架下，数据拥有方在不用给出己方数据的情况下，也可进行模型训练得到公共的模型$M_{fed}$，使得模型$M_{fed}$，与将数据集中到一起进行训练能得到的模型$M$，二者的预测值的偏差的期望能足够小。
 \begin{equation}
 \label{eq:general-fl}
 \expectation_{z\sim\mathcal{D}} \lVert M_{fed}(z) - M(z) \rVert \leqslant \delta.
 \end{equation}
 其中$\mathcal{D}$是总体训练数据的分布，$\delta$是某个我们能够接受的偏差的上界。尽管分布式优化、加密计算等问题在联邦学习这一概念被提出之前就有学者进行了研究\cite{boyd2011distributed, dist_pca_2014_nips, Gentry_2009_FHE, Nikolaenko_2013}, 但是直到联邦学习被正式提出\cite{mcmahan2017fed_avg}，以上关于联邦学习独有的一些特性以及需求才真正被学界以及工业界所重视，相关的研究才开始蓬勃发展。需要注意的是，尽管文献\parencite{kairouz2019advances_fl}给出的联邦学习的定义强调了有中心节点这一特征，同时大部分关于联邦学习的文献也是基于这一假设开展研究的，但仍有一部分关于联邦学习的文献是基于无中心的完全分布式的节点网络进行研究的\cite{elgabli2020gadmm, issaid2020cq-ggadmm}.
+
+从上面关于联邦学习的定义中我们可以看出，一般来说，联邦学习的参与方构成了一个有中心的网络。我们在这里先明确关于这个网络的一些基本的术语：
+\begin{itemize}
+    \item Server: 中心节点，负责整个联邦学习网络的控制、编排子节点任务的工作，同时维护全局共享的模型，其本身一般没有训练数据；
+    \item Client: 子节点，拥有一定数量的训练数据，利用这些数据以及中心节点共享的信息，执行本地模型训练的任务。
+\end{itemize}
 
 我国杨强教授领导的香港科技大学以及微众银行(WeBank)的AI研究团队，从经济金融行业实践出发，将文献\parencite{mcmahan2017fed_avg}考虑的联邦学习经典的应用场景,即超大规模的移动、边缘设备协同参与模型训练的场景，扩展到了多个数据不互通的数据中心的场景\cite{Yang_2019_VFL}。前者被抽象为了\textbf{跨设备}(cross-device)的场景，后者被抽象为了\textbf{跨(数据)仓库}(cross-silo)的场景\cite{kairouz2019advances_fl}。跨设备的场景具有子节点数量多，每个子节点持有数据量少，算力低，通信带宽低且不稳定，对通信开销非常敏感等特点；跨仓库的场景具有子节点数量少(数量级通常在$10^2$以内)，每个子节点持有数据量大，算力高，对数据的安全性、保密性要求高等特点，子节点与中心节点的通信开销与子节点本身的算力都可能成为瓶颈。这两种经过高度抽象的场景基本涵盖了联邦学习面临的所有的场景。文献\parencite{kairouz2019advances_fl}的Table 1对于这两种场景的联邦学习的特点进行了全面的总结与对比。
 
