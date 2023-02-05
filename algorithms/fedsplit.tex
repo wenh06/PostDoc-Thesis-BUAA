@@ -1,0 +1,27 @@
+\begin{algorithm}[ht]
+% \SetAlgoNoLine
+% \DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+\Input{{\bfseries proximal solvers} $\texttt{prox\_update}_j: \R^d \to \R^d$}
+{\bfseries Initiation:}\;
+\Indp
+init server: parameters $\theta^{(0)} \in \R^d$,\;
+init clients: $\theta_1^{(0)} = \cdots = \theta_K^{(0)} = \theta^{(0)}$\;
+\Indm
+\For{each round $t = 0, 1, \cdots$}{
+    \For{each client $k = 1, \cdots, K$ {\bfseries in parallel}}{
+        Local prox step: $\theta_k^{(t+1/2)} \gets$ $\texttt{prox\_update}_k(2\theta^{(t)} - \theta_k^{(t)})$\;
+        Local centering step: $\theta_k^{(t+1)} \gets$ $\theta_k^{(t)} + 2(\theta_k^{(t+1/2)} - \theta^{(t)})$
+        }
+    {\bfseries Server Update:}\;
+    \Indp
+    compute global average: $\theta^{(t+1)} \gets \overline{\theta}^{(t+1)}$\;
+    \If{meet convergent criteria}{
+        $\theta^* \gets \theta^{(t+1)}$\;
+        {\bfseries break}\;
+    }
+}
+% return $\theta^*$\;
+\caption{FedSplit\cite{pathak2020fedsplit}算法的伪代码}
+\label{algo:fedsplit}
+\end{algorithm}
