@@ -6,4 +6,47 @@
 
 \input{algorithms/fedsplit.tex}
 
+
+我们从最优化理论的角度对FedSplit算法进行分析。事实上，我们考虑的优化问题\eqref{eq:fl-basic}可以等价地改写为如下的共识优化问题(注意与式\eqref{eq:fl-basic-constraint}的细微差别)
+\begin{equation}
+\label{eq:fedsplit-constraint}
+\begin{array}{cl}
+\minimize & F(\Theta) := \sum\limits_{k=1}^K w_k f_k(\theta_k), \\
+\text{subject to} & A \Theta = 0,
+\end{array}
+\end{equation}
+其中
+\begin{equation*}
+A = \begin{pmatrix} I_d & -I_d & & & \\ & I_d & -I_d & & \\ & & \ddots & \ddots & \\ & & & \ddots & -I_d \\ -I_d & & & & I_d \end{pmatrix}, ~ \Theta = \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, ~ \theta_1, \ldots, \theta_K \in \R^d.
+\end{equation*}
+约束优化问题\eqref{eq:fedsplit-constraint}的拉格朗日函数为
+\begin{equation}
+\label{eq:fedsplit-lagrangian}
+\mathcal{L}(\Theta, \Lambda) = F(\Theta) - \langle \Lambda, A\Theta \rangle = \sum\limits_{k=1}^K w_k f_k(\theta_k) - \langle \Lambda, A\Theta \rangle,
+\end{equation}
+其中$\Lambda = \begin{pmatrix} \lambda_1 \\ \vdots \\ \lambda_K \end{pmatrix} \in \R^{Kd}$为对偶变量。考虑上述问题的一阶最优性条件$\nabla F(\Theta) - A^T \Lambda,$ 即
+\begin{equation*}
+\nabla F(\Theta) - \begin{pmatrix} \lambda_1 - \lambda_K \\ \lambda_2 - \lambda_1 \\ \vdots \\ \lambda_K - \lambda_{K-1} \end{pmatrix} = 0.
+\end{equation*}
+上式是一个所谓的单调包含问题(Monotone Inclusion Problem)
+\begin{equation}
+\label{eq:fedsplit-mono-incl}
+0 \in \nabla F(\Theta) + \mathcal{N}_{\mathcal{E}}(\Theta)
+\end{equation}
+其中
+\begin{equation*}
+\mathcal{N}_{\mathcal{E}}(\Theta) = \begin{cases} \mathcal{E}^{\perp} & \text{ if } \Theta \in \mathcal{E} \\ \emptyset & \text{ otherwise } \end{cases}
+\end{equation*}
+是凸集$\mathcal{E} = \{ \Theta \in \R^{Kd} ~ | ~ \theta_1 = \cdots = \theta_K\}$在点$\Theta$处的法锥(Normal Cone)。
+
+我们回忆一下法锥(Normal Cone)的定义：
+\begin{definition}[法锥(Normal Cone)]
+设$\Omega \in \R^n$是$n$维欧氏空间中的非空凸集，$x \in \Omega$是其中一点，那么非空凸集$\Omega$在点$x$处的法锥(Normal Cone)为
+\begin{equation}
+\label{eq:def-normal-cone}
+\mathcal{N}_{\Omega}(x) = \left\{ v ~ \middle| ~ \langle v, w - x \rangle \leqslant 0 ~ \forall w \in \Omega \right\}.
+\end{equation}
+\end{definition}
+
+
 \input{algorithms/feddr.tex}

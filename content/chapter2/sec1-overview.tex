@@ -72,10 +72,8 @@ f(\theta) \geqslant c > -\infty, ~ \forall \theta \in \R^d.
 \begin{equation}
 \label{eq:fl-basic-constraint}
 \begin{array}{cl}
-\begin{array}{cl}
 \minimize & \sum\limits_{k=1}^K w_k f_k(\theta_k), \\
 \text{subject to} & \theta_k = \theta, ~ k = 1, \ldots, K.
-\end{array}
 \end{array}
 \end{equation}
 我们很容易看出\eqref{eq:fl-basic-constraint}与\eqref{eq:fl-basic}这两种格式的等价性。格式\eqref{eq:fl-basic-constraint}在分布式优化中被称作共识问题(Consensus Problem)。我们会在本文随后的章节发现，约束优化的格式\eqref{eq:fl-basic-constraint}及其变体，更有利于我们对算法进行理论分析，进而对算法的改进做出指导。
@@ -89,16 +87,40 @@ f(\theta) \geqslant c > -\infty, ~ \forall \theta \in \R^d.
 
 联邦平均算法的核心思想，是充分利用子节点的计算能力，在执行完一定轮数的随机梯度下降(Stochastic Gradient Descent, SGD)之后，由中心节点收集各子节点发送过来的模型参数，进行平均(Averaging)，之后再将平均之后的模型参数广播(Broadcast)给子节点进行下一轮迭代。这样，规避了每一轮SGD都进行通信带来的巨大的通信开销，在加速模型训练的同时，数值上在某些情况下还有更好的收敛性。这实际上是一种比较朴素与简单的``跳步''的思想，这种思想也在随后的研究\cite{zhang2020fedpd, proxskip, proxskip-vr}也得到了进一步的发展。
 
-% 约束优化问题\eqref{eq:fl-basic-constraint}的拉格朗日函数为
-% \begin{equation}
-% \label{eq:fl-basic-lagrangian}
-% \mathcal{L}(\theta_1, \ldots, \theta_K, \theta, \lambda) = \sum\limits_{k=1}^K \left( w_k f_k(\theta_k) + \langle \lambda_k, \theta_k - \theta \rangle \right).
-% \end{equation}
+我们从最优化理论的角度对联邦平均算法进行分析。事实上，联邦平均算法处理的优化问题\eqref{eq:fl-basic}可以等价地改写为如下的约束优化问题(注意与格式\ref{eq:fl-basic-constraint}的差别)
+\begin{equation}
+\label{eq:fedavg-constraint}
+\begin{array}{cl}
+\minimize & F(\Theta) := \sum\limits_{k=1}^K w_k f_k(\theta_k), \\
+\text{subject to} & \Theta \in \mathcal{E}，
+\end{array}
+\end{equation}
+其中$\Theta = \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, \theta_1, \ldots, \theta_K \in \R^d,$ $\mathcal{E} = \left\{ \Theta ~ \middle| ~ \theta_1 = \cdots = \theta_K \right\}$是$\R^{Kd}$中一个凸集。我们知道，投影梯度下降法(Projected Gradient Descent)是求解问题\eqref{eq:fedavg-constraint}的一个有效的算法。投影梯度下降法的迭代格式是
+\begin{equation}
+\label{eq:fedavg-pgd}
+\Theta^{(t+1)} = \Pi_{\mathcal{E}} \left( \Theta^{(t)} - \eta \nabla F(\Theta^{(t)}) \right),
+\end{equation}
+其中$\Pi_{\mathcal{E}}$是到集合$\mathcal{E}$的投影算子。容易看出，到集合$\mathcal{E} = \left\{ \Theta ~ \middle| ~ \theta_1 = \cdots = \theta_K \right\}$的投影映射就是``求平均''映射：
+\begin{equation*}
+\R^{Kd} \to \mathcal{E}: (\theta_1, \ldots, \theta_K) \mapsto (\frac{1}{K}\sum\limits_{k=1}^K \theta_K, \ldots, \frac{1}{K}\sum\limits_{k=1}^K \theta_K).
+\end{equation*}
+也就是说联邦平均算法在数学上，实质上是一种带有随机的投影梯度法。
 
-\subsection{联邦平均的改进算法}
+联邦平均算法在数值上取得了一些不错的实验结果\cite{mcmahan2017fed_avg}，但是其收敛性，特别是在数据非独立同分布的情况下，并未得到证明。
+
+\subsection{联邦平均算法的改进}
 \label{subsec:chap2-overview-fedavg-improve}
 
 待写。。。。
 
 \input{algorithms/fedopt.tex}
+
+
+% fedprox
+bounded dissimilarity:
+for some $\epsilon > 0$, $\exists B_{\epsilon}$ s.t. $\forall w \in \{ w ~|~ \lVert \nabla f(w) > \epsilon \rVert \}$, $B(w) \leqslant B$.
+
+一些关于FedProx文章中的Theorem 4的观察：
+
+在$\lVert \nabla f \rVert$的零点附近，如果这个零点没有被$\mathbb{E}_k[\lVert \nabla F_k \rVert]$消除掉的话，$B$会急速趋向于无穷，导致在$\lVert \nabla f \rVert$的零点附近，$\rho > 0$的假设不再成立，那么定理中的不等式就变得无意义了。当子节点之间的数据分布完全一致的时候（理想情况下），$B$恒为1，就不会有这个问题。这也是FedSplit\cite{pathak2020fedsplit}文章里提到的。
 
