@@ -16,9 +16,9 @@
     }
     {\bfseries Server Update:}\;
     \Indp
-    $\Delta^{(t)} \gets \operatorname{aggregate} \left( \left\{ \Delta_{k}^{(t)} \right\}_{k \in \mathcal{S}^{(t)}} \right) \quad \left( \text{e.g.} \frac{1}{|\lvert \mathcal{S}^{(t)} \rvert} \sum\limits_{k \in \mathcal{S}^{(t)}} \Delta_{k}^{(t)} \right)$\;
+    $\Delta^{(t)} \gets \operatorname{aggregate} \left( \left\{ \Delta_{k}^{(t)} \right\}_{k \in \mathcal{S}^{(t)}} \right)$\;
     $\theta^{(t+1)} \gets$ {\bfseries ServerOpt}$(\theta^{(t)}, \Delta^{(t)}, \eta_g, t)$\;
 }
-\caption{FedOpt\cite{reddi2020fed_opt}算法的伪代码}
+\caption{\texttt{FedOpt}\cite{reddi2020fed_opt}算法的伪代码}
 \label{algo:fedopt}
 \end{algorithm}
