@@ -1,0 +1,21 @@
+\section{联邦学习中的临近点算法}
+\addcontentsline{toe}{section}{{2.2\ \ Proximal Point Algorithms in Federated Learning}\numberline\,}
+\label{sec:chap2-ppa}
+
+基于减小数据非独立同分布情形下，每一轮的子节点更新对整体模型的影响，文献\parencite{sahu2018fedprox}首先提在子节点上的局部模型中增加邻近项的\texttt{FedProx}算法，达到了算法收敛更快、更加稳定的目的。具体来说，在算法迭代的第$t+1$轮，每个子节点优化的目标函数从$f_k(\theta_k)$变为了如下的带临近项的函数
+\begin{equation}
+\label{eq:fedprox}
+f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2
+\end{equation}
+值得注意的是，上式临近项的中心为$\theta^{(t)},$ 即上一轮迭代得到的全局模型。关于临近项中心的其他选取，文献\parencite{hanzely2020federated,li_2021_ditto}进行了研究，我们随后进行详细介绍。
+
+待写。。。。
+
+
+% fedprox
+bounded dissimilarity:
+for some $\epsilon > 0$, $\exists B_{\epsilon}$ s.t. $\forall w \in \{ w ~|~ \lVert \nabla f(w) > \epsilon \rVert \}$, $B(w) \leqslant B$.
+
+一些关于FedProx文章中的Theorem 4的观察：
+
+在$\lVert \nabla f \rVert$的零点附近，如果这个零点没有被$\mathbb{E}_k[\lVert \nabla F_k \rVert]$消除掉的话，$B$会急速趋向于无穷，导致在$\lVert \nabla f \rVert$的零点附近，$\rho > 0$的假设不再成立，那么定理中的不等式就变得无意义了。当子节点之间的数据分布完全一致的时候（理想情况下），$B$恒为1，就不会有这个问题。这也是FedSplit\cite{pathak2020fedsplit}文章里提到的。

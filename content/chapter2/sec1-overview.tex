@@ -1,4 +1,4 @@
-\section{联邦学习中的优化算法}
+\section{联邦学习中的优化算法概述}
 \addcontentsline{toe}{section}{{2.1\ \ Overview of Optimization Algorithms in Federated Learning}\numberline\,}
 \label{sec:chap2-overview}
 % NOT finished
@@ -179,15 +179,4 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
     \end{equation*}
 \end{itemize}
 
-
-待写。。。。
-
-
-% fedprox
-bounded dissimilarity:
-for some $\epsilon > 0$, $\exists B_{\epsilon}$ s.t. $\forall w \in \{ w ~|~ \lVert \nabla f(w) > \epsilon \rVert \}$, $B(w) \leqslant B$.
-
-一些关于FedProx文章中的Theorem 4的观察：
-
-在$\lVert \nabla f \rVert$的零点附近，如果这个零点没有被$\mathbb{E}_k[\lVert \nabla F_k \rVert]$消除掉的话，$B$会急速趋向于无穷，导致在$\lVert \nabla f \rVert$的零点附近，$\rho > 0$的假设不再成立，那么定理中的不等式就变得无意义了。当子节点之间的数据分布完全一致的时候（理想情况下），$B$恒为1，就不会有这个问题。这也是FedSplit\cite{pathak2020fedsplit}文章里提到的。
-
+\texttt{FedOpt}将机器学习领域内常用的一些加速的技巧应用于联邦学习的场景，是\texttt{FedAvg}较为平凡的推广，它的另一个更重要的意义在于充分表明了联邦学习子节点与中心节点的计算的解耦合的性质。
