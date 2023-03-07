@@ -3,7 +3,7 @@
 % \DontPrintSemicolon
 \SetKwInOut{Input}{Input}
 \Input{methods {\bfseries ServerOpt, ClientOpt}, learning rates (schedule) $\eta_g, \eta_l$}
-{\bfseries Initiation:} parameters $\theta^{(0)}$\;
+{\bfseries Initiation:} global model parameters $\theta^{(0)}$\;
 \For{each round $t = 0, 1, \cdots, T-1$}{
     $S^{(t)} \gets$ (random set of clients)\;
     \For{each client $k \in S^{(t)}$ {\bfseries in parallel}}{
