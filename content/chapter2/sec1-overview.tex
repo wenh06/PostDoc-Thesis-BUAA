@@ -109,9 +109,9 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 
 \input{algorithms/fedavg.tex}
 
-联邦平均算法的核心思想，是充分利用子节点的计算能力，在执行完一定轮数的随机梯度下降(Stochastic Gradient Descent, SGD)\cite{Robbins_1951_sgd}之后，由中心节点收集各子节点发送过来的模型参数，进行平均(Averaging)，之后再将平均之后的模型参数广播(Broadcast)给子节点进行下一轮迭代。这样，规避了每一轮SGD都进行通信带来的巨大的通信开销，在加速模型训练的同时，数值上在某些情况下还有更好的收敛性。这实际上是一种比较朴素与简单的``跳步''的思想，这种思想也在随后的研究\cite{zhang2020fedpd, proxskip, proxskip-vr}也得到了进一步的发展。
+联邦平均算法的核心思想，是充分利用子节点的计算能力，在以学习率(learning rate, 又称步长，step size) $\eta$执行完一定轮数的随机梯度下降(Stochastic Gradient Descent, SGD)\cite{Robbins_1951_sgd}之后，由中心节点收集各子节点发送过来的模型参数，进行平均(Averaging)，之后再将平均之后的模型参数广播(Broadcast)给子节点进行下一轮迭代。这样，规避了每一轮SGD都进行通信带来的巨大的通信开销，在加速模型训练的同时，数值上在某些情况下还有更好的收敛性。这实际上是一种比较朴素与简单的``跳步''的思想，这种思想也在随后的研究\cite{zhang2020fedpd, proxskip, proxskip-vr}也得到了进一步的发展。
 
-联邦平均算法在数值上取得了一些不错的实验结果\cite{mcmahan2017fed_avg}，但是其收敛性，特别是在数据非独立同分布的情况下，并未得到证明。文献\parencite{zhou_2018_convergence}首先在假设数据独立同分布的情况下证明了联邦平均算法的收敛性。文献\parencite{li2019convergence}进一步在非独立同分布的情况下证明了联邦平均算法的收敛性，但添加了$f$强凸(见定义\ref{def-convexity})的假设。
+联邦平均算法在数值上取得了一些不错的实验结果\cite{mcmahan2017fed_avg}，但是其收敛性，特别是在数据非独立同分布的情况下，并未得到证明。后续的文献\parencite{zhou_2018_convergence}首先在假设数据独立同分布的情况下证明了联邦平均算法的收敛性。文献\parencite{li2019convergence}进一步在非独立同分布的情况下证明了联邦平均算法的收敛性，但添加了$f$强凸(见定义\ref{def-convexity})的假设。
 
 % TODO: 看这里是否要列举一些收敛率的定理
 
