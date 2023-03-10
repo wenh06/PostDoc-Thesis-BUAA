@@ -5,6 +5,7 @@
 \Input{{\bfseries proximal solvers} $\texttt{prox\_update}_j: \R^d \to \R^d$}
 {\bfseries Initiation:} parameters $\theta^{(0)} \in \R^d$,\;
 \For{each round $t = 0, 1, \cdots$}{
+    broadcast $\theta^{(t)}$ to clients $k \in [K]$\;
     \For{each client $k = 1, \cdots, K$ {\bfseries in parallel}}{
         $\theta_k^{(t)} \gets \theta^{(t)}$\;
         $\theta_k^{(t+1/2)} \gets$ $\texttt{prox\_update}_k(2\theta^{(t)} - \theta_k^{(t)})$ \tcc*[h]{local prox step}\;

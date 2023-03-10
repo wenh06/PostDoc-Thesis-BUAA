@@ -2,7 +2,7 @@
 % \SetAlgoNoLine
 % \DontPrintSemicolon
 {\bfseries Initiation:} $x^{(0)} \in \operatorname{dom}(f)$, $s > 0$, $\alpha > 0$, $\varepsilon_{i,0} \geqslant 0$ \\
-\hspace{2em}Init server: $\overline{x}^{(0)} = \widetilde{x}^{(0)} = y^{(0)} = x^{(0)}$\\
+\hspace{2em}Init server: $\overline{x}^{(0)} = \widetilde{x}^{(0)} = y^{(0)} = x^{(0)} \in \R^d$\\
 \hspace{2em}Init clients: $y_i^{(0)} = x^{(0)}$, {\color{red}$x_i^{(0)} \approx \operatorname{prox}_{sf_i}(y_i^{(0)})$}, $\widehat{x}_i^{(0)} = 2x_i^{(0)} - y_i^{(0)}$\;
 \For{$t = 0, 2, \cdots, T-1$}{
     sample $\mathcal{S}^{(t)} \subseteq [K]$ \tcc*[h]{active clients}\;

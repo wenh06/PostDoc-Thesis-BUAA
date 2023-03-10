@@ -111,7 +111,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 
 联邦平均算法的核心思想，是充分利用子节点的计算能力，在以学习率(learning rate, 又称步长，step size) $\eta$执行完一定轮数的随机梯度下降(Stochastic Gradient Descent, SGD)\cite{Robbins_1951_sgd}之后，由中心节点收集各子节点发送过来的模型参数，进行平均(Averaging)，之后再将平均之后的模型参数广播(Broadcast)给子节点进行下一轮迭代。这样，规避了每一轮SGD都进行通信带来的巨大的通信开销，在加速模型训练的同时，数值上在某些情况下还有更好的收敛性。这实际上是一种比较朴素与简单的``跳步''的思想，这种思想也在随后的研究\cite{zhang2020fedpd, proxskip, proxskip-vr}也得到了进一步的发展。
 
-联邦平均算法在数值上取得了一些不错的实验结果\cite{mcmahan2017fed_avg}，但是其收敛性，特别是在数据非独立同分布的情况下，并未得到证明。后续的文献\parencite{zhou_2018_convergence}首先在假设数据独立同分布的情况下证明了联邦平均算法的收敛性。文献\parencite{li2019convergence}进一步在非独立同分布的情况下证明了联邦平均算法的收敛性，但添加了$f$强凸(见定义\ref{def-convexity})的假设。
+联邦平均算法在数值上取得了一些不错的实验结果\cite[Section 3]{mcmahan2017fed_avg}，但是其收敛性，特别是在数据非独立同分布的情况下，并未得到证明。后续的文献\parencite{zhou_2018_convergence}首先在假设数据独立同分布的情况下证明了联邦平均算法的收敛性。文献\parencite{li2019convergence}进一步在非独立同分布的情况下证明了联邦平均算法的收敛性，但添加了$f$强凸(见定义\ref{def-convexity})的假设。
 
 % TODO: 看这里是否要列举一些收敛率的定理
 
@@ -137,10 +137,12 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \end{equation*}
 也就是说联邦平均算法在数学上，实质上是一种随机投影梯度法，子节点执行的是梯度步(具体来说是用的随机梯度下降)，中心节点执行的是投影步。
 
+关于联邦平均算法\texttt{FedAvg}的收敛结果，待写。。。
+
 \subsection{联邦平均算法的改进}
 \label{subsec:chap2-overview-fedavg-improve}
 
-自从联邦平均算法\texttt{FedAvg}算法被提出以来，一直有学者从联邦学习面临的几大核心挑战(见\S\ref{sec:chap1-fl-applications})出发，对联邦平均算法加以改进，提出一些收敛速度更快\cite{reddi2020fed_opt}、通信资源要求更少\cite{karimireddy2020scaffold}、鲁棒性更强\cite{sahu2018fedprox}的算法。
+收敛速度是最优化算法的一个重要指标，自从联邦平均算法\texttt{FedAvg}算法被提出以来，一直有学者从联邦学习面临的几大核心挑战(见\S\ref{sec:chap1-fl-applications})出发，对联邦平均算法加以改进，提出一些收敛速度更快\cite{reddi2020fed_opt}、通信资源要求更少\cite{karimireddy2020scaffold}、鲁棒性更强\cite{sahu2018fedprox}的算法。
 
 因为联邦平均算法是以随机梯度下降法为基础的，那么一个自然的想法就是将随机梯度下降法的一些加速的技巧\cite{adagrad, adam, Zaheer_2018_yogi, adamw_amsgrad}引入联邦学习整个算法体系内。由于联邦学习子节点与中心节点的计算相对独立无耦合，所以这种做法并不需要对联邦学习整个算法框架做大改动，是一种可行的方法。事实上，联邦平均算法的作者在随后发表的文章\parencite{reddi2020fed_opt}中实践了这一想法，提出了一个泛用性更强的\texttt{FedOpt}的联邦学习算法框架。\texttt{FedOpt}的伪代码见算法\ref{algo:fedopt}. 
 
@@ -180,3 +182,10 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \end{itemize}
 
 \texttt{FedOpt}将机器学习领域内常用的一些加速的技巧应用于联邦学习的场景，是\texttt{FedAvg}较为平凡的推广，它的另一个更重要的意义在于充分表明了联邦学习子节点与中心节点的计算的解耦合的性质。
+
+\texttt{FedAvg}以及\texttt{FedOpt}算法考虑的主要是数据在各子节点之间独立同分布的场景。对于更具有实际意义的数据非独立同分布的场景，我们需要引入一些别的工具来处理这种情况。此时，各子节点上的梯度在分布上是有差异的，一个很自然的想法就是引入一些额外的参数，与模型参数一起更新，利用这些额外的参数对子节点的梯度进行修正，减小各子节点上的梯度在分布上的差异，进而达到加速收敛的目的。这种技术就是方差缩减技术，由文献\parencite{karimireddy2020scaffold}首次引入联邦学习中。
+
+
+\input{algorithms/scaffold}
+
+待写

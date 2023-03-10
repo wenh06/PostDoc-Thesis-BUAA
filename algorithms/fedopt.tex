@@ -3,9 +3,10 @@
 % \DontPrintSemicolon
 \SetKwInOut{Input}{Input}
 \Input{methods {\bfseries ServerOpt, ClientOpt}, learning rates (schedule) $\eta_g, \eta_l$}
-{\bfseries Initiation:} global model parameters $\theta^{(0)}$\;
+{\bfseries Initiation:} global (server) model parameters $\theta^{(0)} \in \R^d$\;
 \For{each round $t = 0, 1, \cdots, T-1$}{
-    $S^{(t)} \gets$ (random set of clients)\;
+    $S^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
+    broadcast $\theta^{(t)}$ to clients $k \in S^{(t)}$\;
     \For{each client $k \in S^{(t)}$ {\bfseries in parallel}}{
         $\theta_k^{(t, 0)} \gets \theta^{(t)}$\;
         \For{local step $r = 0, 1, \cdots, R-1$}{
