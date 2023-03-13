@@ -2,7 +2,33 @@
 \addcontentsline{toe}{section}{{2.3\ \ Operator Splitting Algorithms in Federated Learning}\numberline\,}
 \label{sec:chap2-operator-split}
 
-待写。。。。
+我们已经讨论过的通用加速技巧\cite{reddi2020fed_opt}，方差缩减技术\cite{karimireddy2020scaffold}，以及临近点方法\cite{sahu2018fedprox}，解决的都是联邦学习在各种各样场景下的收敛性、收敛率相关的问题，而算法收敛结果的正确性这一问题始终没有得到重视。我们来举一个非常简单的例子来说明这个问题。
+
+\begin{example}
+\label{eg:correctness}
+假设我们要拟合线性模型$y = mx$, $m$为需要拟合的变量，使用均方误差(Mean Squared Error, MSE)做损失函数 (目标函数)。我们有两个参与方，参与方1的拥有的训练数据为$\{ (0, 2), (1, 2) \},$ 相应的目标函数为
+\begin{equation*}
+f_1(m_1) = 4 + (m_1 - 2)^2;
+\end{equation*}
+参与方2的拥有的训练数据为$\{ (2, 0), (2, 1) \},$ 相应的目标函数为
+\begin{equation*}
+f_2(m_2) = 4m_2^2 + (2m_2 - 1)^2.
+\end{equation*}
+那么参与方1单独拟合结果为$m_1 = 2$, 参与方2单独拟合结果为$m_2 = \frac{1}{4}$, 采用联邦平均算法\texttt{FedAvg}的结果是$m = \frac{9}{8}.$ 而采用临近点算法\texttt{FedProx}的结果(计算依据见定理\ref{thm:fedsplit-correctness})是
+\begin{equation*}
+m = \frac{36 + 4\mu}{32 + 9\mu},
+\end{equation*}
+其中$\mu$为临近项相关的系数 (见式\eqref{eq:fedprox})。
+
+数据都拿一起拟合结果为$k = \frac{4}{9}.$ 注意，这里一起拟合的结果并不等于单独拟合的均值 (\texttt{FedAvg}的结果)，原因就在于loss function里的k是2次的，不是线性的。
+\end{example}
+
+文献\cite{pathak2020fedsplit}首先注意到这个问题，并具体分析了联邦平均算法\texttt{FedAvg}与临近点算法\texttt{FedProx}的理论收敛结果，如下
+
+\begin{theorem}
+\label{thm:fedsplit-correctness}
+xx
+\end{theorem}
 
 \input{algorithms/fedsplit.tex}
 

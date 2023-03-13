@@ -1,7 +1,7 @@
 \section{联邦学习中的优化算法概述}
 \addcontentsline{toe}{section}{{2.1\ \ Overview of Optimization Algorithms in Federated Learning}\numberline\,}
 \label{sec:chap2-overview}
-% NOT finished
+% almost finished
 
 优化算法自从联邦学习这一概念诞生起，便一直是相关研究的中心问题之一。联邦学习开创性的文献\parencite{mcmahan2017fed_avg}中，最重要也是最为人所熟知的便是优化算法\texttt{FederatedAveraging}（简记为\texttt{FedAvg}）的提出。
 
@@ -137,7 +137,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \end{equation*}
 也就是说联邦平均算法在数学上，实质上是一种随机投影梯度法，子节点执行的是梯度步(具体来说是用的随机梯度下降)，中心节点执行的是投影步。
 
-关于联邦平均算法\texttt{FedAvg}的收敛结果，待写。。。
+% 关于联邦平均算法\texttt{FedAvg}的收敛结果，待写。。。
 
 \subsection{联邦平均算法的改进}
 \label{subsec:chap2-overview-fedavg-improve}
@@ -183,8 +183,8 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 
 \texttt{FedOpt}将机器学习领域内常用的一些加速的技巧应用于联邦学习的场景，是\texttt{FedAvg}较为平凡的推广，它的另一个更重要的意义在于充分表明了联邦学习子节点与中心节点的计算的解耦合的性质。
 
-\texttt{FedAvg}以及\texttt{FedOpt}算法考虑的主要是数据在各子节点之间独立同分布的场景。对于更具有实际意义的数据非独立同分布的场景，我们需要引入一些别的工具来处理这种情况。此时，各子节点上的梯度在分布上是有差异的，一个很自然的想法就是引入一些额外的参数，与模型参数一起更新，利用这些额外的参数对子节点的梯度进行修正，减小各子节点上的梯度在分布上的差异，进而达到加速收敛的目的。这种技术就是方差缩减(Variance Reduction)技术\cite{johnson2013accelerating}，由文献\parencite{karimireddy2020scaffold}首次引入联邦学习中，其伪代码可见算法\ref{algo:scaffold}。
+\texttt{FedAvg}以及\texttt{FedOpt}算法考虑的主要是数据在各子节点之间独立同分布的场景。对于更具有实际意义的数据非独立同分布的场景，我们需要引入一些别的工具来处理这种情况。此时，各子节点上的梯度在分布上是有差异的，一个很自然的想法就是引入一些额外的参数，与模型参数一起更新，利用这些额外的参数对子节点的梯度进行修正，减小各子节点上的梯度在分布上的差异，进而达到加速收敛的目的。这种技术就是方差缩减(Variance Reduction)技术\cite{johnson2013accelerating}，由文献\parencite{karimireddy2020scaffold}以算法\texttt{SCAFFOLD} (Stochastic Controlled Averaging algorithm) 的形式首次引入联邦学习中，其伪代码可见算法\ref{algo:scaffold}。
 
 \input{algorithms/scaffold}
 
-方差缩减这项技术可以灵活地和大部分算法相结合，目前已经成为联邦学习中统计异质性的一种常用的处理手段。需要注意的是，我们可以在SCAFFOLD算法\ref{algo:scaffold} 中看到，在中心服务器端与子节点端，都有额外的参数$c, c_k$需要维护，产生额外的通信开销。这对于在通信开销敏感的联邦学习场景，这会是一个潜在的问题，所以一个更好的办法是将方差缩减与``跳步''更新的技术联合使用\cite{proxskip-vr}。关于``跳步''的算法，我们会在\S\ref{sec:chap2-skip-alg} 中进行更详细的介绍。同时，SCAFFOLD算法\ref{algo:scaffold} 传输了梯度相关的信息，这在安全性方面\cite{zhu2019deep_leakage}也是一个隐患。
+方差缩减这项技术可以灵活地和大部分算法相结合，目前已经成为联邦学习中统计异质性的一种常用的处理手段。需要注意的是，我们可以在\texttt{SCAFFOLD}算法\ref{algo:scaffold} 中看到，在中心服务器端与子节点端，都有额外的参数$c, c_k$需要维护，产生额外的通信开销。这对于在通信开销敏感的联邦学习场景，这会是一个潜在的问题，所以一个更好的办法是将方差缩减与``跳步''更新的技术联合使用\cite{proxskip-vr}。关于``跳步''的算法，我们会在\S\ref{sec:chap2-skip-alg} 中进行更详细的介绍。同时，\texttt{SCAFFOLD}算法\ref{algo:scaffold} 传输了梯度相关的信息，这在安全性方面\cite{zhu2019deep_leakage}也是一个隐患。
