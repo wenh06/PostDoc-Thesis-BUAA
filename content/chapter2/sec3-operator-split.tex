@@ -14,21 +14,45 @@ f_1(m_1) = 4 + (m_1 - 2)^2;
 \begin{equation*}
 f_2(m_2) = 4m_2^2 + (2m_2 - 1)^2.
 \end{equation*}
-那么参与方1单独拟合结果为$m_1 = 2$, 参与方2单独拟合结果为$m_2 = \frac{1}{4}$, 采用联邦平均算法\texttt{FedAvg}的结果是$m = \frac{9}{8}.$ 而采用临近点算法\texttt{FedProx}的结果(计算依据见定理\ref{thm:fedsplit-correctness})是
-\begin{equation*}
+那么参与方1单独拟合结果为$m_1 = 2$, 参与方2单独拟合结果为$m_2 = \frac{1}{4}$, 采用联邦平均算法\texttt{FedAvg}的结果是$m = \frac{9}{8}.$ 而采用联邦临近点算法\texttt{FedProx}的结果(计算依据见定理\ref{thm:fedsplit-correctness})是
+\begin{equation}
+\label{eq:eg-correctness-fedprox}
 m = \frac{36 + 4\mu}{32 + 9\mu},
-\end{equation*}
+\end{equation}
 其中$\mu$为临近项相关的系数 (见式\eqref{eq:fedprox})。
 
 数据都拿一起拟合结果为$k = \frac{4}{9}.$ 注意，这里一起拟合的结果并不等于单独拟合的均值 (\texttt{FedAvg}的结果)，原因就在于loss function里的k是2次的，不是线性的。
 \end{example}
 
-文献\cite{pathak2020fedsplit}首先注意到这个问题，并具体分析了联邦平均算法\texttt{FedAvg}与临近点算法\texttt{FedProx}的理论收敛结果，如下
+文献\cite{pathak2020fedsplit}首先注意到这个问题，并具体分析了联邦平均算法\texttt{FedAvg}与联邦临近点算法\texttt{FedProx}的理论收敛结果，如下
 
 \begin{theorem}
 \label{thm:fedsplit-correctness}
-xx
+假设我们有$K$个节点参与联邦学习，每一个节点$k \in [K]$的目标函数为$f_k(\theta_k),$ 那么
+\begin{itemize}
+\item[(1)] 若采用联邦平均算法\texttt{FedAvg} \ref{algo:fedavg}，且假设子节点上的参数更新方式为单步 (即$R = 1$) 的梯度下降。记梯度映射为
+\begin{equation*}
+\mathcal{G}_k (\theta_k) := \theta_k - \eta \nabla f_k (\theta_k),
+\end{equation*}
+并记$\mathcal{G}^e_k (\theta_k) := \underbrace{G_k\circ\cdots\circ G_k}_{e-\text{次复合}} (\theta_k).$ 若算法 \ref{algo:fedavg} 生成的全局模型参数的序列$\{ \theta^{(t)} \}_{t=1}^{\infty}$收敛，那么所有子节点$k \in [K]$模型参数的序列$\{ \theta_k^{(t)} \}_{t=1}^{\infty}$有公共的极限$\theta^*,$ 且$\theta^*$满足下列不动点条件
+\begin{equation}
+\label{eq:fedgd-fixed-pt}
+\sum\limits_{i=1}^e \sum\limits_{k=1}^K \nabla f_k(\mathcal{G}_k^{i-1}(\theta^*)) = 0.
+\end{equation}
+\item[(2)] 若采用联邦临近点算法\texttt{FedProx} \ref{algo:fedprox}，记Moreau包络映射\eqref{eq:moreau_env}为
+\begin{equation}
+\label{eq:moreau-mapping}
+\mathcal{M}_{\mu, f_k} (\theta) := \inf\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta - \theta_k \rVert^2 \right\}.
+\end{equation}
+若算法 \ref{algo:fedprox} 生成的全局模型参数的序列$\{ \theta^{(t)} \}_{t=1}^{\infty}$收敛，那么所有子节点$k \in [K]$模型参数的序列$\{ \theta_k^{(t)} \}_{t=1}^{\infty}$有公共的极限$\theta^*,$ 且$\theta^*$满足下列不动点条件
+\begin{equation}
+\label{eq:fedprox-fixed-pt}
+\sum\limits_{k=1}^K \nabla \mathcal{M}_{\mu, f_k} (\theta^*) = 0.
+\end{equation}
+\end{itemize}
 \end{theorem}
+
+待写。。。
 
 \input{algorithms/fedsplit.tex}
 
