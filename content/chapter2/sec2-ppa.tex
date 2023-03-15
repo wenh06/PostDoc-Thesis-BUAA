@@ -9,7 +9,7 @@
 \label{eq:fedprox}
 h_k(\theta_k, \theta^{(t)}) := \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2  \right\},
 \end{equation}
-上式中的$\mu$被称作罚参数(penalty constant)。值得注意的是，上式临近项的中心为$\theta^{(t)},$ 即上一轮迭代得到的全局模型。关于临近项中心的其他选取，文献\parencite{hanzely2020federated,li_2021_ditto}进行了研究，我们随后进行详细介绍。我们将联邦临近点算法\texttt{FedProx}的伪代码总结在算法\ref{algo:fedprox}中。
+上式中的$\mu$被称作罚参数(penalty constant)。值得注意的是，上式临近项的中心为$\theta^{(t)},$ 即上一轮迭代得到的全局模型。关于临近项中心的其他选取，文献\parencite{hanzely2020federated,li_2021_ditto}进行了研究，我们随后进行详细介绍。我们将联邦临近点算法\texttt{FedProx}的伪代码总结在算法\ref{algo:fedprox}~中。
 
 \input{algorithms/fedprox}
 
@@ -26,7 +26,7 @@ h_k(\theta_k, \theta^{(t)}) := \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \the
 被称作$f_k$的Moreau包络 (Moreau Envelope) 或者Moreau-Yosida正规化 (Moreau-Yosida Regularization)。关于联邦临近点算法\texttt{FedProx}在非凸情况下的收敛性，文献\parencite{sahu2018fedprox}有如下的结论
 \begin{theorem}[\parencite{sahu2018fedprox} Theorem 4]
 \label{thm:fedprox}
-假设子节点的目标函数$\{f_k\}_{k=1}^K$都是非凸、$L$−光滑(定义见式\eqref{eq:l-smooth})函数，并且存在常数$L_- > 0,$使得$\nabla^2 f_k \succcurlyeq -L_- I_d.$ 又假设$\{f_k\}_{k=1}^K$满足差异有解条件(Bounded Dissimilarity)，即对$\varepsilon > 0,$ 存在常数$B_{\varepsilon} > 0,$ 使得集合$\mathcal{S}_{\varepsilon}^c := \{ \theta ~|~ \lVert \nabla f(\theta) \rVert^2 > \varepsilon\}$中的任何一点$\theta$都满足不等式
+假设子节点的目标函数$\{f_k\}_{k=1}^K$都是非凸、$L$−光滑(定义见式~\eqref{eq:l-smooth})函数，并且存在常数$L_- > 0,$使得$\nabla^2 f_k \succcurlyeq -L_- I_d.$ 又假设$\{f_k\}_{k=1}^K$满足差异有解条件(Bounded Dissimilarity)，即对$\varepsilon > 0,$ 存在常数$B_{\varepsilon} > 0,$ 使得集合$\mathcal{S}_{\varepsilon}^c := \{ \theta ~|~ \lVert \nabla f(\theta) \rVert^2 > \varepsilon\}$中的任何一点$\theta$都满足不等式
 \begin{equation}
 \label{eq:fedprox_bdd_dissim}
 B(\theta) := \frac{\expectation_k [\lVert \nabla f_k(\theta) \rVert^2]}{\lVert \nabla f(\theta) \rVert^2} \leqslant B_{\varepsilon}.
@@ -35,7 +35,7 @@ B(\theta) := \frac{\expectation_k [\lVert \nabla f_k(\theta) \rVert^2]}{\lVert \
 \begin{equation*}
 \rho := \left( \frac{1}{\mu} - \frac{\gamma B}{\mu} - \frac{B(1+\gamma)\sqrt{2}}{\bar{\mu}\sqrt{K}} - \frac{LB(1+\gamma)}{\bar{\mu}\mu} - \frac{LB^2(1+\gamma)^2}{2\bar{\mu}^2} - \frac{LB^2(1+\gamma)^2}{\bar{\mu}^2 K} \left( 2\sqrt{2K} + 2 \right) \right) > 0,
 \end{equation*}
-其中$\bar{\mu} = \mu - L_- > 0.$ 那么在联邦临近点算法\ref{algo:fedprox}的第$t+1$步，设前一步的全局模型参数$\theta^{(t)}$为全局目标函数$f$的一阶非稳定点(即$\theta^{(t)} \in \mathcal{S}_{\varepsilon}^c,$ 那么$f$的值满足如下的下降关系
+其中$\bar{\mu} = \mu - L_- > 0.$ 那么在联邦临近点算法\ref{algo:fedprox}~的第$t+1$步，设前一步的全局模型参数$\theta^{(t)}$为全局目标函数$f$的一阶非稳定点(即$\theta^{(t)} \in \mathcal{S}_{\varepsilon}^c,$ 那么$f$的值满足如下的下降关系
 \begin{equation*}
 \expectation\nolimits_{\mathcal{S}^{(t)}}[f(\theta^{(t+1)})] \leqslant f(\theta^{(t)}) - \rho \lVert \nabla f (\theta^{(t)}) \rVert^2.
 \end{equation*}
@@ -47,5 +47,5 @@ B(\theta) := \frac{\expectation_k [\lVert \nabla f_k(\theta) \rVert^2]}{\lVert \
 当子节点之间的数据分布完全一致的时候（理想情况下），$B_{\varepsilon}$恒为1，就不会有这个问题。这也是后续一系列文章\cite{pathak2020fedsplit,tran2021feddr}进行改进的出发点。
 \end{rem}
 
-联邦临近点算法\texttt{FedProx}的积极意义在于，首次将临近点算法(Proximal Point Algorithms, PPA)引入联邦学习领域中。临近点算法不仅仅在理论分析上可以提供一个好的框架，在算法设计上也能提供一个支撑。后续在\$\ref{chap3}我们将要详细研究的有关个性化联邦学习的工作\cite{hanzely2020federated,li_2021_ditto,t2020pfedme,li2021pfedmac}都依赖于引入临近项(或者类似的项)作为模型个性化的主要技术手段。
+联邦临近点算法\texttt{FedProx}的积极意义在于，首次将临近点算法(Proximal Point Algorithms, PPA)引入联邦学习领域中。临近点算法不仅仅在理论分析上可以提供一个好的框架，在算法设计上也能提供一个支撑。后续在\$\ref{chap3}~我们将要详细研究的有关个性化联邦学习的工作\cite{hanzely2020federated,li_2021_ditto,t2020pfedme,li2021pfedmac}都依赖于引入临近项(或者类似的项)作为模型个性化的主要技术手段。
 
