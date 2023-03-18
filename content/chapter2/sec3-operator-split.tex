@@ -8,16 +8,16 @@
 \label{eg:correctness}
 假设我们要拟合线性模型$y = mx$, $m$为需要拟合的变量，使用均方误差(Mean Squared Error, MSE)做损失函数 (目标函数)，即我们考虑的是一个最小二乘问题。假设我们有两个参与方，参与方1的拥有的训练数据为$\{ (0, 2), (1, 2) \},$ 相应的目标函数为
 \begin{equation*}
-f_1(m_1) = 4 + (m_1 - 2)^2;
+f_1(m_1) = \frac{1}{2} (4 + (m_1 - 2)^2);
 \end{equation*}
 参与方2的拥有的训练数据为$\{ (2, 0), (2, 1) \},$ 相应的目标函数为
 \begin{equation*}
-f_2(m_2) = 4m_2^2 + (2m_2 - 1)^2.
+f_2(m_2) = \frac{1}{2} (4m_2^2 + (2m_2 - 1)^2).
 \end{equation*}
-那么参与方1单独拟合结果为$m_1 = 2$, 参与方2单独拟合结果为$m_2 = \frac{1}{4}$, 采用联邦平均算法\texttt{FedAvg}的结果是$m = \frac{9}{8}.$ 而采用联邦临近点算法\texttt{FedProx}的结果(计算依据见定理\ref{thm:fedsplit-correctness})是
+那么参与方1单独拟合结果为$m_1 = 2$, 参与方2单独拟合结果为$m_2 = \frac{1}{4}$, 采用联邦平均算法\texttt{FedAvg}的结果是$m = \frac{9}{8}.$ 而采用联邦临近点算法\texttt{FedProx}的结果(计算方法见定理\ref{thm:fedsplit-correctness})是
 \begin{equation}
 \label{eq:eg-correctness-fedprox}
-m = \frac{36 + 4\mu}{32 + 9\mu},
+m = \frac{18 + 4\mu}{16 + 9\mu},
 \end{equation}
 其中$\mu$为临近项相关的系数 (见式~\eqref{eq:fedprox})。
 
@@ -96,19 +96,31 @@ m = \frac{36 + 4\mu}{32 + 9\mu},
 \end{proof}
 
 \begin{rem}
-我们把定理~\ref{thm:fedsplit-correctness}应用到一个一般的最小二乘问题$f_k(\theta_k) = \lVert A_k \theta_k + b_k \rVert^2,$ $A_k$列满秩，$k \in [K],$ 那么我们有
-\begin{itemize}
-    \item $\theta^*_{\texttt{FedGD}} = \left( \sum\limits_{k=1}^K A_k^TA_k G \right)^{-1}\left( \sum\limits_{k=1}^K GA_k^Tb_k \right),$ 其中矩阵$G = \sum\limits_{i=0}^{R-1} ( I - \frac{1}{\mu} A_k^TA_k )^i$
-    \item $x^*_{\texttt{FedProx}} = \left( \sum\limits_{k=1}^K \left( I - P_k \right) \right)^{-1} \left( \mu \sum\limits_{k=1}^K P_kA_k^Tb_k \right)，$ 其中矩阵$P_k = ( I + \frac{1}{\mu} A_k^TA_k )^{-1}$
-\end{itemize}
-上面的$\theta^*_{\texttt{FedGD}}, x^*_{\texttt{FedProx}}$分别是算法\texttt{FedGD}以及\texttt{FedProx}的理论收敛点。但是，实际上，这个最小二乘问题真正的最优解应该是
+我们把定理~\ref{thm:fedsplit-correctness}应用到一个一般的最小二乘问题$f_k(\theta_k) = \frac{1}{2}\lVert A_k \theta_k + b_k \rVert^2,$ $A_k$列满秩，$k \in [K],$ 那么我们有
+\begin{subequations}
+\label{eq:lst-sol}
+\begin{align}
+\theta^*_{\texttt{FedGD}} & = \left( \sum\limits_{k=1}^K A_k^TA_k G \right)^{-1}\left( \sum\limits_{k=1}^K GA_k^Tb_k \right), \label{eq:lst-sol-fedgd} \\
+\theta^*_{\texttt{FedProx}} & = \left( \sum\limits_{k=1}^K \left( I - P_k \right) \right)^{-1} \left( \sum\limits_{k=1}^K Q_kA_k^Tb_k \right)， \label{eq:lst-sol-fedprox}
+\end{align}
+\end{subequations}
+上式中的$\theta^*_{\texttt{FedGD}}, \theta^*_{\texttt{FedProx}}$分别是算法\texttt{FedGD}以及\texttt{FedProx}的理论收敛点，矩阵
 \begin{equation*}
-\theta^* = \left( \sum_{k=1}^K A_k^TA_k \right)^{-1} \sum_{k=1}^K A_k^Tb_k.
+G = \sum\limits_{i=0}^{R-1} ( I - \frac{1}{\mu} A_k^TA_k )^i, ~~ P_k = ( I + \frac{1}{\mu} A_k^TA_k )^{-1}, ~~ Q_k = (\mu I + A_k^TA_k)^{-1}.
 \end{equation*}
-待写。。。。
+我们把这个结论应用到例~\ref{eg:correctness}~即可得到联邦临近点算法的收敛结果~\eqref
+{eq:eg-correctness-fedprox}。但是，从另一方面来说，最小二乘问题
+\begin{equation*}
+\text{minimize} ~ \sum\limits_{k=1}^K \frac{1}{2}\lVert A_k \theta_k + b_k \rVert^2
+\end{equation*}
+的最优解很容易算得是
+\begin{equation*}
+\theta^* = \left( \sum_{k=1}^K A_k^TA_k \right)^{-1} \sum_{k=1}^K A_k^Tb_k,
+\end{equation*}
+一般情况下，这与联邦平均算法\texttt{FedAvg}的理论收敛点~\eqref{eq:lst-sol-fedgd}~以及联邦临近点算法\texttt{FedProx}的的理论收敛点~\eqref{eq:lst-sol-fedprox}~并不一致。
 \end{rem}
 
-我们需要重新考虑的优化问题~\eqref{eq:fl-basic}~的等价转换。我们把这个问题改写为如下的共识优化问题(注意与式~\eqref{eq:fl-basic-constraint}~的细微差别)
+以上便是文献\parencite{pathak2020fedsplit}首先发现的大部分已有的联邦学习算法在收敛结果正确性方面的缺陷，因此需要需要重新考虑的优化问题~\eqref{eq:fl-basic}~的等价转换。我们把这个问题改写为如下的共识优化问题(注意与式~\eqref{eq:fl-basic-constraint}~的细微差别)
 \begin{equation}
 \label{eq:fedsplit-constraint}
 \begin{array}{cl}
@@ -135,19 +147,35 @@ A = \begin{pmatrix} I_d & -I_d & & & \\ & I_d & -I_d & & \\ & & \ddots & \ddots 
 0 \in \nabla F(\Theta) + \mathcal{N}_{\mathcal{E}}(\Theta)
 \end{equation}
 其中
-\begin{equation*}
+\begin{equation}
+\label{eq:normal-cone}
 \mathcal{N}_{\mathcal{E}}(\Theta) = \begin{cases} \mathcal{E}^{\perp} & \text{ if } \Theta \in \mathcal{E} \\ \emptyset & \text{ otherwise } \end{cases}
-\end{equation*}
-是凸集$\mathcal{E} = \{ \Theta \in \R^{Kd} ~ | ~ \theta_1 = \cdots = \theta_K\}$在点$\Theta$处的法锥(Normal Cone)。
+\end{equation}
+是凸集$\mathcal{E} = \{ \Theta \in \R^{Kd} ~ | ~ \theta_1 = \cdots = \theta_K\}$在点$\Theta$处的法锥(Normal Cone)，$\nabla F,$ $\mathcal{N}_{\mathcal{E}}$是两个极大单调算子(Maximal Monotone Operator)。
 
-我们回忆一下法锥(Normal Cone)的定义：
+我们回忆一下法锥以及极大单调算子的定义：
+
 \begin{definition}[法锥(Normal Cone)]
+\label{def:normal-cone}
 设$\Omega \in \R^n$是$n$维欧氏空间中的非空凸集，$x \in \Omega$是其中一点，那么非空凸集$\Omega$在点$x$处的法锥(Normal Cone)为
 \begin{equation}
 \label{eq:def-normal-cone}
 \mathcal{N}_{\Omega}(x) = \left\{ v ~ \middle| ~ \langle v, w - x \rangle \leqslant 0 ~ \forall w \in \Omega \right\}.
 \end{equation}
 \end{definition}
+
+\begin{definition}[极大单调算子(Maximal Monotone Operator)]
+\label{def:mmo}
+待写。。。。
+\end{definition}
+
+事实上，对于凸集$\mathcal{E}$中的点$\Theta \in \mathcal{E},$ 我们有
+\begin{align*}
+\mathcal{N}_{\mathcal{E}}(\Theta) & = \left\{ \omega \ \middle|\ \langle \omega, \widetilde{\Theta} - \Theta \rangle \leqslant 0, ~~ \forall \widetilde{\Theta} \in {\mathcal{E}} \right\} \\
+& = \left\{ \omega \ \middle|\ \left\langle \sum\limits_{k=1}^K \omega_j, ~~ \widetilde{\Theta}_1 - \Theta_1 \right\rangle \leqslant 0, \ \forall \widetilde{\Theta}_1 \in \mathbb{R}^d \right\} \\
+& = \left\{ \omega \ \middle|\ \sum\limits_{k=1}^K \omega_k = 0 \right\} = {\mathcal{E}}^{\perp},
+\end{align*}
+由此可以得到法锥$\mathcal{N}_{\mathcal{E}}(\Theta)$的具体表达式~\eqref{eq:normal-cone}。
 
 待写。。。。
 
