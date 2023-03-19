@@ -32,6 +32,40 @@
 % \usepackage{setspace}
 \usepackage{boxedminipage}
 
+% from newtxmath
+\DeclareFontFamily{U}{ntxmia}{}
+\DeclareFontShape{U}{ntxmia}{m}{it}{<-> ntxmia }{}
+\DeclareFontShape{U}{ntxmia}{b}{it}{<-> ntxbmia }{}
+\DeclareSymbolFont{lettersA}{U}{ntxmia}{m}{it}
+\SetSymbolFont{lettersA}{bold}{U}{ntxmia}{b}{it}
+
+\AtBeginDocument{\let\mathbb\varmathbb}
+
+\ExplSyntaxOn
+\NewDocumentCommand{\varmathbb}{m}
+ {
+  \tl_map_inline:nn { #1 }
+   {
+    \use:c { varbb##1 }
+   }
+ }
+\cs_new_protected:Nn \__mathbb_define:Nn
+ {
+  \DeclareMathSymbol{#1}{\mathord}{lettersA}{#2}
+ }
+\cs_generate_variant:Nn \__mathbb_define:Nn {ce}
+\tl_map_inline:nn { ABCDEFGHIJKLMNOPQRSTUVWXYZ }
+ {
+  \__mathbb_define:ce { varbb#1 } { \int_eval:n { `#1+67 } }
+ }
+\tl_map_inline:nn { abcdefghijklmnopqrstuvwxyz }
+ {
+  \__mathbb_define:ce { varbb#1 } { \int_eval:n { `#1+61 } }
+ }
+\DeclareMathSymbol{\varbbimath}{\mathord}{lettersA}{'270}
+\DeclareMathSymbol{\varbbjmath}{\mathord}{lettersA}{'271}
+\ExplSyntaxOff
+
 \usepackage[ruled,linesnumbered,algosection,nofillcomment]{algorithm2e}
 \renewcommand*{\algorithmcfname}{算法}
 \renewcommand*{\algorithmautorefname}{算法}
@@ -106,6 +140,7 @@
 \DeclareMathOperator*{\minimize}{minimize}
 % \DeclareMathOperator*{\prox}{prox}
 \newcommand{\prox}{\mathbf{prox}}
+\newcommand{\dom}{\operatorname{dom}}
 
 \newcommand{\R}{\mathbb{R}}
 

@@ -153,9 +153,24 @@ A = \begin{pmatrix} I_d & -I_d & & & \\ & I_d & -I_d & & \\ & & \ddots & \ddots 
 \end{equation}
 是凸集$\mathcal{E} = \{ \Theta \in \R^{Kd} ~ | ~ \theta_1 = \cdots = \theta_K\}$在点$\Theta$处的法锥(Normal Cone)，$\nabla F,$ $\mathcal{N}_{\mathcal{E}}$是两个极大单调算子(Maximal Monotone Operator)。
 
-我们回忆一下法锥以及极大单调算子的定义：
+我们回忆一下极大单调算子以及法锥的定义：
 
-\begin{definition}[法锥(Normal Cone)]
+\begin{definition}[极大单调算子(Maximal Monotone Operator)\cite{ryu2022large}]
+\label{def:mmo}
+$\R^n$上的一个算子(Operator) $\mathcal{T}: \R^n \rightrightarrows \R^n$指的是一个$\R^n \times \R^n$中的一个子集。$\R^n$中的一个算子$\mathcal{T}$被称作是一个单调算子(Monotone Operator)，如果$\mathcal{T}$满足下列条件
+\begin{equation}
+\label{eq:mo}
+(u - v)^T (x - y) \geqslant 0, ~~ \forall ~ (x, u), (y, v) \in \mathcal{T},
+\end{equation}
+或者写成更紧凑的形式
+\begin{equation}
+\label{eq:mo-compact}
+(\mathcal{T}x - \mathcal{T}y)^T (x - y) \geqslant 0, ~~ \forall ~ x, y \in \R^n.
+\end{equation}
+如果单调算子$\mathcal{T}$不真包含于任何一个单调算子，则称$\mathcal{T}$是一个极大单调算子(Maximal Monotone Operator)。
+\end{definition}
+
+\begin{definition}[法锥(Normal Cone)\cite{nocedal_2006_num_opt}]
 \label{def:normal-cone}
 设$\Omega \in \R^n$是$n$维欧氏空间中的非空凸集，$x \in \Omega$是其中一点，那么非空凸集$\Omega$在点$x$处的法锥(Normal Cone)为
 \begin{equation}
@@ -164,12 +179,18 @@ A = \begin{pmatrix} I_d & -I_d & & & \\ & I_d & -I_d & & \\ & & \ddots & \ddots 
 \end{equation}
 \end{definition}
 
-\begin{definition}[极大单调算子(Maximal Monotone Operator)]
-\label{def:mmo}
-待写。。。。
-\end{definition}
-
-事实上，对于凸集$\mathcal{E}$中的点$\Theta \in \mathcal{E},$ 我们有
+算子又被称作是集合值映射(Set-valued Mapping)，法锥也能视作一个算子，被称作法锥算子。法锥算子有另外一种表示，令$\iota_{\Omega}$为非空凸集$\Omega$的指示函数(Indicator Function)
+\begin{equation*}
+\iota_{\Omega} (x) = \begin{cases}
+0, & \text{ 若 } x \in \Omega \\
+\infty, & \text{ 若 } x \not\in \Omega
+\end{cases}
+\end{equation*}
+那么
+\begin{equation*}
+\partial \iota_{\Omega}(x) = \mathcal{N}_{\Omega}(x),
+\end{equation*}
+其中$\partial$为指示函数$\iota_{\Omega}$的次微分。对于凸集$\mathcal{E}$中的点$\Theta \in \mathcal{E},$ 我们有
 \begin{align*}
 \mathcal{N}_{\mathcal{E}}(\Theta) & = \left\{ \omega \ \middle|\ \langle \omega, \widetilde{\Theta} - \Theta \rangle \leqslant 0, ~~ \forall \widetilde{\Theta} \in {\mathcal{E}} \right\} \\
 & = \left\{ \omega \ \middle|\ \left\langle \sum\limits_{k=1}^K \omega_j, ~~ \widetilde{\Theta}_1 - \Theta_1 \right\rangle \leqslant 0, \ \forall \widetilde{\Theta}_1 \in \mathbb{R}^d \right\} \\
@@ -177,7 +198,64 @@ A = \begin{pmatrix} I_d & -I_d & & & \\ & I_d & -I_d & & \\ & & \ddots & \ddots 
 \end{align*}
 由此可以得到法锥$\mathcal{N}_{\mathcal{E}}(\Theta)$的具体表达式~\eqref{eq:normal-cone}。
 
-待写。。。。
+对于极大单调算子，我们有如下的重要结果
+
+\begin{prop}
+\label{prop:os}
+设算子$\mathcal{T} = \mathcal{A} + \mathcal{B},$ 其中$\mathcal{A}, \mathcal{B}$都是极大单调算子，$0 < s \in \R,$ 记
+\begin{gather*}
+\mathcal{R}_{s\mathcal{A}} = (\mathcal{I} + s \mathcal{A})^{-1}, \quad \mathcal{R}_{s\mathcal{B}} = (\mathcal{I} + s \mathcal{B})^{-1} \\
+\mathcal{C}_{s\mathcal{A}} = 2 \mathcal{R}_{s\mathcal{A}} - \mathcal{I}, \quad \mathcal{C}_{s\mathcal{B}} = 2 \mathcal{R}_{s\mathcal{B}} - \mathcal{I}
+\end{gather*}
+那么我们有
+\begin{itemize}
+\item[(1)] $\mathcal{C}_{s\mathcal{A}}, \mathcal{C}_{s\mathcal{B}}, \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$都是非扩张算子。我们称一个算子$\mathcal{T}$是非扩张的，若
+\begin{equation*}
+\lVert \mathcal{T}x - \mathcal{T}y \rVert \leqslant \lVert x - y \rVert, ~~ \forall ~ x, y \in \dom{\mathcal{T}} := \left\{ w \in \R^n ~ \middle| ~ \mathcal{T} w \neq \emptyset \right\}.
+\end{equation*}
+\item[(2)] $0\in \mathcal{A}(x) + \mathcal{B}(x) \Longleftrightarrow \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}(z) = z, \ x = \mathcal{R}_{s\mathcal{B}}(z).$
+\end{itemize}
+\end{prop}
+
+\begin{proof}
+(1). 任取$(x, u), (y, v) \in \mathcal{R}_{s\mathcal{A}} = (\mathcal{I} + s \mathcal{A})^{-1},$ 那么有
+\begin{equation*}
+x \in u + s\mathcal{A}(u), ~~ y \in v + s\mathcal{A}(v).
+\end{equation*}
+由于$\mathcal{A}$是单调算子，因此(由单调算子定义式~\eqref{eq:mo})有
+\begin{equation*}
+\frac{1}{s}((x - u) - (y - v))^T (u - v) \geqslant 0.
+\end{equation*}
+那么我们有
+\begin{align*}
+\lVert (2u - x) - (2v - y) \rVert^2 & = \lVert x - y \rVert^2 - 4 ((x - u) - (y - v))^T (u - v) \\
+& \leqslant \lVert x - y \rVert^2,
+\end{align*}
+因此$\mathcal{C}_{s\mathcal{A}} = 2 \mathcal{R}_{s\mathcal{A}} - \mathcal{I}$是非扩张的算子。同理可证$\mathcal{C}_{s\mathcal{B}}$是非扩张的，从而$\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$也是非扩张算子。
+
+(2). 我们有如下的等价关系
+\begin{align*}
+0 \in \mathcal{A}(x) + \mathcal{B}(x) & \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{A})(x) - (\mathcal{I} - s\mathcal{B})(x) \\
+& \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{A})(x) - (2\mathcal{I} - (\mathcal{I} + s\mathcal{B}))(x) \\
+& \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{A})(x) - \mathcal{C}_{s\mathcal{B}} (\mathcal{I} + s\mathcal{B})(x) \\
+& \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{A})(x) - \mathcal{C}_{s\mathcal{B}} z, ~ z \in (\mathcal{I} + s\mathcal{B}) (x) \\
+& \Longleftrightarrow \mathcal{C}_{s\mathcal{B}} (z) \in (\mathcal{I} + s\mathcal{A}) \mathcal{R}_{s\mathcal{B}} (z) , ~ x \in \mathcal{R}_{s\mathcal{B}} (z) \\
+& \Longleftrightarrow \mathcal{R}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}} (z) = \mathcal{R}_{s\mathcal{B}} (z), ~ x \in \mathcal{R}_{s\mathcal{B}} (z) \\
+& \Longleftrightarrow 2\mathcal{R}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}} (z) - \mathcal{C}_{s\mathcal{B}} (z) = 2 \mathcal{R}_{s\mathcal{B}} (z) - z + z, ~ x \in \mathcal{R}_{s\mathcal{B}} (z) \\
+& \Longleftrightarrow \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}} (z) = z, ~ x \in \mathcal{R}_{s\mathcal{B}} (z)
+\end{align*}
+\end{proof}
+
+当$s$明确取定的时候，我们可以把算子$\mathcal{R}_{s\mathcal{A}}, \mathcal{R}_{s\mathcal{B}}, \mathcal{C}_{s\mathcal{A}}, \mathcal{C}_{s\mathcal{B}}$分别简写为$\mathcal{R}_{\mathcal{A}}, \mathcal{R}_{\mathcal{B}}, \mathcal{C}_{\mathcal{A}}, \mathcal{C}_{\mathcal{B}}.$ 这个命题告诉了我们，求解单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$等价于求解非扩张算子$\mathcal{C}_{\mathcal{A}} \mathcal{C}_{\mathcal{B}}$的不动点问题。命题~\ref{prop:os}~所涉及到的算子$\mathcal{R}_{\mathcal{A}}, \mathcal{R}_{\mathcal{B}}$被称作算子$s\mathcal{A}, s\mathcal{B}$的预解式(Resolvent)，即算子$s\mathcal{A}, s\mathcal{B}$的逆算子；$\mathcal{C}_{\mathcal{A}}, \mathcal{C}_{\mathcal{B}}$被称作反射预解式(Reflected Resolvent)，或者Cayley算子。关于预解式相关的基础知识以及重要结果，读者可参阅\parencite[\S 2.5]{ryu2022large}。
+
+我们现在回到我们想要求解的单调包含问题~\eqref{eq:fedsplit-mono-incl}，并将命题~\ref{prop:os}~应用到这个问题上。我们令$\mathcal{T} = \nabla F + \mathcal{N}_{\mathcal{E}},$ 那么根据命题~\ref{prop:os}，我们将问题转化为了求算子$C_AC_B$的不动点的问题，其中$A = \nabla F, B = \mathcal{N}_{\mathcal{E}}.$ 对于这两个算子，我们有
+$$R_{\nabla F} = \prox_{F, \mu}, \quad R_{\mathcal{N}_E} = \Pi_{E},$$
+其中$s = \frac{1}{\mu},$ 同时又有
+\begin{align*}
+\prox_{F, \mu}(\Theta) & = \argmin_{\omega} \left\{ F(\omega) + \frac{\mu}{2} \lVert \omega - \Theta \rVert^2 \right\} \\
+& = \argmin_{\omega} \left\{ \sum_{k=1}^K f_k(\omega_k) + \frac{\mu}{2} \sum_{k=1}^K \lVert \omega_k - \theta_k \rVert^2 \right\} \\
+& = (\prox_{f_k, \mu}(\theta_k))_{j=1}^K.
+\end{align*}
 
 \input{algorithms/fedsplit.tex}
 
