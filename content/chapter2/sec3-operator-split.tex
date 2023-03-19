@@ -246,18 +246,76 @@ x \in u + s\mathcal{A}(u), ~~ y \in v + s\mathcal{A}(v).
 \end{align*}
 \end{proof}
 
-当$s$明确取定的时候，我们可以把算子$\mathcal{R}_{s\mathcal{A}}, \mathcal{R}_{s\mathcal{B}}, \mathcal{C}_{s\mathcal{A}}, \mathcal{C}_{s\mathcal{B}}$分别简写为$\mathcal{R}_{\mathcal{A}}, \mathcal{R}_{\mathcal{B}}, \mathcal{C}_{\mathcal{A}}, \mathcal{C}_{\mathcal{B}}.$ 这个命题告诉了我们，求解单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$等价于求解非扩张算子$\mathcal{C}_{\mathcal{A}} \mathcal{C}_{\mathcal{B}}$的不动点问题。命题~\ref{prop:os}~所涉及到的算子$\mathcal{R}_{\mathcal{A}}, \mathcal{R}_{\mathcal{B}}$被称作算子$s\mathcal{A}, s\mathcal{B}$的预解式(Resolvent)，即算子$s\mathcal{A}, s\mathcal{B}$的逆算子；$\mathcal{C}_{\mathcal{A}}, \mathcal{C}_{\mathcal{B}}$被称作反射预解式(Reflected Resolvent)，或者Cayley算子。关于预解式相关的基础知识以及重要结果，读者可参阅\parencite[\S 2.5]{ryu2022large}。
+当$s$明确取定的时候，我们可以把算子$\mathcal{R}_{s\mathcal{A}}, \mathcal{R}_{s\mathcal{B}}, \mathcal{C}_{s\mathcal{A}}, \mathcal{C}_{s\mathcal{B}}$分别简写为$\mathcal{R}_{\mathcal{A}}, \mathcal{R}_{\mathcal{B}}, \mathcal{C}_{\mathcal{A}}, \mathcal{C}_{\mathcal{B}}.$ 这个命题告诉了我们，求解单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$等价于求解非扩张算子$\mathcal{C}_{\mathcal{A}} \mathcal{C}_{\mathcal{B}}$的不动点问题。命题~\ref{prop:os}~所涉及到的算子$\mathcal{R}_{\mathcal{A}}, \mathcal{R}_{\mathcal{B}}$被称作算子$s\mathcal{A}, s\mathcal{B}$的预解式(Resolvent)，即算子$s\mathcal{A}, s\mathcal{B}$的逆算子；$\mathcal{C}_{\mathcal{A}}, \mathcal{C}_{\mathcal{B}}$被称作反射预解式(Reflected Resolvent)，或者Cayley算子。关于预解式相关的基础知识以及重要结果，读者可参阅\parencite[\S 2.5]{ryu2022large}。这样，我们就把我们需要求解的单调包含问题~\eqref{eq:fedsplit-mono-incl}~转化为了以下的不动点问题
+\begin{equation}
+\label{eq:fixed-pt-pr}
+\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}} (z) = z, ~ x \in \mathcal{R}_{s\mathcal{B}} (z).
+\end{equation}
+我们称这种转化为Peaceman–Rachford分裂(Peaceman–Rachford Splitting, PRS)。由于算子$\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$只是非扩张的，我们可以用$\tau$-平均算子$(1 - \tau) \mathcal{I} + \tau \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$代替算子$\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}},$ 其中$\tau \in (0, 1),$ 进而考虑如下的不动点问题
+\begin{equation}
+\label{eq:fixed-pt-general}
+((1 - \tau) \mathcal{I} + \tau \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}) (z) = z, ~ x \in \mathcal{R}_{s\mathcal{B}} (z).
+\end{equation}
+特别地，当我们取$\tau = \frac{1}{2}$时，对应的不动点问题为
+\begin{equation}
+\label{eq:fixed-pt-dr}
+\frac{1}{2}(\mathcal{I} + \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}) (z) = z, ~ x \in \mathcal{R}_{s\mathcal{B}} (z),
+\end{equation}
+称这种转化为Douglas-Rachford分裂(Douglas-Rachford Splitting, DRS)。
 
-我们现在回到我们想要求解的单调包含问题~\eqref{eq:fedsplit-mono-incl}，并将命题~\ref{prop:os}~应用到这个问题上。我们令$\mathcal{T} = \nabla F + \mathcal{N}_{\mathcal{E}},$ 那么根据命题~\ref{prop:os}，我们将问题转化为了求算子$C_AC_B$的不动点的问题，其中$A = \nabla F, B = \mathcal{N}_{\mathcal{E}}.$ 对于这两个算子，我们有
-$$R_{\nabla F} = \prox_{F, \mu}, \quad R_{\mathcal{N}_E} = \Pi_{E},$$
+求解不动点问题~\eqref{eq:fixed-pt-pr}, \eqref{eq:fixed-pt-general}, \eqref{eq:fixed-pt-dr}~的一般方法是进行不动点迭代
+\begin{equation}
+\label{eq:fixed-pt-iter}
+z^{(t+1)} = \mathcal{T}(z^{(t)}), ~~ \text{$\mathcal{T}$是某个非扩张算子。}
+\end{equation}
+具体到$\mathcal{T} = (1 - \tau) \mathcal{I} + \tau \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}},$ $\tau \in (0, 1],$ 当$\tau = 1$时，我们有Peaceman–Rachford分裂方法(Peaceman–Rachford Splitting Method, PRSM)
+\begin{subequations}
+\label{eq:prsm}
+\begin{align}
+x^{(t+1/2)} & = \mathcal{R}_{\mathcal{B}}(z^{(t)}) \label{eq:prsm-1} \\
+z^{(t+1/2)} & = 2x^{(t+1/2)} - z^{(t)} \label{eq:prsm-2} \\
+x^{(t+1)} & = \mathcal{R}_{\mathcal{A}}(z^{(t+1/2)}) \label{eq:prsm-3} \\
+z^{(t+1)} & = z^{(t)} + 2x^{(t+1)} - 2x^{(t+1/2)} \label{eq:prsm-4}
+\end{align}
+\end{subequations}
+当$\tau = \frac{1}{2}$时，Douglas–Rachford分裂方法(Douglas–Rachford Splitting Method, DRSM)
+\begin{subequations}
+\label{eq:drsm}
+\begin{align}
+x^{(t+1/2)} & = R_B(z^{(t)}) \label{eq:drsm-1} \\
+z^{(t+1/2)} & = 2x^{(t+1/2)} - z^{(t)} \label{eq:drsm-2} \\
+x^{(t+1)} & = R_A(z^{(t+1/2)}) \label{eq:drsm-3} \\
+z^{(t+1)} & = z^{(t)} + x^{(t+1)} - x^{(t+1/2)} \label{eq:drsm-4}
+\end{align}
+\end{subequations}
+我们注意到PRSM与DRSM的区别主要在迭代格式的最后一步~\eqref{eq:prsm-4}~与~\eqref{eq:drsm-4}，这对应的正是不动点迭代方法~\eqref{eq:fixed-pt-iter}~中算子$\mathcal{T}$的不同的选取。
+
+我们现在回到我们想要求解的单调包含问题~\eqref{eq:fedsplit-mono-incl}，并将命题~\ref{prop:os}~应用到这个问题上。我们令
+\begin{equation}
+\label{eq:fedsplit-operator}
+\mathcal{T} = \nabla F + \mathcal{N}_{\mathcal{E}}
+\end{equation}
+那么根据命题~\ref{prop:os}，我们将问题转化为了求算子$\mathcal{C}_{\mathcal{A}} \mathcal{C}_{\mathcal{B}}$的不动点的问题，其中$\mathcal{A} = \nabla F, \mathcal{B} = \mathcal{N}_{\mathcal{E}}.$ 对于这两个算子，我们有
+\begin{equation*}
+\mathcal{R}_{\nabla F} = \prox_{F, \mu}, \quad \mathcal{R}_{\mathcal{N}_E} = \Pi_{E},
+\end{equation*}
 其中$s = \frac{1}{\mu},$ 同时又有
 \begin{align*}
 \prox_{F, \mu}(\Theta) & = \argmin_{\omega} \left\{ F(\omega) + \frac{\mu}{2} \lVert \omega - \Theta \rVert^2 \right\} \\
 & = \argmin_{\omega} \left\{ \sum_{k=1}^K f_k(\omega_k) + \frac{\mu}{2} \sum_{k=1}^K \lVert \omega_k - \theta_k \rVert^2 \right\} \\
 & = (\prox_{f_k, \mu}(\theta_k))_{j=1}^K.
 \end{align*}
+基于以上的问题转换，文献\parencite{pathak2020fedsplit}将PRSM应用到了联邦学习关注的问题~\eqref{eq:fedsplit-constraint}，提出了联邦分裂算法\texttt{FedSplit}。该算法的伪代码见算法~\ref{algo:fedsplit}，其中的$\texttt{prox\_update}_k$是求解子节点$k$上的临近算子$\prox_{f_k, \mu}$的非精确的方法，例如随机梯度下降。
 
 \input{algorithms/fedsplit.tex}
 
+联邦分裂算法\texttt{FedSplit}很好地解决了在本节开头的例~\ref{eg:correctness}~以及定理~\ref{thm:fedsplit-correctness}~中提出的关于联邦学习算法普遍存在的收敛正确性相关的问题，即我们有如下的结论
+
+\begin{theorem}
+\label{thm:fedsplit-main}
+待写。。。。
+\end{theorem}
+
+联邦分裂算法\texttt{FedSplit}有它自身的一些局限性，待写。。。
 
 \input{algorithms/feddr.tex}
