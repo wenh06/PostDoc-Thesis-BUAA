@@ -13,13 +13,13 @@
         }
     {\bfseries Server Update:}\;
     \Indp
-    $\theta^{(t+1)} \gets \overline{\theta}^{(t+1)}$ \tcc*[h]{compute global average}\;
+    $\theta^{(t+1)} \gets \frac{1}{K} \sum\limits_{k=1}^K \theta_k^{(t+1)}$ \tcc*[h]{compute global average}\;
     \If{meet convergent criteria}{
         $\theta^* \gets \theta^{(t+1)}$\;
         {\bfseries break}\;
     }
 }
 % return $\theta^*$\;
-\caption{\texttt{FedSplit}\cite{pathak2020fedsplit}算法的伪代码}
+\caption{联邦分裂算法\texttt{FedSplit}\cite{pathak2020fedsplit}的伪代码}
 \label{algo:fedsplit}
 \end{algorithm}

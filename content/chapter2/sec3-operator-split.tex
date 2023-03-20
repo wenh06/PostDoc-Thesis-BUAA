@@ -14,7 +14,7 @@ f_1(m_1) = \frac{1}{2} (4 + (m_1 - 2)^2);
 \begin{equation*}
 f_2(m_2) = \frac{1}{2} (4m_2^2 + (2m_2 - 1)^2).
 \end{equation*}
-那么参与方1单独拟合结果为$m_1 = 2$, 参与方2单独拟合结果为$m_2 = \frac{1}{4}$, 采用联邦平均算法\texttt{FedAvg}的结果是$m = \frac{9}{8}.$ 而采用联邦临近点算法\texttt{FedProx}的结果(计算方法见定理\ref{thm:fedsplit-correctness})是
+那么参与方1单独拟合结果为$m_1 = 2$, 参与方2单独拟合结果为$m_2 = \frac{1}{4}$, 采用联邦平均算法\texttt{FedAvg}的结果是$m = \frac{9}{8}.$ 而采用联邦临近点算法\texttt{FedProx}的结果(这里，我们可以直接对带临近项的目标函数求极小，也可以采用定理~\ref{thm:fedsplit-correctness}~中的一般计算公式)是
 \begin{equation}
 \label{eq:eg-correctness-fedprox}
 m = \frac{18 + 4\mu}{16 + 9\mu},
@@ -124,13 +124,13 @@ G = \sum\limits_{i=0}^{R-1} ( I - \frac{1}{\mu} A_k^TA_k )^i, ~~ P_k = ( I + \fr
 \begin{equation}
 \label{eq:fedsplit-constraint}
 \begin{array}{cl}
-\minimize & F(\Theta) := \sum\limits_{k=1}^K w_k f_k(\theta_k), \\
+\minimize & F(\Theta) := \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k), \\
 \text{subject to} & A \Theta = 0,
 \end{array}
 \end{equation}
 其中
 \begin{equation*}
-A = \begin{pmatrix} I_d & -I_d & & & \\ & I_d & -I_d & & \\ & & \ddots & \ddots & \\ & & & \ddots & -I_d \\ -I_d & & & & I_d \end{pmatrix}, ~ \Theta = \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, ~ \theta_1, \ldots, \theta_K \in \R^d.
+A = \begin{pmatrix} I_d & -I_d & & & \\ & I_d & -I_d & & \\ & & \ddots & \ddots & \\ & & & \ddots & -I_d \\ -I_d & & & & I_d \end{pmatrix}, ~ \Theta = \col(\theta_1, \cdots, \theta_K) = \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, ~ \theta_1, \ldots, \theta_K \in \R^d.
 \end{equation*}
 约束优化问题~\eqref{eq:fedsplit-constraint}~的拉格朗日函数为
 \begin{equation}
@@ -196,7 +196,11 @@ $\R^n$上的一个算子(Operator) $\mathcal{T}: \R^n \rightrightarrows \R^n$指
 & = \left\{ \omega \ \middle|\ \left\langle \sum\limits_{k=1}^K \omega_j, ~~ \widetilde{\Theta}_1 - \Theta_1 \right\rangle \leqslant 0, \ \forall \widetilde{\Theta}_1 \in \mathbb{R}^d \right\} \\
 & = \left\{ \omega \ \middle|\ \sum\limits_{k=1}^K \omega_k = 0 \right\} = {\mathcal{E}}^{\perp},
 \end{align*}
-由此可以得到法锥$\mathcal{N}_{\mathcal{E}}(\Theta)$的具体表达式~\eqref{eq:normal-cone}。
+由此可以得到法锥$\mathcal{N}_{\mathcal{E}}(\Theta)$的具体表达式~\eqref{eq:normal-cone}。也就是说，通过罚函数$\iota_{\mathcal{E}},$ 可以将我们考虑的优化模型~\eqref{eq:fedsplit-constraint}~进一步改写为
+\begin{equation}
+\label{eq:fedsplit-pen}
+\minimize \quad F(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + \iota_{\mathcal{E}}(\Theta)
+\end{equation}
 
 对于极大单调算子，我们有如下的重要结果
 
@@ -288,7 +292,11 @@ x^{(t+1)} & = R_A(z^{(t+1/2)}) \label{eq:drsm-3} \\
 z^{(t+1)} & = z^{(t)} + x^{(t+1)} - x^{(t+1/2)} \label{eq:drsm-4}
 \end{align}
 \end{subequations}
-我们注意到PRSM与DRSM的区别主要在迭代格式的最后一步~\eqref{eq:prsm-4}~与~\eqref{eq:drsm-4}，这对应的正是不动点迭代方法~\eqref{eq:fixed-pt-iter}~中算子$\mathcal{T}$的不同的选取。
+我们注意到PRSM与DRSM的区别主要在迭代格式的最后一步~\eqref{eq:prsm-4}~与~\eqref{eq:drsm-4}，这对应的正是不动点迭代方法~\eqref{eq:fixed-pt-iter}~中算子$\mathcal{T}$的不同的选取。对于一般的$\tau \in (0, 1),$ 这一步的迭代为
+\begin{equation}
+\label{eq:sm-general-step}
+z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
+\end{equation}
 
 我们现在回到我们想要求解的单调包含问题~\eqref{eq:fedsplit-mono-incl}，并将命题~\ref{prop:os}~应用到这个问题上。我们令
 \begin{equation}
@@ -305,7 +313,7 @@ z^{(t+1)} & = z^{(t)} + x^{(t+1)} - x^{(t+1/2)} \label{eq:drsm-4}
 & = \argmin_{\omega} \left\{ \sum_{k=1}^K f_k(\omega_k) + \frac{\mu}{2} \sum_{k=1}^K \lVert \omega_k - \theta_k \rVert^2 \right\} \\
 & = (\prox_{f_k, \mu}(\theta_k))_{j=1}^K.
 \end{align*}
-基于以上的问题转换，文献\parencite{pathak2020fedsplit}将PRSM应用到了联邦学习关注的问题~\eqref{eq:fedsplit-constraint}，提出了联邦分裂算法\texttt{FedSplit}。该算法的伪代码见算法~\ref{algo:fedsplit}，其中的$\texttt{prox\_update}_k$是求解子节点$k$上的临近算子$\prox_{f_k, \mu}$的非精确的方法，例如随机梯度下降。
+这意味着，我们可以为问题~\eqref{eq:fedsplit-constraint}~的求解设计充分解耦合，从而适用于联邦学习场景的分裂算法。基于以上的问题转换，文献\parencite{pathak2020fedsplit}将PRSM应用到了联邦学习关注的问题~\eqref{eq:fedsplit-constraint}，提出了联邦分裂算法\texttt{FedSplit}。这是分裂算法第一次应用于联邦学习领域。该算法的伪代码见算法~\ref{algo:fedsplit}，其中的$\texttt{prox\_update}_k$是求解子节点$k$上的临近算子$\prox_{f_k, \mu}$的非精确的方法，例如随机梯度下降。
 
 \input{algorithms/fedsplit.tex}
 
@@ -313,9 +321,66 @@ z^{(t+1)} & = z^{(t)} + x^{(t+1)} - x^{(t+1/2)} \label{eq:drsm-4}
 
 \begin{theorem}
 \label{thm:fedsplit-main}
-待写。。。。
+设$\Theta^* = (\theta_1^*, \ldots, \theta_K^*)$是联邦分裂算法\texttt{FedSplit}~\ref{algo:fedsplit}~迭代得到的不动点，即
+\begin{equation*}
+\theta_k^* = \theta_k^* + 2(\prox_{f_k, \mu}(2 \theta^* - \theta_k^*) - \theta^*), ~~ \forall ~ k \in [K],
+\end{equation*}
+其中$\theta^* = \frac{1}{K} \sum\limits_{k=1}^K \theta_k^*$为平均所有子节点模型参数得到的最终的全局模型参数，那么$\theta^*$是我们最初始要求解的优化问题~\eqref{eq:fl-basic}的最优解，即
+\begin{equation*}
+\sum\limits_{k=1}^K f_k(\theta^*) = \min\limits_{\theta \in \R^d} \sum\limits_{k=1}^K f_k(\theta).
+\end{equation*}
 \end{theorem}
 
-联邦分裂算法\texttt{FedSplit}有它自身的一些局限性，待写。。。
+% TODO: 添加证明
+
+联邦分裂算法\texttt{FedSplit}有它自身的一些局限性。因为对于一般的只有非扩张性质的Cayley算子，PRSM~\eqref{eq:prsm}~并没有收敛性上的保证。因此，为了得到算法的收敛性，需要对目标函数$f_k$做一些额外的假设，例如强凸性，$L$-光滑性等。对于联邦分裂算法\texttt{FedSplit}在这些条件下的收敛率，有如下的结果
+
+\begin{theorem}
+\label{thm:fedsplit-conv-rate}
+设$f_k$是$\ell_j$-强凸而且是$L_k$-光滑的函数, 令$\ell_* = \min \ell_k$, $L^* = \max L_k$, $\kappa = L^*/\ell_*.$ 取步长$s = 1 / \sqrt{\ell_*L^*} = \frac{1}{\mu},$ 并假设非精确求解方法$\texttt{prox\_update}_k$的误差界为$b > 0,$ 即有
+\begin{equation*}
+\lVert \texttt{prox\_update}_k(\theta) - \prox_{f_k, \mu}(\theta) \rVert \leqslant b, ~~ \forall k \in [K], ~ \theta \in \R^d,
+\end{equation*}
+那么
+\begin{equation}
+\label{eq:fedsplit-conv-rate}
+\lVert \theta^{(t+1)} - \theta^* \rVert \leqslant \left( 1 - \frac{2}{\sqrt{\kappa}+1} \right)^t \frac{\lVert \theta^{(1)} - \theta^* \rVert}{\sqrt{K}} + (\sqrt{\kappa}+1)b.
+\end{equation}
+\end{theorem}
+
+文献\parencite{tran2021feddr}基于文献\parencite{pathak2020fedsplit}引入的联邦分裂算法\texttt{FedSplit}存在的一些问题进行了改进，进一步将有收敛性保证的DRSM~\eqref{eq:drsm}~引入到联邦学习问题~\eqref{eq:fl-basic}~的研究，提出了联邦DR分裂算法\texttt{FedDR}，将可处理问题的范围扩大到了目标函数$f_k$非凸的情形。事实上，相较于联邦学习的基本模型~\eqref{eq:fl-basic}，文献\parencite{tran2021feddr}进一步显式的考虑了正则项，相应的模型为
+\begin{equation}
+\label{eq:feddr-model}
+\text{minimize} \quad f(\theta) + g(\theta) = \frac{1}{K} \sum_{k=1}^K f_k(\theta) + g(\theta),
+\end{equation}
+其中$f_k$是$L$-光滑的非凸函数，$g$是正则项，一般假设是一个闭的真凸函数(Closed Proper Convex Function)。类似~\eqref{eq:fedsplit-constraint}, 我们将问题~\eqref{eq:feddr-model}~等价转换为如下的约束优化问题
+\begin{equation}
+\label{eq:feddr-constraint}
+\begin{array}{cl}
+\minimize & F(\Theta) := f(\Theta) + g(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + g(\theta_{K+1}), \\
+\text{subject to} & \theta_1 = \cdots = \theta_{K+1} \in \R^d, ~ \Theta = \col(\theta_1, \cdots, \theta_{K+1}).
+\end{array}
+\end{equation}
+并进一步通过罚函数$\iota_{\mathcal{E}},$ 将问题改写为无约束的问题
+\begin{equation}
+\label{eq:feddr-pen}
+\minimize \quad f(\Theta) + g(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + g(\theta_{K+1}) + \iota_{\mathcal{E}}(\Theta).
+\end{equation}
+需要注意的是，在式~\eqref{eq:feddr-constraint}~以及式~\eqref{eq:feddr-pen}~中为了记号简便，我们对自变量为$\Theta = \col(\theta_1, \cdots, \theta_{K+1})$的函数$\frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k)$以及以$\theta$为自变量的函数$\frac{1}{K} \sum\limits_{k=1}^K f_k(\theta)$使用了同一记号$f.$ 问题~\eqref{eq:feddr-pen}~稳定点的一阶(必要)条件为
+\begin{equation*}
+0 \in \nabla f(\Theta) + \partial (g + \iota_\mathcal{E})(\Theta),
+\end{equation*}
+将DRSM~\eqref{eq:drsm}~应用到这个问题，其迭代格式为($\alpha \in (0, 2)$)
+\begin{equation*}
+\begin{aligned}
+\omega_k^{(t+1)} & = \omega_k^{(t)} + \alpha (\overline{\theta}^{(t)} - \theta_k^{(t)}), ~ k \in [K] \\
+\theta_k^{(t+1)} & = \prox_{f_k, \mu} (\omega_k^{(t+1)}), ~ k \in [K] \\
+\widehat{\theta}_k^{(t+1)} & = 2\theta_k^{(t+1)} - \omega_k^{(t+1)}, ~ k \in [K] \\
+\widetilde{\theta}^{(t+1)} & = \frac{1}{K}\sum\limits_{k=1}^K \widehat{\theta}_k^{(t+1)} \\
+\omega^{(t+1)} & =  \omega^{(t)} + \alpha (\overline{\theta}^{(t)} - \omega^{(t)}) \\
+\overline{\theta}^{(t+1)} & = \prox_{g, \frac{K+1}{Ks}} \left( \frac{K}{K+1} \widetilde{\theta}^{(t+1)} + \frac{1}{K+1} \omega^{(t+1)} \right)
+\end{aligned}
+\end{equation*}
+至此，我们可以把联邦DR分裂算法\texttt{FedDR}以伪代码的形式总结为算法~\ref{algo:feddr}。
 
 \input{algorithms/feddr.tex}
