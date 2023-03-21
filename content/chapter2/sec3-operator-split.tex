@@ -2,6 +2,8 @@
 \addcontentsline{toe}{section}{{2.3\ \ Operator Splitting Algorithms in Federated Learning}\numberline\,}
 \label{sec:chap2-operator-split}
 
+% almost finished
+
 我们已经讨论过的通用加速技巧\cite{reddi2020fed_opt}，方差缩减技术\cite{karimireddy2020scaffold}，以及临近点方法\cite{sahu2018fedprox}，解决的都是联邦学习在各种各样场景下的收敛性、收敛率相关的问题，而算法收敛结果的正确性这一问题始终没有得到重视。我们来举一个非常简单的例子来说明这个问题。
 
 \begin{example}
@@ -351,7 +353,7 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 文献\parencite{tran2021feddr}基于文献\parencite{pathak2020fedsplit}引入的联邦分裂算法\texttt{FedSplit}存在的一些问题进行了改进，进一步将有收敛性保证的DRSM~\eqref{eq:drsm}~引入到联邦学习问题~\eqref{eq:fl-basic}~的研究，提出了联邦DR分裂算法\texttt{FedDR}，将可处理问题的范围扩大到了目标函数$f_k$非凸的情形。事实上，相较于联邦学习的基本模型~\eqref{eq:fl-basic}，文献\parencite{tran2021feddr}进一步显式的考虑了正则项，相应的模型为
 \begin{equation}
 \label{eq:feddr-model}
-\text{minimize} \quad f(\theta) + g(\theta) = \frac{1}{K} \sum_{k=1}^K f_k(\theta) + g(\theta),
+\text{minimize} \quad F(\theta) = f(\theta) + g(\theta) = \frac{1}{K} \sum_{k=1}^K f_k(\theta) + g(\theta),
 \end{equation}
 其中$f_k$是$L$-光滑的非凸函数，$g$是正则项，一般假设是一个闭的真凸函数(Closed Proper Convex Function)。类似~\eqref{eq:fedsplit-constraint}, 我们将问题~\eqref{eq:feddr-model}~等价转换为如下的约束优化问题
 \begin{equation}
@@ -366,11 +368,15 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 \label{eq:feddr-pen}
 \minimize \quad f(\Theta) + g(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + g(\theta_{K+1}) + \iota_{\mathcal{E}}(\Theta).
 \end{equation}
-需要注意的是，在式~\eqref{eq:feddr-constraint}~以及式~\eqref{eq:feddr-pen}~中为了记号简便，我们对自变量为$\Theta = \col(\theta_1, \cdots, \theta_{K+1})$的函数$\frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k)$以及以$\theta$为自变量的函数$\frac{1}{K} \sum\limits_{k=1}^K f_k(\theta)$使用了同一记号$f.$ 问题~\eqref{eq:feddr-pen}~稳定点的一阶(必要)条件为
+需要注意的是，在式~\eqref{eq:feddr-constraint}~以及式~\eqref{eq:feddr-pen}~中为了记号简便，我们对自变量为$\Theta = \col(\theta_1, \cdots, \theta_{K+1})$的函数$\frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k)$以及以$\theta$为自变量的函数$\frac{1}{K} \sum\limits_{k=1}^K f_k(\theta)$使用了同一记号$f$ (以及$F$与$g$)。 问题~\eqref{eq:feddr-pen}~稳定点的一阶(必要)条件为
 \begin{equation*}
-0 \in \nabla f(\Theta) + \partial (g + \iota_\mathcal{E})(\Theta),
+0 \in \nabla f(\Theta) + \partial (g + \iota_\mathcal{E})(\Theta).
 \end{equation*}
-将DRSM~\eqref{eq:drsm}~应用到这个问题，其迭代格式为($\alpha \in (0, 2)$)
+如果令$\mathcal{B} = \nabla f,$ $\mathcal{A} = \partial (g + \iota_\mathcal{E}),$ 那么相应的预解式为
+\begin{equation*}
+\mathcal{R}_{\mathcal{B}} = \prox_{Ksf}, ~~ \mathcal{R}_{\mathcal{A}} = \prox_{Ks(g + \iota_{\mathcal{E}})}.
+\end{equation*}
+将DRSM~\eqref{eq:drsm}~(更准确来说是其一般形式~\eqref{eq:sm-general-step})应用到这个问题，其迭代格式为
 \begin{equation*}
 \begin{aligned}
 \omega_k^{(t+1)} & = \omega_k^{(t)} + \alpha (\overline{\theta}^{(t)} - \theta_k^{(t)}), ~ k \in [K] \\
@@ -384,3 +390,42 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 至此，我们可以把联邦DR分裂算法\texttt{FedDR}以伪代码的形式总结为算法~\ref{algo:feddr}。
 
 \input{algorithms/feddr.tex}
+
+关于联邦DR分裂算法\texttt{FedDR}的收敛性，有如下的结论\cite{tran2021feddr}
+
+\begin{theorem}
+\label{thm:feddr-convergence}
+假设目标函数$f_k$都是$L$-光滑的。令$\{ (\theta^{(t)}, \theta_k^{(t)}) \}$为联邦DR分裂算法\texttt{FedDR}~\ref{algo:feddr}~迭代生成的模型参数序列，
+\begin{itemize}
+\item[(1)] 中心服务器上的全局模型参数与子节点上的模型参数的差有界
+\begin{equation*}
+\lVert \overline{\theta}^{(t)} - \theta_k^{(t)} \rVert^2 \leqslant \frac{2(1+s^2L^2)}{\alpha} \left[ (1+\gamma_1) \lVert \theta_k^{(t+1)} - \theta_k^{(t)} \rVert^2 \right. 
+\left. + \frac{2(1+\gamma_1)}{\gamma_1} \left( \lVert e_k^{(t+1)} \rVert^2 + \lVert e_k^{(t)} \rVert^2 \right) \right],
+\end{equation*}
+其中$\gamma_1$是任意一个大于0的实数。也就是说(经过正则项修正的)全局模型与局部模型的差被局部模型相邻迭代步的差以及临近算子非精确求解的误差界所控制。
+\item[(2)] 令
+\begin{equation*}
+\mathcal{G}_{\beta}(\theta) := \frac{1}{\beta} (x - \prox_{\beta g}(\theta - \beta \nabla f(\theta)))
+\end{equation*}
+为问题~\eqref{eq:feddr-model}~稳定点一阶条件$0 \in \nabla f(\theta) + \partial g(\theta)$对应的梯度映射，$\beta > 0,$ 那么
+\begin{multline*}
+\lVert \mathcal{G}_{\frac{ns}{n+1}} (\overline{\theta}^{(t)}) \rVert^2 \leqslant \frac{n+1}{n^2s^2} \left\{ (1+sL)^2 \sum_{k=1}^K (1+\gamma_2) \left[ \lVert \overline{\theta}^{(t)} - \theta_k^{(t)} \rVert^2 \right. \right. \\
+\left. \left. + \frac{1+\gamma_2}{\gamma_2} \lVert e_k^{(t)} \rVert^2 \right] + \lVert \omega^{(t)} - \overline{\theta}^{(t)} \rVert^2 \right\}.
+\end{multline*}
+其中$\gamma_2$是任意一个大于0的实数。也就是说整体的目标函数在第$t$步迭代得到的(经过正则项修正的)全局模型参数$\overline{\theta}^{(t)}$处的梯度映射的值的大小(模长平方)被该步的全局模型与局部模型的差、临近算子非精确求解的误差界以及中间变量$\omega^{(t)}$与该点$\overline{\theta}^{(t)}$的差所控制。
+\item[(3)] 存在常数$C_1, C_2, C_3,$ 使得下式成立
+\begin{equation*}
+\dfrac{1}{T} \sum_{t=0}^{T-1} \expectation \left[ \lVert \mathcal{G}_{\frac{Ks}{K+1}} (\overline{\theta}^{(t)}) \rVert^2 \right] \leqslant \frac{C_1(F(\theta^{(0)} - F^*)}{T} + \frac{1}{KT} \sum_{t=0}^{T-1} \sum_{k=1}^K (C_2 \varepsilon_{k,t}^2 + C_3 \varepsilon_{k,t+1}^2)
+\end{equation*}
+其中$F^* = \inf\limits_{\theta \in \R^d} F(\theta).$ 也就是说，令$M \geqslant \frac{1}{K} \sum_{t=0}^{T-1} \sum_{k=1}^K \varepsilon_{k,t}^2,$ 联邦DR分裂算法\texttt{FedDR}~\ref{algo:feddr}~迭代$T$步之后，其中
+\begin{equation*}
+T = \left\lfloor \frac{C_1 [F(\theta^{(0)}) - F^*] + (C_2 + C_2)M}{\varepsilon^2} \right\rfloor,
+\end{equation*}
+得到的全局模型参数$\overline{\theta}^{(T)}$即为原问题~\eqref{eq:feddr-model}的$\varepsilon$-稳定点，即
+\begin{equation*}
+\expectation [ \lVert \mathcal{G}_{\beta}(\overline{\theta}^{(T)}) \rVert^2 ] < \varepsilon^2.
+\end{equation*}
+\end{itemize}
+\end{theorem}
+
+通过定理~\ref{thm:fedsplit-correctness}以及定理~\ref{thm:feddr-convergence}，我们可以看到分裂算法的确能够收敛到我们想要求解问题的极值点或者稳定点，这相较于联邦平均算法\texttt{FedAvg}~\ref{algo:fedavg}，联邦邻近算法\texttt{FedProx}~\ref{algo:fedprox}~是极大的进步。其代价，或者说缺点，就是出了模型参数本身，还有一些额外的辅助参数需要维护，增加了相关的存储以及运算的负担。

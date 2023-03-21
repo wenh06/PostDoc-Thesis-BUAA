@@ -18,10 +18,10 @@ h_k(\theta_k, \theta^{(t)}) := \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \the
 \label{eq:prox-op}
 \theta_k^{(t)} \approx \prox_{f_k, \mu} (\theta^{(t)}) := \argmin\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2 \right\},
 \end{equation}
-其中的$\prox_{f_k, \mu}$记为所谓的临近算子(proximity operator)，相应的函数
+其中的$\prox_{f_k, \mu}$为临近算子(Proximity Operator)。令$s = \frac{1}{\mu},$ 因为$\prox_{f_k, \mu} = \prox_{sf_k, 1},$ 我们也把$\prox_{f_k, \mu}$记为$\prox_{sf_k}.$ 相应的函数
 \begin{equation}
 \label{eq:moreau_env}
-\tilde{f}_k (\theta^{(t)}) := \inf\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2 \right\}
+\mathcal{M}_{f_k, \mu} (\theta^{(t)}) := \inf\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2 \right\}
 \end{equation}
 被称作$f_k$的Moreau包络 (Moreau Envelope) 或者Moreau-Yosida正规化 (Moreau-Yosida Regularization)。关于联邦临近点算法\texttt{FedProx}在非凸情况下的收敛性，文献\parencite{sahu2018fedprox}有如下的结论
 \begin{theorem}[\parencite{sahu2018fedprox} Theorem 4]

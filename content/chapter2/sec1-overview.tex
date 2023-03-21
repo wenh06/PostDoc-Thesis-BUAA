@@ -35,10 +35,15 @@
 \end{array}
 ~ \forall \theta, \theta' \in \R^d, k = 1, \ldots, K.
 \end{equation}
-\item[(A2)] $f$下有界(Lower Bounded)：存在常数$c \in \R,$ 使得
+\item[(A2)] $f$值域$\operatorname{dom}(f) := \{ \theta \in \R^d ~|~ f(\theta) < + \infty \}$非空，且下有界(Lower Bounded)：存在常数$c \in \R,$ 使得
 \begin{equation}
 \label{eq:lower-bounded}
 f(\theta) \geqslant c > -\infty, ~ \forall \theta \in \R^d.
+\end{equation}
+或等价地
+\begin{equation}
+\label{eq:lower-bounded-2}
+f^* := \inf\limits_{\theta \in \R^d} f(\theta) > - \infty
 \end{equation}
 \end{itemize}
 很多时候，为了方便收敛性的分析，我们还会对目标函数的梯度进行一些假设
