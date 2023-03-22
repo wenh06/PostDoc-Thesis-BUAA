@@ -84,8 +84,9 @@ f^* := \inf\limits_{\theta \in \R^d} f(\theta) > - \infty
 f(a \theta + (1 - a) \theta') \leqslant a f(\theta) + (1 - a) f(\theta'), ~ \forall \theta, \theta' \in \mathcal{C}, ~ \alpha \in [0, 1].
 \end{equation}
 \item 称$f$是$\mu$-强凸函数($\mu$-Strongly Convex Function)，$\mu > 0,$ 若$f - \frac{\mu}{2} \lVert \theta \rVert^2$是凸函数。
+\item 称$f$是$\mu$-弱凸函数($\mu$-Weakly Convex Function)，$\mu > 0,$ 若$f + \frac{\mu}{2} \lVert \theta \rVert^2$是凸函数。
 \end{enumerate}
-如果$\mathcal{C}$是开集，而且$f$在$\mathcal{C}$上可微，那么以上关于函数凸性以及强凸性的定义式可分别写为
+如果$\mathcal{C}$是开集，而且$f$在$\mathcal{C}$上可微，那么以上关于函数凸性以及强(弱)凸性的定义式可分别写为
 \begin{equation}
 \label{eq:def-convex-function-2}
 f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \rangle
@@ -93,7 +94,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 以及
 \begin{equation}
 \label{eq:def-strongly-convex-function}
-f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \rangle + \frac{\mu}{2} \lVert \theta' - \theta \rVert^2
+f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \rangle \pm \frac{\mu}{2} \lVert \theta' - \theta \rVert^2
 \end{equation}
 \end{definition}
 
@@ -101,7 +102,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \begin{equation}
 \label{eq:fl-basic-constraint}
 \begin{array}{cl}
-\minimize & \sum\limits_{k=1}^K w_k f_k(\theta_k), \\
+\minimize & \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k), \\
 \text{subject to} & \theta_k = \theta, ~ k = 1, \ldots, K.
 \end{array}
 \end{equation}
@@ -127,11 +128,11 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \begin{equation}
 \label{eq:fedavg-constraint}
 \begin{array}{cl}
-\minimize & F(\Theta) := \sum\limits_{k=1}^K w_k f_k(\theta_k), \\
+\minimize & F(\Theta) := \frac{1}{K}  \sum\limits_{k=1}^K f_k(\theta_k), \\
 \text{subject to} & \Theta \in \mathcal{E}，
 \end{array}
 \end{equation}
-其中$\Theta = \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, \theta_1, \ldots, \theta_K \in \R^d,$ $\mathcal{E} = \left\{ \Theta ~ \middle| ~ \theta_1 = \cdots = \theta_K \right\}$是$\R^{Kd}$中一个凸集。我们知道，投影梯度下降法(Projected Gradient Descent)是求解问题~\eqref{eq:fedavg-constraint}~的一个有效的算法。投影梯度下降法的迭代格式是
+其中$\Theta = \col(\theta_1, \cdots, \theta_K) := \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, \theta_1, \ldots, \theta_K \in \R^d,$ $\mathcal{E} = \left\{ \Theta ~ \middle| ~ \theta_1 = \cdots = \theta_K \right\}$是$\R^{Kd}$中一个凸集。我们知道，投影梯度下降法(Projected Gradient Descent)是求解问题~\eqref{eq:fedavg-constraint}~的一个有效的算法。投影梯度下降法的迭代格式是
 \begin{equation}
 \label{eq:fedavg-pgd}
 \Theta^{(t+1)} = \Pi_{\mathcal{E}} \left( \Theta^{(t)} - \eta \nabla F(\Theta^{(t)}) \right),

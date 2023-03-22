@@ -10,13 +10,23 @@
 \input{setup/Englishlist}
 \input{preface/cover}
 
+\newpage
+~~~\vspace{1em}
+\thispagestyle{empty}
+
 \pagenumbering{Roman}
 
 % \newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
 
 \baselineskip 18.8pt
 
+% clear the extra empty page caused by the above \newpage command
+\makeatletter\@openrightfalse
+
 \include{content/abstract-zh}
+
+\makeatletter\@openrighttrue
+
 \include{content/abstract-en}
 
 \include{content/fuhao}

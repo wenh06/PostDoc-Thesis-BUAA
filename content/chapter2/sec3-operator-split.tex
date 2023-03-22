@@ -122,40 +122,42 @@ G = \sum\limits_{i=0}^{R-1} ( I - \frac{1}{\mu} A_k^TA_k )^i, ~~ P_k = ( I + \fr
 一般情况下，这与联邦平均算法\texttt{FedAvg}的理论收敛点~\eqref{eq:lst-sol-fedgd}~以及联邦临近点算法\texttt{FedProx}的的理论收敛点~\eqref{eq:lst-sol-fedprox}~并不一致。
 \end{rem}
 
-以上便是文献\parencite{pathak2020fedsplit}首先发现的大部分已有的联邦学习算法在收敛结果正确性方面的缺陷，因此需要需要重新考虑的优化问题~\eqref{eq:fl-basic}~的等价转换。我们把这个问题改写为如下的共识优化问题(注意与式~\eqref{eq:fl-basic-constraint}~的细微差别)
-\begin{equation}
-\label{eq:fedsplit-constraint}
+以上便是文献\parencite{pathak2020fedsplit}首先发现的大部分已有的联邦学习算法在收敛结果正确性方面的缺陷，因此需要需要重新考虑的优化问题~\eqref{eq:fl-basic}~的等价转换。我们再回到约束优化问题~\eqref{eq:fedavg-constraint}~的格式
+\begin{equation*}
 \begin{array}{cl}
-\minimize & F(\Theta) := \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k), \\
-\text{subject to} & A \Theta = 0,
+\minimize & F(\Theta) := \frac{1}{K}  \sum\limits_{k=1}^K f_k(\theta_k), \\
+\text{subject to} & \Theta = \col(\theta_1, \cdots, \theta_K) \in \mathcal{E}，
 \end{array}
-\end{equation}
-其中
-\begin{equation*}
-A = \begin{pmatrix} I_d & -I_d & & & \\ & I_d & -I_d & & \\ & & \ddots & \ddots & \\ & & & \ddots & -I_d \\ -I_d & & & & I_d \end{pmatrix}, ~ \Theta = \col(\theta_1, \cdots, \theta_K) = \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, ~ \theta_1, \ldots, \theta_K \in \R^d.
 \end{equation*}
-约束优化问题~\eqref{eq:fedsplit-constraint}~的拉格朗日函数为
+我们通过使用$\mathcal{E}$的指示函数(Indicator Function)作为罚函数的方式将以上问题转换为无约束优化问题
 \begin{equation}
-\label{eq:fedsplit-lagrangian}
-\mathcal{L}(\Theta, \Lambda) = F(\Theta) - \langle \Lambda, A\Theta \rangle = \sum\limits_{k=1}^K w_k f_k(\theta_k) - \langle \Lambda, A\Theta \rangle,
+\label{eq:fedsplit-pen}
+\minimize \quad F(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + \iota_{\mathcal{E}}(\Theta).
 \end{equation}
-其中$\Lambda = \begin{pmatrix} \lambda_1 \\ \vdots \\ \lambda_K \end{pmatrix} \in \R^{Kd}$为对偶变量。考虑上述问题的一阶最优性条件$\nabla F(\Theta) - A^T \Lambda,$ 即
+对于一个一般的非空凸集$\Omega,$ 其指示函数$\iota_{\Omega}$的定义为
 \begin{equation*}
-\nabla F(\Theta) - \begin{pmatrix} \lambda_1 - \lambda_K \\ \lambda_2 - \lambda_1 \\ \vdots \\ \lambda_K - \lambda_{K-1} \end{pmatrix} = 0.
+\iota_{\Omega} (x) = \begin{cases}
+0, & \text{ 若 } x \in \Omega \\
+\infty, & \text{ 若 } x \not\in \Omega
+\end{cases}
 \end{equation*}
-上式是一个所谓的单调包含问题(Monotone Inclusion Problem)
+无约束优化问题~\eqref{eq:fedsplit-pen}~的一阶最优性条件为
+\begin{equation}
+\label{eq:fedsplit-mono-incl-pre}
+0 \in \nabla F(\Theta) + \partial \iota_{\mathcal{E}}(\Theta)
+\end{equation}
+上式是一个所谓的单调包含问题(Monotone Inclusion Problem)，其中其中$\partial$为指示函数$\iota_{\mathcal{E}}$的次微分，并且有
+\begin{equation}
+\label{eq:normal-cone}
+\partial \iota_{\mathcal{E}}(\Theta) = \mathcal{N}_{\mathcal{E}}(\Theta) = \begin{cases} \mathcal{E}^{\perp} & \text{ if } \Theta \in \mathcal{E} \\ \emptyset & \text{ otherwise } \end{cases}
+\end{equation}
+是凸集$\mathcal{E} = \{ \Theta \in \R^{Kd} ~ | ~ \theta_1 = \cdots = \theta_K\}$在点$\Theta$处的法锥(Normal Cone)，$\nabla F,$ $\mathcal{N}_{\mathcal{E}}$是两个极大单调算子(Maximal Monotone Operator)。单调包含问题~\eqref{eq:fedsplit-mono-incl-pre}~可进一步改写为
 \begin{equation}
 \label{eq:fedsplit-mono-incl}
 0 \in \nabla F(\Theta) + \mathcal{N}_{\mathcal{E}}(\Theta)
 \end{equation}
-其中
-\begin{equation}
-\label{eq:normal-cone}
-\mathcal{N}_{\mathcal{E}}(\Theta) = \begin{cases} \mathcal{E}^{\perp} & \text{ if } \Theta \in \mathcal{E} \\ \emptyset & \text{ otherwise } \end{cases}
-\end{equation}
-是凸集$\mathcal{E} = \{ \Theta \in \R^{Kd} ~ | ~ \theta_1 = \cdots = \theta_K\}$在点$\Theta$处的法锥(Normal Cone)，$\nabla F,$ $\mathcal{N}_{\mathcal{E}}$是两个极大单调算子(Maximal Monotone Operator)。
 
-我们回忆一下极大单调算子以及法锥的定义：
+我们回忆一下极大单调算子以及法锥等基本概念：
 
 \begin{definition}[极大单调算子(Maximal Monotone Operator)\cite{ryu2022large}]
 \label{def:mmo}
@@ -181,28 +183,20 @@ $\R^n$上的一个算子(Operator) $\mathcal{T}: \R^n \rightrightarrows \R^n$指
 \end{equation}
 \end{definition}
 
-算子又被称作是集合值映射(Set-valued Mapping)，法锥也能视作一个算子，被称作法锥算子。法锥算子有另外一种表示，令$\iota_{\Omega}$为非空凸集$\Omega$的指示函数(Indicator Function)
-\begin{equation*}
-\iota_{\Omega} (x) = \begin{cases}
-0, & \text{ 若 } x \in \Omega \\
-\infty, & \text{ 若 } x \not\in \Omega
-\end{cases}
-\end{equation*}
-那么
-\begin{equation*}
-\partial \iota_{\Omega}(x) = \mathcal{N}_{\Omega}(x),
-\end{equation*}
-其中$\partial$为指示函数$\iota_{\Omega}$的次微分。对于凸集$\mathcal{E}$中的点$\Theta \in \mathcal{E},$ 我们有
+算子又被称作是集合值映射(Set-valued Mapping)，法锥也能视作一个算子，被称作法锥算子。对于一个一般的非空凸集$\Omega$以及$x \in \Omega,$ 我们有
+\begin{align*}
+\mathcal{N}_{\Omega}(x) & = \left\{ \omega \ \middle|\ \langle \omega, \widetilde{x} - x \rangle \leqslant 0, ~~ \forall \widetilde{x} \in \Omega \right\} \\
+& = \left\{ \omega \ \middle|\ \langle \omega, \widetilde{x} - x \rangle + \iota_{\Omega}(x) \leqslant \iota_{\Omega}(\widetilde{x}), ~~ \forall \widetilde{x} \in \Omega \right\} \\
+& = \left\{ \omega \ \middle|\ \langle \omega, \widetilde{x} - x \rangle + \iota_{\Omega}(x) \leqslant \iota_{\Omega}(\widetilde{x}), ~~ \forall \widetilde{x} \in \R^d \right\} \\
+& = \partial \iota_{\Omega}(x).
+\end{align*}
+同时，对于凸集$\mathcal{E}$中的点$\Theta \in \mathcal{E},$ 我们有
 \begin{align*}
 \mathcal{N}_{\mathcal{E}}(\Theta) & = \left\{ \omega \ \middle|\ \langle \omega, \widetilde{\Theta} - \Theta \rangle \leqslant 0, ~~ \forall \widetilde{\Theta} \in {\mathcal{E}} \right\} \\
 & = \left\{ \omega \ \middle|\ \left\langle \sum\limits_{k=1}^K \omega_j, ~~ \widetilde{\Theta}_1 - \Theta_1 \right\rangle \leqslant 0, \ \forall \widetilde{\Theta}_1 \in \mathbb{R}^d \right\} \\
 & = \left\{ \omega \ \middle|\ \sum\limits_{k=1}^K \omega_k = 0 \right\} = {\mathcal{E}}^{\perp},
 \end{align*}
-由此可以得到法锥$\mathcal{N}_{\mathcal{E}}(\Theta)$的具体表达式~\eqref{eq:normal-cone}。也就是说，通过罚函数$\iota_{\mathcal{E}},$ 可以将我们考虑的优化模型~\eqref{eq:fedsplit-constraint}~进一步改写为
-\begin{equation}
-\label{eq:fedsplit-pen}
-\minimize \quad F(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + \iota_{\mathcal{E}}(\Theta)
-\end{equation}
+由此可以得到指示函数$\iota_{\mathcal{E}}$的次微分以及法锥$\mathcal{N}_{\mathcal{E}}(\Theta)$的具体表达式~\eqref{eq:normal-cone}。
 
 对于极大单调算子，我们有如下的重要结果
 
@@ -315,7 +309,7 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 & = \argmin_{\omega} \left\{ \sum_{k=1}^K f_k(\omega_k) + \frac{\mu}{2} \sum_{k=1}^K \lVert \omega_k - \theta_k \rVert^2 \right\} \\
 & = (\prox_{f_k, \mu}(\theta_k))_{j=1}^K.
 \end{align*}
-这意味着，我们可以为问题~\eqref{eq:fedsplit-constraint}~的求解设计充分解耦合，从而适用于联邦学习场景的分裂算法。基于以上的问题转换，文献\parencite{pathak2020fedsplit}将PRSM应用到了联邦学习关注的问题~\eqref{eq:fedsplit-constraint}，提出了联邦分裂算法\texttt{FedSplit}。这是分裂算法第一次应用于联邦学习领域。该算法的伪代码见算法~\ref{algo:fedsplit}，其中的$\texttt{prox\_update}_k$是求解子节点$k$上的临近算子$\prox_{f_k, \mu}$的非精确的方法，例如随机梯度下降。
+这意味着，我们可以为问题~\eqref{eq:fedsplit-pen}~的求解设计充分解耦合，从而适用于联邦学习场景的分裂算法。基于以上的问题转换，文献\parencite{pathak2020fedsplit}将PRSM应用到了联邦学习关注的问题~\eqref{eq:fedsplit-pen}，提出了联邦分裂算法\texttt{FedSplit}。这是分裂算法第一次应用于联邦学习领域。该算法的伪代码见算法~\ref{algo:fedsplit}，其中的$\texttt{prox\_update}_k$是求解子节点$k$上的临近算子$\prox_{f_k, \mu}$的非精确的方法，例如随机梯度下降。
 
 \input{algorithms/fedsplit.tex}
 
@@ -355,7 +349,7 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 \label{eq:feddr-model}
 \text{minimize} \quad F(\theta) = f(\theta) + g(\theta) = \frac{1}{K} \sum_{k=1}^K f_k(\theta) + g(\theta),
 \end{equation}
-其中$f_k$是$L$-光滑的非凸函数，$g$是正则项，一般假设是一个闭的真凸函数(Closed Proper Convex Function)。类似~\eqref{eq:fedsplit-constraint}, 我们将问题~\eqref{eq:feddr-model}~等价转换为如下的约束优化问题
+其中$f_k$是$L$-光滑的非凸函数，$g$是正则项，一般假设是一个闭的真凸函数(Closed Convex and Proper, CCP)。类似~\eqref{eq:fedsplit-pen}, 我们将问题~\eqref{eq:feddr-model}~等价转换为如下的约束优化问题
 \begin{equation}
 \label{eq:feddr-constraint}
 \begin{array}{cl}
