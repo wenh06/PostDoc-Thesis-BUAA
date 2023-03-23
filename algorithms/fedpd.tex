@@ -6,8 +6,8 @@
 \For{each round $t = 0, 1, \cdots$}{
     \For{each client $k = 1, \cdots, K$ {\bfseries in parallel}}{
         $\theta_k^{(t+1)} \gets \operatorname{\mathbf{Oracle}}_k(\mathcal{L}_k(\theta_k^{(t)}, \theta_{k, 0}^{(t)}, \lambda_k^{(t)}))$\;
-        $\lambda_k^{(t+1)} \gets \lambda_k^{(t)} + \frac{1}{\eta} (\theta_k^{(t+1)} - \theta_{k, 0}^{(t)})$ \tcc*[h]{dual update step}\;
-        $\theta_{k, 0}^{(t+\frac{1}{2})} \gets \theta_k^{(t+1)} + \eta \lambda_k^{(t+1)}$
+        $\lambda_k^{(t+1)} \gets \lambda_k^{(t)} + \frac{1}{s} (\theta_k^{(t+1)} - \theta_{k, 0}^{(t)})$ \tcc*[h]{dual update step}\;
+        $\theta_{k, 0}^{(t+\frac{1}{2})} \gets \theta_k^{(t+1)} + s \lambda_k^{(t+1)}$
         }
     With probability $1 − p$ do global communication\;
     \Indp

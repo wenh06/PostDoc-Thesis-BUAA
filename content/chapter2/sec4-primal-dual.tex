@@ -20,9 +20,21 @@
 其中
 \begin{equation}
 \label{eq:al-local}
-\mathcal{L}_k(\theta, \theta_k, \lambda_k) = f_k(\theta_k) + \langle \lambda_k, \theta_k - \theta \rangle + \frac{1}{2\eta} \lVert \theta_k - \theta \rVert^2,
+\mathcal{L}_k(\theta, \theta_k, \lambda_k) = f_k(\theta_k) + \langle \lambda_k, \theta_k - \theta \rangle + \frac{1}{2s} \lVert \theta_k - \theta \rVert^2,
 \end{equation}
-$\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量(Dual Variable)或者拉格朗日乘子(Lagrangian Multiplier)。
+$\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量(Dual Variable)或者拉格朗日乘子(Lagrangian Multiplier)。通过将梯度提升算法应用到对偶问题
+\begin{equation}
+\label{eq:al-dual}
+\text{maximize} \quad G(\Lambda) := \inf\limits_{\Theta} \mathcal{L}(\Theta, \Lambda)
+\end{equation}
+可以得到解这种形式的问题算法的一般迭代格式
+\begin{equation}
+\label{eq:al-iter}
+\begin{aligned}
+\theta_k^{(t+1)} & = \argmin_{\theta_k} \mathcal{L}_k(\theta^{(t)}, \theta_k, \lambda_k^{(t)}) \\
+\lambda_k^{(t+1)} & = \lambda_k^{(t)} + \frac{1}{s} (\theta_k^{(t+1)} - \theta^{(t)})
+\end{aligned}
+\end{equation}
 
 待写
 
