@@ -15,7 +15,7 @@
 其中$\Theta = \col(\theta_1, \cdots, \theta_K), ~ \theta, \theta_1, \ldots, \theta_K \in \R^d.$ 约束优化问题~\eqref{eq:fedpd-constraint}~的增广拉格朗日函数(Augmented Lagrangian, AL)为
 \begin{equation}
 \label{eq:al}
-\mathcal{L}(\Theta, \Lambda) = F(\Theta) - \sum\limits_{k=1}^K \left\{ \langle \lambda_k, \theta_k \rangle + \frac{1}{2\eta} \lVert \theta_k - \theta \rVert^2 \right\} = \sum\limits_{k=1}^K \mathcal{L}_k(\theta, \theta_k, \lambda_k)
+\mathcal{L}(\theta, \Theta, \Lambda) = F(\Theta) - \sum\limits_{k=1}^K \left\{ \langle \lambda_k, \theta_k \rangle + \frac{1}{2s} \lVert \theta_k - \theta \rVert^2 \right\} = \sum\limits_{k=1}^K \mathcal{L}_k(\theta, \theta_k, \lambda_k)
 \end{equation}
 其中
 \begin{equation}
@@ -25,21 +25,37 @@
 $\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量(Dual Variable)或者拉格朗日乘子(Lagrangian Multiplier)。通过将梯度提升算法应用到对偶问题
 \begin{equation}
 \label{eq:al-dual}
-\text{maximize} \quad G(\Lambda) := \inf\limits_{\Theta} \mathcal{L}(\Theta, \Lambda)
+\text{maximize} \quad G(\Lambda) := \inf\limits_{\theta, \Theta} \mathcal{L}(\theta, \Theta, \Lambda)
 \end{equation}
 可以得到解这种形式的问题算法的一般迭代格式
-\begin{equation}
+\begin{subequations}
 \label{eq:al-iter}
-\begin{aligned}
-\theta_k^{(t+1)} & = \argmin_{\theta_k} \mathcal{L}_k(\theta^{(t)}, \theta_k, \lambda_k^{(t)}) \\
-\lambda_k^{(t+1)} & = \lambda_k^{(t)} + \frac{1}{s} (\theta_k^{(t+1)} - \theta^{(t)})
-\end{aligned}
-\end{equation}
+\begin{align}
+\theta^{(t+1)} & = \argmin_{\theta} \sum\limits_{k=1}^K \left\{ \frac{1}{2s} \lVert \theta_k^{(t)} - \theta \rVert^2 - \langle \lambda_k^{(t)}, \theta \rangle \right\} \nonumber \\
+& = \frac{1}{K} \sum\limits_{k=1}^K (\theta_k^{(t)} + s\lambda_k^{(t)}) \label{eq:al-iter-global} \\
+\theta_k^{(t+1)} & = \argmin_{\theta_k} \mathcal{L}_k(\theta^{(t)}, \theta_k, \lambda_k^{(t)}) \label{eq:al-iter-local} \\
+\lambda_k^{(t+1)} & = \lambda_k^{(t)} + \frac{1}{s} (\theta_k^{(t+1)} - \theta^{(t)}) \label{eq:al-iter-dual}
+\end{align}
+\end{subequations}
 
-待写
-
-文献\parencite{zhang2020fedpd}研究了
+基于这种迭代格式，文献\parencite{zhang2020fedpd}设计了联邦原始对偶(Federated Primal-Dual)算法\texttt{FedPD}，其伪代码可见算法~\ref{algo:fedpd}。
 
 \input{algorithms/fedpd}
 
+联邦原始对偶算法\texttt{FedPD}有以下几点是值得注意的。
+
+首先，在子节点执行本地模型更新，也就是求解问题~\eqref{eq:al-iter-local}~时，\texttt{FedPD}采用了比较灵活的设置，即允许
+\begin{equation*}
+\operatorname{\mathbf{Oracle}}_k(\mathcal{L}_k(\theta_{k, 0}^{(t)}, \theta_k, \lambda_k^{(t)}), \theta_k^{(t)})
+\end{equation*}
+可以是任何一个求解算法，例如随机梯度下降，亦或是与在SCAFFOLD算法~\ref{algo:scaffold}~中应用过的方差缩减技术进行结合。文献\parencite{zhang2020fedpd}特别提到的是，在方差缩减技术的时候，可以进一步结合线性化的方法进行加速,即把需要优化的(局部)拉格朗日函数进行线性化，或者更准确的说，是将$f_k$在$\theta_{k}^{(t,r)}$处线性化：
+\begin{equation*}
+\begin{aligned}
+\widetilde{\mathcal{L}}(\theta_{k}) & := \mathcal{L}_k(\theta_{k, 0}^{(t)}, \theta_k, \lambda_k^{(t)}) = f_k(\theta_k) + \langle \lambda_k^{(t)}, \theta_k - \theta_{k, 0}^{(t)} \rangle + \frac{1}{2s} \lVert \theta_k - \theta_{k, 0}^{(t)} \rVert^2 \\
+& = f_k(\theta_k^{(t,r)}) + \langle g_k^{(t,r)}, \theta_k - \theta_k^{(t,r)} \rangle + \frac{1}{2\gamma} \lVert \theta_k - \theta_k^{(t,r)} \rVert^2 + \langle \lambda_k^{(t)}, \theta_k - \theta_{k, 0}^{(t)} \rangle + \frac{1}{2s} \lVert \theta_k - \theta_{k, 0}^{(t)} \rVert^2
+\end{aligned}
+\end{equation*}
+
 待写。。。。
+
+其次，是``跳步''更新技术的使用，待写。。。。

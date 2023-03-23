@@ -1,9 +1,13 @@
 \begin{algorithm}[ht]
 % \SetAlgoNoLine
 % \DontPrintSemicolon
-{\bfseries Initiation:} global parameters $\theta^{(0)} \in \operatorname{dom}(f)$, step size $s = \frac{1}{\mu} > 0$, $\alpha \in (0, 2)$, error bound for inexact proximal operator $\varepsilon_{k,0} \geqslant 0$ \\
-\hspace{2em}Init server: $\overline{\theta}^{(0)} = \widetilde{\theta}^{(0)} = \omega^{(0)} = \theta^{(0)} \in \R^d$\\
-\hspace{2em}Init clients: $\omega_k^{(0)} = \theta^{(0)}$, $\theta_k^{(0)} \approx \prox_{f_k, \mu}(\omega_k^{(0)})$, $\widehat{\theta}_k^{(0)} = 2\theta_k^{(0)} - \omega_k^{(0)}, ~ \forall k \in [K]$\;
+\SetKwInOut{Input}{Input}
+\Input{step size $s = \frac{1}{\mu} > 0$, $\alpha \in (0, 2)$, error bounds $\varepsilon_{k,0} \geqslant 0$}
+{\bfseries Initiation:}\;
+\Indp
+    {\bfseries Init server:} global parameters $\theta^{(0)} \in \operatorname{dom}(f)$, $\overline{\theta}^{(0)} = \widetilde{\theta}^{(0)} = \omega^{(0)} = \theta^{(0)} \in \R^d$\\
+    {\bfseries Init clients:} $\omega_k^{(0)} = \theta^{(0)}$, $\theta_k^{(0)} \approx \prox_{f_k, \mu}(\omega_k^{(0)})$, $\widehat{\theta}_k^{(0)} = 2\theta_k^{(0)} - \omega_k^{(0)}, ~ \forall k \in [K]$\;
+\Indm
 \For{$t = 0, 1, \cdots, T-1$}{
     $S^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
     each client $k \in \mathcal{S}^{(t)}$ receives $\overline{\theta}^{(t)}$ from server \tcc*[h]{communication}\;
