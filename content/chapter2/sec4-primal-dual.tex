@@ -2,7 +2,7 @@
 \addcontentsline{toe}{section}{{2.4\ \ Primal-Dual Algorithms in Federated Learning}\numberline\,}
 \label{sec:chap2-primal-dual}
 
-% NOT finished
+% almost finished
 
 在传统的最优化方法中，原始-对偶算法(Primal-Dual Algorithms)也是一类常用的算法。我们考虑格式为~\eqref{eq:fl-basic-constraint}~的带等式线性约束的共识优化问题(注意与~\eqref{eq:fl-basic-constraint}~的细微差别)
 \begin{equation}
@@ -82,4 +82,11 @@ $\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量(Dual Variabl
 \end{cases}
 \end{equation*}
 
-跳步更新的方式在提高联邦学习算法的通信效率上有非常明显的优势，待添加参考文档，待写。。。。
+跳步更新的方式在提高联邦学习算法的通信效率上有非常明显的优势，而我们已经在\S\ref{sec:chap1-fl-applications}~中介绍过了，通信效率恰恰是大部分联邦学习问题的瓶颈所在。文献~\parencite[TABLE III]{zhang2020fedpd}~进一步给出了跳步更新概率$p$与节点间数据分布异质程度的关系
+\begin{equation*}
+p \approx \begin{cases}
+\sqrt{\frac{1}{36s} \cdot \frac{\varepsilon}{G^2}}, & \text{当$0 \leqslant p < \frac{1-2Ls}{1+Ls},$} \\
+1 - 2 / \log(\frac{1}{42s} \cdot \frac{\varepsilon}{G^2}), & \text{当$\frac{1-2Ls}{1+Ls} < p < 1,$}
+\end{cases}
+\end{equation*}
+其中$\varepsilon$是算法收敛点精度相关的常值($\varepsilon$-稳定点)，$G$是通过梯度差异有界性~\eqref{eq:bdd_grad_dissim}~表达的节点间数据分布异质程度的常值，$L$是目标函数$f, f_k$的Lipschitz常数(见式~\eqref{eq:l-smooth})，步长$s$被取定为$s = \frac{\sqrt{5}-1}{8L}.$
