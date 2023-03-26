@@ -4,8 +4,15 @@
 
 % NOT finished
 
-我们已经在上一节\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步''(Skipping)更新技术的联邦学习算法了。
+我们已经在上一节\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步''(Skipping)更新技术的联邦学习算法了。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用。
 
-待写。。。。
+再一次考虑建模为共识优化~\eqref{eq:fedsplit-pen}~的联邦学习问题
+\begin{equation*}
+\begin{array}{rl}
+\minimize & F(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + \iota_{\mathcal{E}}(\Theta), \\
+\text{where} & \Theta = \col(\theta_1, \cdots, \theta_K) \in \R^{Kd}, \\
+& \mathcal{E} = \{ \Theta ~|~ \theta_1 = \cdots = \theta_K \}.
+\end{array}
+\end{equation*}
 
 \input{algorithms/proxskip}
