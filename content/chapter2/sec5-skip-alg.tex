@@ -5,7 +5,7 @@
 % NOT finished
 % NOT indexed
 
-我们已经在\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步''(Skipping)更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用。
+我们已经在\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用。
 
 再一次考虑建模为共识优化~\eqref{eq:fl-basic-constraint}~的联邦学习问题
 \begin{equation*}
@@ -20,19 +20,21 @@
 \begin{equation*}
 \minimize \quad F(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + \iota_{\mathcal{E}}(\Theta),
 \end{equation*}
-再将算子分裂的方法用于上述问题的一阶(最优或者稳定点)条件
+再将算子分裂的方法用于上述问题的一阶 (最优或者稳定点) 条件
 \begin{equation*}
 0 \in \nabla F(\Theta) + \partial \iota_{\mathcal{E}}(\Theta).
 \end{equation*}
-事实上，我们在\S\ref{sec:chap2-operator-split}~(命题~\ref{prop:os})使用的分裂方法\eqref{eq:fixed-pt-pr}，即PRSM~\eqref{eq:prsm}~与DRSM~\eqref{eq:drsm}~，都属于向后-向前分裂(Backward-Forward Splitting, BFS)\index{向后-向前分裂, Backward-Forward Splitting, BFS}这一类的方法。考虑一个一般的单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$ 类似命题\ref{prop:os}~有\cite{ryu2022large}
+事实上，我们在\S\ref{sec:chap2-operator-split} (命题~\ref{prop:os}) 使用的分裂方法\eqref{eq:fixed-pt-pr}，即PRSM~\eqref{eq:prsm}~与DRSM~\eqref{eq:drsm}~，都属于向后-向前分裂 (Backward-Forward Splitting, BFS)\index{向后-向前分裂, Backward-Forward Splitting, BFS} 这一类的方法。考虑一个一般的单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$ 类似命题\ref{prop:os}~有\cite{ryu2022large}
 \begin{align*}
 0 \in \mathcal{A}(x) + \mathcal{B}(x) & \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{B})(x) - (\mathcal{I} - s\mathcal{A})(x) \\
 & \Longleftrightarrow (\mathcal{I} + s\mathcal{B})(x) \ni (\mathcal{I} - s\mathcal{A})(x) \\
 & \Longleftrightarrow x = \mathcal{R}_{s\mathcal{B}}(\mathcal{I} - s\mathcal{A})(x),
 \end{align*}
-相对应的算子分裂方法被称作向前-向后分裂(Forward-Backward Splitting, FBS)\index{向前-向后分裂, Forward-Backward Splitting, FBS}。具体应用到$\mathcal{A} = \nabla F,$ $\mathcal{B} = \partial \iota_{\mathcal{E}},$ 即得到
+相对应的算子分裂方法被称作向前-向后分裂 (Forward-Backward Splitting, FBS)\index{向前-向后分裂, Forward-Backward Splitting, FBS}。具体应用到$\mathcal{A} = \nabla F,$ $\mathcal{B} = \partial \iota_{\mathcal{E}},$ 即得到要进行迭代求解的不动点问题
 \begin{equation*}
-\Theta = \mathcal{R}_{s\iota_{\mathcal{E}}}(\mathcal{I} - s\nabla F)(\Theta)
+\Theta = \mathcal{R}_{s\partial\iota_{\mathcal{E}}}(\mathcal{I} - s\nabla F)(\Theta) = \Pi_{\mathcal{E}}(\mathcal{I} - s\nabla F)(\Theta).
 \end{equation*}
+这也正好是联邦平均算法\texttt{FedAvg} (或者说梯度投影法, 见\S\ref{subsec:chap2-overview-fedavg-opt}) 从单调算子理论的角度进行的另一种解读。
+
 
 \input{algorithms/proxskip}

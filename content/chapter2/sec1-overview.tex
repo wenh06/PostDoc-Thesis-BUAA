@@ -3,15 +3,15 @@
 \label{sec:chap2-overview}
 
 % almost finished
-% NOT indexed
+% indexed
 
-优化算法自从联邦学习这一概念诞生起，便一直是相关研究的中心问题之一。联邦学习开创性的文献\parencite{mcmahan2017fed_avg}中，最重要也是最为人所熟知的便是优化算法\texttt{FederatedAveraging}(简记为\texttt{FedAvg})的提出。
+优化算法自从联邦学习这一概念诞生起，便一直是相关研究的中心问题之一。联邦学习开创性的文献\parencite{mcmahan2017fed_avg}中，最重要也是最为人所熟知的便是联邦平均算法\texttt{FederatedAveraging} (Federated Averaging Algorithm, 简记为\texttt{FedAvg})\index{联邦平均算法, \texttt{FedAvg}} 的提出。
 
-联邦学习优化算法最重要的设计原则，是计算效率以及通信效率并重，甚至很多时候通信效率是更重要的一个方面。这也是联邦学习与传统的分布式优化最显著的区别之一。实际上，分布式优化在联邦学习被提出之前就是一个被研究得比较多的问题，从具体的问题，例如分布式主成分分析(Principal Component Analysis, PCA)\cite{dist_pca_2014_nips}，到一般的算法理论\cite{Mangasarian_1995_parallel,boyd2011distributed}都有研究人员进行了研究。当时这些研究往往仅从计算效率以及效果出发，往往不考虑通信效率、通信保密性等问题。文献\parencite{mcmahan2017fed_avg}正是从实际问题出发，发现了这些需求，基于一种分布式梯度下降算法\cite{chen2016_revisit}(该算法在文献\parencite{mcmahan2017fed_avg}中被称作\texttt{FedSGD}算法)，做了上文提到的改进而提出了\texttt{FedAvg}算法。
+联邦学习优化算法最重要的设计原则，是计算效率以及通信效率并重，甚至很多时候通信效率是更重要的一个方面。这也是联邦学习与传统的分布式优化最显著的区别之一。实际上，分布式优化在联邦学习被提出之前就是一个被研究得比较多的问题，从具体的问题，例如分布式主成分分析 (Principal Component Analysis, PCA)\cite{dist_pca_2014_nips}，到一般的算法理论\cite{Mangasarian_1995_parallel,boyd2011distributed}都有研究人员进行了研究。当时这些研究往往仅从计算效率以及效果出发，往往不考虑通信效率、通信保密性等问题。文献\parencite{mcmahan2017fed_avg}正是从实际问题出发，发现了这些需求，基于一种分布式梯度下降算法\cite{chen2016_revisit} (该算法在文献\parencite{mcmahan2017fed_avg}中被称作\texttt{FedSGD}算法)，做了上文提到的改进而提出了\texttt{FedAvg}算法。
 
-这里还需要强调的是，\texttt{FedAvg}相对于\texttt{FedSGD}的另一个关键的改进是，子节点与中心节点之间传输的信息，从梯度改为了模型参数。这在某种程度上规避了从梯度泄露联邦学习参与方私密训练数据\cite{zhu2019deep_leakage}的潜在风险。
+这里还需要强调的是，联邦平均算法\texttt{FedAvg}相对于\texttt{FedSGD}的另一个关键的改进是，子节点与中心节点之间传输的信息，从梯度改为了模型参数。这在某种程度上规避了从梯度泄露联邦学习参与方私密训练数据\cite{zhu2019deep_leakage}的潜在风险。
 
-联邦学习在数学上来说，其本质是一个极小化经验风险函数(Minimization of Empirical Risk Function, 见下文的式~\eqref{eq:fl-basic})的优化问题。沿用式~\eqref{eq:general-hfl}~中的记号，本文考虑的联邦学习中的优化问题，其最基本的格式如下
+联邦学习在数学上来说，其本质是一个极小化经验风险函数 (Minimization of Empirical Risk Function, 见下文的式~\eqref{eq:fl-basic})的优化问题。沿用式~\eqref{eq:general-hfl}~中的记号，本文考虑的联邦学习中的优化问题，其最基本的格式如下
 \begin{equation}
 \label{eq:fl-basic-dist}
 \begin{array}{cl}
@@ -28,7 +28,7 @@
 \end{equation}
 通常，为了形式简便，我们令$w_k = \frac{1}{K}.$ 对于$f$以及$f_k,$ 我们一般都假设它满足如下几条最基本的假设
 \begin{itemize}
-\item[(A1)] $f$以及$f_k$都是$L-$光滑的($L-$smooth, $L > 0$)，亦即它们有Lipschitz-连续的梯度：
+\item[(A1)] $f$以及$f_k$都是$L-$光滑的 ($L-$smooth, $L > 0$)\index{$L-$光滑, $L-$smooth}，亦即它们有Lipschitz-连续的梯度：
 \begin{equation}
 \label{eq:l-smooth}
 \begin{array}{c}
@@ -38,7 +38,7 @@
 ~ \forall \theta, \theta' \in \R^d, k = 1, \ldots, K.
 \end{equation}
 $L$被称作是这些函数的Lipschitz常数。
-\item[(A2)] $f$值域$\operatorname{dom}(f) := \{ \theta \in \R^d ~|~ f(\theta) < + \infty \}$非空，且下有界(Lower Bounded)：存在常数$c \in \R,$ 使得
+\item[(A2)] $f$值域$\operatorname{dom}(f) := \{ \theta \in \R^d ~|~ f(\theta) < + \infty \}$非空，且下有界 (Lower Bounded)：存在常数$c \in \R,$ 使得
 \begin{equation}
 \label{eq:lower-bounded}
 f(\theta) \geqslant c > -\infty, ~ \forall \theta \in \R^d.
@@ -51,15 +51,15 @@ f^* := \inf\limits_{\theta \in \R^d} f(\theta) > - \infty
 \end{itemize}
 很多时候，为了方便收敛性的分析，我们还会对目标函数的梯度进行一些假设
 \begin{itemize}
-\item[(A3)] 梯度有界性(Bounded Gradient)：存在常数$G > 0,$ 使得
+\item[(A3)] 梯度有界性 (Bounded Gradient)\index{梯度有界性, Bounded Gradient)}：存在常数$G > 0,$ 使得
 \begin{equation}
 \label{eq:bdd_grad}
 \lVert \nabla f_k (\theta) \rVert^2 \leqslant G^2, ~ \forall \theta \in \R^d, ~ k = 1, \ldots K.
 \end{equation}
 \end{itemize}
-数据分布的特征(是否独立同分布，以及非独立同分布的程度)是联邦学习避免不了要考虑的问题，这也是联邦学习区别于传统的分布式优化的重要特征，这也是我们在\S\ref{sec:chap1-fl-applications}~中着重讨论过的问题。
+数据分布的特征 (是否独立同分布，以及非独立同分布的程度) 是联邦学习避免不了要考虑的问题，这也是联邦学习区别于传统的分布式优化的重要特征，这也是我们在\S\ref{sec:chap1-fl-applications}~中着重讨论过的问题。
 \begin{itemize}
-\item[(A4-1)] 数据独立同分布(I.I.D.)：
+\item[(A4-1)] 数据独立同分布 (I.I.D.)：
 \begin{equation}
 \label{eq:iid-1}
 \nabla f(\theta) = \expectation [f_k(\theta)] = \expectation\limits_{(x, y) \sim \mathcal{D}_k}[\nabla \ell_k(\theta; x, y)], ~ \forall \theta \in \R^d, ~ k = 1, \ldots K,
@@ -69,7 +69,7 @@ f^* := \inf\limits_{\theta \in \R^d} f(\theta) > - \infty
 \label{eq:iid-2}
 \sum\limits_{k=1}^K \lVert \nabla f_k(\theta) \rVert^2 = \lVert f(\theta) \rVert^2, ~ \forall \theta \in \left\{ \theta \in \R^d ~ \middle| ~ \lVert f(\theta) \rVert^2 > \varepsilon \right\}.
 \end{equation}
-\item[(A4-2)] 数据非独立同分布(Non-I.I.D.)，这个时候我们需要有一个量，用来度量这种统计上的异质性的程度。这个量可以有多种定义方式\cite{karimireddy2020scaffold, zhang2020fedpd, li2019convergence, sahu2018fedprox}，本文采用文献\parencite{karimireddy2020scaffold}以及文献\parencite{zhang2020fedpd}中定义的梯度差异有界性(Bounded Gradient Dissimilarity)，记作$(G; B)$-BGD. 具体来说，存在常数$G > 0,$ 以及$B \geqslant 0,$ 满足
+\item[(A4-2)] 数据非独立同分布 (Non-I.I.D.)，这个时候我们需要有一个量，用来度量这种统计上的异质性的程度。这个量可以有多种定义方式\cite{karimireddy2020scaffold, zhang2020fedpd, li2019convergence, sahu2018fedprox}，本文采用文献\parencite{karimireddy2020scaffold}以及文献\parencite{zhang2020fedpd}中定义的梯度差异有界性 (Bounded Gradient Dissimilarity, BGD)\index{梯度差异有界性, Bounded Gradient Dissimilarity, BGD}，记作$(G; B)$-BGD. 具体来说，存在常数$G > 0,$ 以及$B \geqslant 0,$ 满足
 \begin{equation}
 \label{eq:bdd_grad_dissim}
 \dfrac{1}{K} \sum\limits_{k=1}^K \lVert \nabla f_k(\theta) \rVert^2 \leqslant G^2 + B^2 \lVert \nabla f(\theta) \rVert^2, ~ \forall \theta \in \R^d.
@@ -79,17 +79,17 @@ f^* := \inf\limits_{\theta \in \R^d} f(\theta) > - \infty
 很多时候，在证明算法收敛性的时候，我们需要对目标函数$f$进行一些凸性方面的假设，我们先引入相关的定义。
 \begin{definition}
 \label{def-convexity}
-设$f: \mathcal{C} -> \R$是定义在$\R^n$中凸集(Convex Set)的连续函数，
+设$f: \mathcal{C} -> \R$是定义在$\R^n$中凸集 (Convex Set)\index{凸集, Convex Set} 的连续函数，
 \begin{enumerate}
-\item 称$f$是凸函数(Convex Function)，若有
+\item 称$f$是凸函数 (Convex Function)\index{凸函数, Convex Function}，若有
 \begin{equation}
 \label{eq:def-convex-function-1}
 f(a \theta + (1 - a) \theta') \leqslant a f(\theta) + (1 - a) f(\theta'), ~ \forall \theta, \theta' \in \mathcal{C}, ~ \alpha \in [0, 1].
 \end{equation}
-\item 称$f$是$\mu$-强凸函数($\mu$-Strongly Convex Function)，$\mu > 0,$ 若$f - \frac{\mu}{2} \lVert \theta \rVert^2$是凸函数。
-\item 称$f$是$\mu$-弱凸函数($\mu$-Weakly Convex Function)，$\mu > 0,$ 若$f + \frac{\mu}{2} \lVert \theta \rVert^2$是凸函数。
+\item 称$f$是$\mu$-强凸函数 ($\mu$-Strongly Convex Function)\index{强凸函数, Strongly Convex Function}，$\mu > 0,$ 若$f - \frac{\mu}{2} \lVert \theta \rVert^2$是凸函数。
+\item 称$f$是$\mu$-弱凸函数 ($\mu$-Weakly Convex Function)\index{弱凸函数, Weakly Convex Function}，$\mu > 0,$ 若$f + \frac{\mu}{2} \lVert \theta \rVert^2$是凸函数。
 \end{enumerate}
-如果$\mathcal{C}$是开集，而且$f$在$\mathcal{C}$上可微，那么以上关于函数凸性以及强(弱)凸性的定义式可分别写为
+如果$\mathcal{C}$是开集，而且$f$在$\mathcal{C}$上可微，那么以上关于函数凸性以及强 (弱) 凸性的定义式可分别写为
 \begin{equation}
 \label{eq:def-convex-function-2}
 f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \rangle
@@ -101,7 +101,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \end{equation}
 \end{definition}
 
-由于联邦学习天然的分层以及可解耦的结构(见\S\ref{sec:chap1-fl-origin})，更方便以及自然的做法，是将问题~\eqref{eq:fl-basic}~写成约束优化问题的格式：
+由于联邦学习天然的分层以及可解耦的结构 (见\S\ref{sec:chap1-fl-origin})，更方便以及自然的做法，是将问题~\eqref{eq:fl-basic}~写成约束优化问题的格式：
 \begin{equation}
 \label{eq:fl-basic-constraint}
 \begin{array}{cl}
@@ -109,25 +109,25 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \text{subject to} & \theta_k = \theta, ~ k = 1, \ldots, K.
 \end{array}
 \end{equation}
-我们很容易看出~\eqref{eq:fl-basic-constraint}~与~\eqref{eq:fl-basic}~这两种格式的等价性。格式~\eqref{eq:fl-basic-constraint}~在分布式优化中被称作共识问题(Consensus Problem)。这种格式的好处是，目标函数变成了分块可分离的(Block Separable)。目标函数的分块可分离性对于设计可并行化的算法是巨大的便利。我们会在本文随后的章节中进一步发现，约束优化的格式~\eqref{eq:fl-basic-constraint}~及其变体，更有利于我们对算法进行理论分析，进而对算法的改进做出指导。
+我们很容易看出~\eqref{eq:fl-basic-constraint}~与~\eqref{eq:fl-basic}~这两种格式的等价性。格式~\eqref{eq:fl-basic-constraint}~在分布式优化中被称作共识优化问题 (Consensus Problem)\index{共识优化问题, Consensus Problem}。这种格式的好处是，目标函数变成了分块可分离的 (Block Separable)\index{分块可分离, Block Separable)}。目标函数的分块可分离性对于设计可并行化的算法是巨大的便利。我们会在本文随后的章节中进一步发现，约束优化的格式~\eqref{eq:fl-basic-constraint}~及其变体，更有利于我们对算法进行理论分析，进而对算法的改进做出指导。
 
 \subsection{联邦平均算法}
 \label{subsec:chap2-overview-fedavg}
 
-联邦平均算法(Federated Averaging Algorithm)\cite{mcmahan2017fed_avg}是首个被提出的联邦学习算法，后续一系列的工作都是以此为基础进行的改进。我们先给出该算法的伪代码\ref{algo:fedavg}。
+联邦平均算法\cite{mcmahan2017fed_avg}是首个被提出的联邦学习算法，后续一系列的工作都是以此为基础进行的改进。我们先给出该算法的伪代码\ref{algo:fedavg}。
 
 \input{algorithms/fedavg.tex}
 
-联邦平均算法的核心思想，是充分利用子节点的计算能力，在以学习率(learning rate, 又称步长，step size) $\eta$执行完一定轮数的随机梯度下降(Stochastic Gradient Descent, SGD)\cite{Robbins_1951_sgd}之后，由中心节点收集各子节点发送过来的模型参数，进行平均(Averaging)，之后再将平均之后的模型参数广播(Broadcast)给子节点进行下一轮迭代。这样，规避了每一轮SGD都进行通信带来的巨大的通信开销，在加速模型训练的同时，数值上在某些情况下还有更好的收敛性。这实际上是一种比较朴素与简单的``跳步''的思想，这种思想也在随后的研究\cite{zhang2020fedpd, proxskip, proxskip-vr}也得到了进一步的发展。
+联邦平均算法的核心思想，是充分利用子节点的计算能力，在以学习率\index{学习率, learning rate} (learning rate, 又称步长\index{步长, step size}，step size) $\eta$执行完一定轮数的随机梯度下降 (Stochastic Gradient Descent, SGD)\cite{Robbins_1951_sgd}\index{随机梯度下降, Stochastic Gradient Descent, SGD} 之后，由中心节点收集各子节点发送过来的模型参数，进行平均 (Averaging)，之后再将平均之后的模型参数广播 (Broadcast) 给子节点进行下一轮迭代。这样，规避了每一轮SGD都进行通信带来的巨大的通信开销，在加速模型训练的同时，数值上在某些情况下还有更好的收敛性。这实际上是一种比较朴素与简单的``跳步''的思想，这种思想也在随后的研究\cite{zhang2020fedpd, proxskip, proxskip-vr}也得到了进一步的发展。
 
-联邦平均算法\texttt{FedAvg}在数值上取得了一些不错的实验结果\cite[Section 3]{mcmahan2017fed_avg}，但是其收敛性，特别是在数据非独立同分布的情况下，并未得到证明\cite{khaled2019_first,Khaled2020_tighter}。后续的文献\parencite{zhou_2018_convergence}首先在假设数据独立同分布的情况下证明了联邦平均算法的收敛性。文献\parencite{li2019convergence}进一步在非独立同分布的情况下证明了联邦平均算法的收敛性，但添加了$f$强凸(见定义\ref{def-convexity})的假设。
+联邦平均算法\texttt{FedAvg}在数值上取得了一些不错的实验结果\cite[Section 3]{mcmahan2017fed_avg}，但是其收敛性，特别是在数据非独立同分布的情况下，并未得到证明\cite{khaled2019_first,Khaled2020_tighter}。后续的文献\parencite{zhou_2018_convergence}首先在假设数据独立同分布的情况下证明了联邦平均算法的收敛性。文献\parencite{li2019convergence}进一步在非独立同分布的情况下证明了联邦平均算法的收敛性，但添加了$f$强凸 (见定义\ref{def-convexity})的假设。
 
 % TODO: 看这里是否要列举一些收敛率的定理
 
 \subsection{最优化理论视角下的联邦平均算法}
 \label{subsec:chap2-overview-fedavg-opt}
 
-我们从最优化理论的角度对联邦平均算法进行分析。事实上，联邦平均算法处理的优化问题~\eqref{eq:fl-basic}~可以等价地改写为如下的约束优化问题(注意与格式\ref{eq:fl-basic-constraint}~的差别)
+我们从最优化理论的角度对联邦平均算法\texttt{FedAvg}进行分析。事实上，联邦平均算法\texttt{FedAvg}处理的优化问题~\eqref{eq:fl-basic}~可以等价地改写为如下的约束优化问题 (注意与格式\ref{eq:fl-basic-constraint}~的差别)
 \begin{equation}
 \label{eq:fedavg-constraint}
 \begin{array}{cl}
@@ -135,7 +135,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \text{subject to} & \Theta \in \mathcal{E},
 \end{array}
 \end{equation}
-其中$\Theta = \col(\theta_1, \cdots, \theta_K) := \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, \theta_1, \ldots, \theta_K \in \R^d,$ $\mathcal{E} = \left\{ \Theta ~ \middle| ~ \theta_1 = \cdots = \theta_K \right\}$是$\R^{Kd}$中一个凸集。我们知道，投影梯度下降法(Projected Gradient Descent, PGD)是求解问题~\eqref{eq:fedavg-constraint}~的一个有效的算法。投影梯度下降法的迭代格式是
+其中$\Theta = \col(\theta_1, \cdots, \theta_K) := \begin{pmatrix} \theta_1 \\ \vdots \\ \theta_K \end{pmatrix}, \theta_1, \ldots, \theta_K \in \R^d,$ $\mathcal{E} = \left\{ \Theta ~ \middle| ~ \theta_1 = \cdots = \theta_K \right\}$是$\R^{Kd}$中一个凸集。我们知道，投影梯度下降法 (Projected Gradient Descent, PGD)\index{投影梯度下降, Projected Gradient Descent, PGD} 是求解问题~\eqref{eq:fedavg-constraint}~的一个有效的算法。投影梯度下降法的迭代格式是
 \begin{equation}
 \label{eq:fedavg-pgd}
 \Theta^{(t+1)} = \Pi_{\mathcal{E}} \left( \Theta^{(t)} - \eta \nabla F(\Theta^{(t)}) \right),
@@ -144,7 +144,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \begin{equation*}
 \Pi_{\mathcal{E}}: \R^{Kd} \to \mathcal{E}: (\theta_1, \ldots, \theta_K) \mapsto (\frac{1}{K}\sum\limits_{k=1}^K \theta_K, \ldots, \frac{1}{K}\sum\limits_{k=1}^K \theta_K).
 \end{equation*}
-也就是说联邦平均算法在数学上，实质上是一种随机投影梯度法，子节点执行的是梯度步(具体来说是用的随机梯度下降)，中心节点执行的是投影步。
+也就是说联邦平均算法在数学上，实质上是一种随机投影梯度法，子节点执行的是梯度步 (具体来说是用的随机梯度下降)，中心节点执行的是投影步。
 
 % 关于联邦平均算法\texttt{FedAvg}的收敛结果，待写。。。
 
@@ -166,7 +166,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \Delta^{(t)} \gets \beta_1 \Delta^{(t-1)} + \left( (1 - \beta_1) / \lvert \mathcal{S}^{(t)} \rvert \right) \sum_{k \in \mathcal{S}^{(t)}} \Delta_{k}^{(t)}
 \end{equation*}
 
-我们注意到，相比于\texttt{FedAvg}算法\ref{algo:fedavg}，\texttt{FedOpt}在中心节点引入了带动量(Momentum)的项用于\textbf{ServerOpt}进行加速。我们列举一些\textbf{ServerOpt}可供选择的方法\cite{reddi2020fed_opt}：
+我们注意到，相比于联邦平均算法\texttt{FedAvg}\ref{algo:fedavg}，\texttt{FedOpt}在中心节点引入了带动量 (Momentum)\index{动量, Momentum} 的项用于\textbf{ServerOpt}进行加速。我们列举一些\textbf{ServerOpt}可供选择的方法\cite{reddi2020fed_opt}：
 \begin{itemize}
     \item \texttt{FedAdagrad}:
     \begin{equation*}
@@ -192,7 +192,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 
 \texttt{FedOpt}将机器学习领域内常用的一些加速的技巧应用于联邦学习的场景，是\texttt{FedAvg}较为平凡的推广，它的另一个更重要的意义在于充分表明了联邦学习子节点与中心节点的计算的解耦合的性质。
 
-\texttt{FedAvg}以及\texttt{FedOpt}算法考虑的主要是数据在各子节点之间独立同分布的场景。对于更具有实际意义的数据非独立同分布的场景，我们需要引入一些别的工具来处理这种情况。此时，各子节点上的梯度在分布上是有差异的，一个很自然的想法就是引入一些额外的参数，与模型参数一起更新，利用这些额外的参数对子节点的梯度进行修正，减小各子节点上的梯度在分布上的差异，进而达到使算法收敛更稳定以及加速收敛的目的。这种技术就是方差缩减(Variance Reduction)技术\cite{johnson2013accelerating}，由文献\parencite{karimireddy2020scaffold}以算法\texttt{SCAFFOLD} (Stochastic Controlled Averaging algorithm) 的形式首次引入联邦学习中，其伪代码可见算法\ref{algo:scaffold}。
+\texttt{FedAvg}以及\texttt{FedOpt}算法考虑的主要是数据在各子节点之间独立同分布的场景。对于更具有实际意义的数据非独立同分布的场景，我们需要引入一些别的工具来处理这种情况。此时，各子节点上的梯度在分布上是有差异的，一个很自然的想法就是引入一些额外的参数，与模型参数一起更新，利用这些额外的参数对子节点的梯度进行修正，减小各子节点上的梯度在分布上的差异，进而达到使算法收敛更稳定以及加速收敛的目的。这种技术就是方差缩减 (Variance Reduction, VR)\index{方差缩减, Variance Reduction, VR} 技术\cite{johnson2013accelerating}，由文献\parencite{karimireddy2020scaffold}以算法\texttt{SCAFFOLD} (Stochastic Controlled Averaging algorithm) 的形式首次引入联邦学习中，其伪代码可见算法\ref{algo:scaffold}。
 
 \input{algorithms/scaffold}
 

@@ -3,9 +3,9 @@
 \label{sec:chap2-primal-dual}
 
 % almost finished
-% NOT indexed
+% indexed
 
-在传统的最优化方法中，原始-对偶算法(Primal-Dual Algorithms)也是一类常用的算法。我们考虑格式为~\eqref{eq:fl-basic-constraint}~的带等式线性约束的共识优化问题(注意与~\eqref{eq:fl-basic-constraint}~的细微差别)
+在传统的最优化方法中，原始-对偶算法 (Primal-Dual Algorithms)\index{原始-对偶算法, Primal-Dual Algorithms} 也是一类常用的算法。我们考虑格式为~\eqref{eq:fl-basic-constraint}~的带等式线性约束的共识优化问题 (注意与~\eqref{eq:fl-basic-constraint}~的细微差别)
 \begin{equation}
 \label{eq:fedpd-constraint}
 \begin{array}{cl}
@@ -13,7 +13,7 @@
 \text{subject to} & \theta_k = \theta, ~ k = 1, \ldots, K.
 \end{array}
 \end{equation}
-其中$\Theta = \col(\theta_1, \cdots, \theta_K), ~ \theta, \theta_1, \ldots, \theta_K \in \R^d.$ 约束优化问题~\eqref{eq:fedpd-constraint}~的增广拉格朗日函数(Augmented Lagrangian, AL)为
+其中$\Theta = \col(\theta_1, \cdots, \theta_K), ~ \theta, \theta_1, \ldots, \theta_K \in \R^d.$ 约束优化问题~\eqref{eq:fedpd-constraint}~的增广拉格朗日函数 (Augmented Lagrangian, AL)\index{增广拉格朗日函数, Augmented Lagrangian, AL} 为
 \begin{equation}
 \label{eq:al}
 \mathcal{L}(\theta, \Theta, \Lambda) = F(\Theta) - \sum\limits_{k=1}^K \left\{ \langle \lambda_k, \theta_k \rangle + \frac{1}{2s} \lVert \theta_k - \theta \rVert^2 \right\} = \sum\limits_{k=1}^K \mathcal{L}_k(\theta, \theta_k, \lambda_k)
@@ -23,7 +23,7 @@
 \label{eq:al-local}
 \mathcal{L}_k(\theta, \theta_k, \lambda_k) = f_k(\theta_k) + \langle \lambda_k, \theta_k - \theta \rangle + \frac{1}{2s} \lVert \theta_k - \theta \rVert^2,
 \end{equation}
-$\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量(Dual Variable)或者拉格朗日乘子(Lagrangian Multiplier)。通过将梯度提升算法应用到对偶问题
+$\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量 (Dual Variable)\index{对偶变量, Dual Variable} 或者拉格朗日乘子 (Lagrangian Multiplier)\index{拉格朗日乘子, Lagrangian Multiplier}。通过将梯度提升算法应用到对偶问题
 \begin{equation}
 \label{eq:al-dual}
 \text{maximize} \quad G(\Lambda) := \inf\limits_{\theta, \Theta} \mathcal{L}(\theta, \Theta, \Lambda)
@@ -39,7 +39,7 @@ $\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量(Dual Variabl
 \end{align}
 \end{subequations}
 
-基于这种迭代格式，文献\parencite{zhang2020fedpd}设计了联邦原始对偶(Federated Primal-Dual)算法\texttt{FedPD}，其伪代码可见算法~\ref{algo:fedpd}。
+基于这种迭代格式，文献\parencite{zhang2020fedpd}设计了联邦原始对偶算法 (Federated Primal-Dual)\texttt{FedPD}\index{联邦原始对偶算法, \texttt{FedPD}}，其伪代码可见算法~\ref{algo:fedpd}。
 
 \input{algorithms/fedpd}
 
@@ -49,7 +49,7 @@ $\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量(Dual Variabl
 \begin{equation*}
 \operatorname{\mathbf{Oracle}}_k(\mathcal{L}_k(\theta_{k, 0}^{(t)}, \theta_k, \lambda_k^{(t)}), \theta_k^{(t)})
 \end{equation*}
-可以是任何一个求解算法，例如随机梯度下降，亦或是与在SCAFFOLD算法~\ref{algo:scaffold}~中应用过的方差缩减技术进行结合。这种灵活性，是联邦学习的显著特点，这一点我们已经在\S\ref{sec:chap2-overview}~中介绍\texttt{FedOpt}算法的时候已经强调过了。文献\parencite{zhang2020fedpd}进一步特别提到的是，在方差缩减技术的时候，可以进一步结合线性化的方法进行加速,即把需要优化的(局部)拉格朗日函数进行线性化，或者更准确的说，是将$f_k$在$\theta_{k}^{(t,r)}$处线性化：
+可以是任何一个求解算法，例如随机梯度下降，亦或是与在SCAFFOLD算法~\ref{algo:scaffold}~中应用过的方差缩减技术进行结合。这种灵活性，是联邦学习的显著特点，这一点我们已经在\S\ref{sec:chap2-overview}~中介绍\texttt{FedOpt}算法的时候已经强调过了。文献\parencite{zhang2020fedpd}进一步特别提到的是，在方差缩减技术的时候，可以进一步结合线性化的方法进行加速,即把需要优化的 (局部) 拉格朗日函数进行线性化，或者更准确的说，是将$f_k$在$\theta_{k}^{(t,r)}$处线性化：
 \begin{equation*}
 \begin{aligned}
 \widetilde{\mathcal{L}}(\theta_{k}) & := \mathcal{L}_k(\theta_{k, 0}^{(t)}, \theta_k, \lambda_k^{(t)}) = f_k(\theta_k) + \langle \lambda_k^{(t)}, \theta_k - \theta_{k, 0}^{(t)} \rangle + \frac{1}{2s} \lVert \theta_k - \theta_{k, 0}^{(t)} \rVert^2 \\
@@ -90,4 +90,4 @@ p \approx \begin{cases}
 1 - 2 / \log(\frac{1}{42s} \cdot \frac{\varepsilon}{G^2}), & \text{当$\frac{1-2Ls}{1+Ls} < p < 1,$}
 \end{cases}
 \end{equation*}
-其中$\varepsilon$是算法收敛点精度相关的常值($\varepsilon$-稳定点)，$G$是通过梯度差异有界性~\eqref{eq:bdd_grad_dissim}~表达的节点间数据分布异质程度的常值，$L$是目标函数$f, f_k$的Lipschitz常数(见式~\eqref{eq:l-smooth})，步长$s$被取定为$s = \frac{\sqrt{5}-1}{8L}.$
+其中$\varepsilon$是算法收敛点精度相关的常值 ($\varepsilon$-稳定点)，$G$是通过梯度差异有界性~\eqref{eq:bdd_grad_dissim}~表达的节点间数据分布异质程度的常值，$L$是目标函数$f, f_k$的Lipschitz常数 (见式~\eqref{eq:l-smooth})，步长$s$被取定为$s = \frac{\sqrt{5}-1}{8L}.$
