@@ -251,7 +251,7 @@ x \in u + s\mathcal{A}(u), ~~ y \in v + s\mathcal{A}(v).
 \label{eq:fixed-pt-pr}
 \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}} (z) = z, ~ x \in \mathcal{R}_{s\mathcal{B}} (z).
 \end{equation}
-我们称这种转化为Peaceman–Rachford分裂(Peaceman–Rachford Splitting, PRS)。由于算子$\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$只是非扩张的，我们可以用$\tau$-平均算子$(1 - \tau) \mathcal{I} + \tau \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$代替算子$\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}},$ 其中$\tau \in (0, 1),$ 进而考虑如下的不动点问题
+我们称这种转化为Peaceman–Rachford分裂(Peaceman–Rachford Splitting, PRS)\cite{Peaceman_1955_prsm,Lions_1979_splitting}。由于算子$\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$只是非扩张的，我们可以用$\tau$-平均算子$(1 - \tau) \mathcal{I} + \tau \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$代替算子$\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}},$ 其中$\tau \in (0, 1),$ 进而考虑如下的不动点问题
 \begin{equation}
 \label{eq:fixed-pt-general}
 ((1 - \tau) \mathcal{I} + \tau \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}) (z) = z, ~ x \in \mathcal{R}_{s\mathcal{B}} (z).
@@ -261,7 +261,7 @@ x \in u + s\mathcal{A}(u), ~~ y \in v + s\mathcal{A}(v).
 \label{eq:fixed-pt-dr}
 \frac{1}{2}(\mathcal{I} + \mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}) (z) = z, ~ x \in \mathcal{R}_{s\mathcal{B}} (z),
 \end{equation}
-称这种转化为Douglas-Rachford分裂(Douglas-Rachford Splitting, DRS)。
+称这种转化为Douglas-Rachford分裂(Douglas-Rachford Splitting, DRS)\cite{Douglas_1956_drsm,Lions_1979_splitting}。
 
 求解不动点问题~\eqref{eq:fixed-pt-pr}, \eqref{eq:fixed-pt-general}, \eqref{eq:fixed-pt-dr}~的一般方法是进行不动点迭代
 \begin{equation}

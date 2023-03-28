@@ -5,7 +5,7 @@
 
 优化算法自从联邦学习这一概念诞生起，便一直是相关研究的中心问题之一。联邦学习开创性的文献\parencite{mcmahan2017fed_avg}中，最重要也是最为人所熟知的便是优化算法\texttt{FederatedAveraging}(简记为\texttt{FedAvg})的提出。
 
-联邦学习优化算法最重要的设计原则，是计算效率以及通信效率并重，甚至很多时候通信效率是更重要的一个方面。这也是联邦学习与传统的分布式优化(Distributed Optimization)最显著的区别之一。实际上，分布式优化在联邦学习被提出之前就是一个被研究得比较多的问题，从具体的问题，例如分布式主成分分析(Principal Component Analysis, PCA)\cite{dist_pca_2014_nips}，到一般的算法理论\cite{Mangasarian_1995_parallel,boyd2011distributed}都有研究人员进行了研究。当时这些研究往往仅从计算效率以及效果出发，往往不考虑通信效率、通信保密性等问题。文献\parencite{mcmahan2017fed_avg}正是从实际问题出发，发现了这些需求，基于一种分布式梯度下降算法\cite{chen2016_revisit}(该算法在文献\parencite{mcmahan2017fed_avg}中被称作\texttt{FedSGD}算法)，做了上文提到的改进而提出了\texttt{FedAvg}算法。
+联邦学习优化算法最重要的设计原则，是计算效率以及通信效率并重，甚至很多时候通信效率是更重要的一个方面。这也是联邦学习与传统的分布式优化最显著的区别之一。实际上，分布式优化在联邦学习被提出之前就是一个被研究得比较多的问题，从具体的问题，例如分布式主成分分析(Principal Component Analysis, PCA)\cite{dist_pca_2014_nips}，到一般的算法理论\cite{Mangasarian_1995_parallel,boyd2011distributed}都有研究人员进行了研究。当时这些研究往往仅从计算效率以及效果出发，往往不考虑通信效率、通信保密性等问题。文献\parencite{mcmahan2017fed_avg}正是从实际问题出发，发现了这些需求，基于一种分布式梯度下降算法\cite{chen2016_revisit}(该算法在文献\parencite{mcmahan2017fed_avg}中被称作\texttt{FedSGD}算法)，做了上文提到的改进而提出了\texttt{FedAvg}算法。
 
 这里还需要强调的是，\texttt{FedAvg}相对于\texttt{FedSGD}的另一个关键的改进是，子节点与中心节点之间传输的信息，从梯度改为了模型参数。这在某种程度上规避了从梯度泄露联邦学习参与方私密训练数据\cite{zhu2019deep_leakage}的潜在风险。
 
