@@ -31,6 +31,7 @@
 
 \include{content/fuhao}
 
+\setcounter{tocdepth}{1}  % no subsections?
 \tableofcontents
 \tableofengcontents
 \mainmatter
@@ -41,8 +42,15 @@
 \include{content/chapter4/chap4.tex}
 \include{content/chapter5/chap5.tex}
 
-\printbibliography[title=参考文献]
 
+\phantomsection
+% \addcontentsline{toe}{chapter}{{{\bf References}}\numberline~}
+% \markboth{参~考~文~献}{北京航空航天大学文豪博士后研究工作报告}
+\printbibliography[heading=bibintoc,title=参考文献]
+
+\phantomsection
+% \addcontentsline{toe}{chapter}{{{\bf Index}}\numberline~}
+% \markboth{名~词~索~引}{北京航空航天大学文豪博士后研究工作报告}
 \printindex
 
 \backmatter

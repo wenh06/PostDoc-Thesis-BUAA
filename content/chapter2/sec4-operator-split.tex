@@ -3,6 +3,7 @@
 \label{sec:chap2-operator-split}
 
 % almost finished
+% NOT indexed
 
 我们已经讨论过的通用加速技巧\cite{reddi2020fed_opt}，方差缩减技术\cite{karimireddy2020scaffold}，以及临近点方法\cite{sahu2018fedprox}，解决的都是联邦学习在各种各样场景下的收敛性、收敛率相关的问题，而算法收敛结果的正确性这一问题始终没有得到重视。我们来举一个非常简单的例子来说明这个问题。
 
@@ -183,7 +184,7 @@ $\R^n$上的一个算子(Operator) $\mathcal{T}: \R^n \rightrightarrows \R^n$指
 \end{equation}
 \end{definition}
 
-算子又被称作是集合值映射(Set-valued Mapping)，法锥也能视作一个算子，被称作法锥算子。对于一个一般的非空凸集$\Omega$以及$x \in \Omega,$ 我们有
+算子又被称作是集值映射(Set-Valued Mapping)，法锥也能视作一个算子，被称作法锥算子。对于一个一般的非空凸集$\Omega$以及$x \in \Omega,$ 我们有
 \begin{align*}
 \mathcal{N}_{\Omega}(x) & = \left\{ \omega \ \middle|\ \langle \omega, \widetilde{x} - x \rangle \leqslant 0, ~~ \forall \widetilde{x} \in \Omega \right\} \\
 & = \left\{ \omega \ \middle|\ \langle \omega, \widetilde{x} - x \rangle + \iota_{\Omega}(x) \leqslant \iota_{\Omega}(\widetilde{x}), ~~ \forall \widetilde{x} \in \Omega \right\} \\
@@ -233,7 +234,7 @@ x \in u + s\mathcal{A}(u), ~~ y \in v + s\mathcal{A}(v).
 \end{align*}
 因此$\mathcal{C}_{s\mathcal{A}} = 2 \mathcal{R}_{s\mathcal{A}} - \mathcal{I}$是非扩张的算子。同理可证$\mathcal{C}_{s\mathcal{B}}$是非扩张的，从而$\mathcal{C}_{s\mathcal{A}} \mathcal{C}_{s\mathcal{B}}$也是非扩张算子。
 
-(2). 我们有如下的等价关系
+(2). 我们有如下的等价关系\cite{ryu2022large}
 \begin{align*}
 0 \in \mathcal{A}(x) + \mathcal{B}(x) & \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{A})(x) - (\mathcal{I} - s\mathcal{B})(x) \\
 & \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{A})(x) - (2\mathcal{I} - (\mathcal{I} + s\mathcal{B}))(x) \\
@@ -263,7 +264,7 @@ x \in u + s\mathcal{A}(u), ~~ y \in v + s\mathcal{A}(v).
 \end{equation}
 称这种转化为Douglas-Rachford分裂(Douglas-Rachford Splitting, DRS)\cite{Douglas_1956_drsm,Lions_1979_splitting}。
 
-求解不动点问题~\eqref{eq:fixed-pt-pr}, \eqref{eq:fixed-pt-general}, \eqref{eq:fixed-pt-dr}~的一般方法是进行不动点迭代
+求解不动点问题~\eqref{eq:fixed-pt-pr}, \eqref{eq:fixed-pt-general}, \eqref{eq:fixed-pt-dr}~的一般方法是进行不动点迭代(Fixed Point Iteration, FPI)\index{不动点迭代, Fixed Point Iteration}
 \begin{equation}
 \label{eq:fixed-pt-iter}
 z^{(t+1)} = \mathcal{T}(z^{(t)}), ~~ \text{$\mathcal{T}$是某个非扩张算子。}
@@ -282,9 +283,9 @@ z^{(t+1)} & = z^{(t)} + 2x^{(t+1)} - 2x^{(t+1/2)} \label{eq:prsm-4}
 \begin{subequations}
 \label{eq:drsm}
 \begin{align}
-x^{(t+1/2)} & = R_B(z^{(t)}) \label{eq:drsm-1} \\
+x^{(t+1/2)} & = \mathcal{R}_{\mathcal{B}}(z^{(t)}) \label{eq:drsm-1} \\
 z^{(t+1/2)} & = 2x^{(t+1/2)} - z^{(t)} \label{eq:drsm-2} \\
-x^{(t+1)} & = R_A(z^{(t+1/2)}) \label{eq:drsm-3} \\
+x^{(t+1)} & = \mathcal{R}_{\mathcal{A}}(z^{(t+1/2)}) \label{eq:drsm-3} \\
 z^{(t+1)} & = z^{(t)} + x^{(t+1)} - x^{(t+1/2)} \label{eq:drsm-4}
 \end{align}
 \end{subequations}
@@ -301,7 +302,7 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 \end{equation}
 那么根据命题~\ref{prop:os}，我们将问题转化为了求算子$\mathcal{C}_{\mathcal{A}} \mathcal{C}_{\mathcal{B}}$的不动点的问题，其中$\mathcal{A} = \nabla F, \mathcal{B} = \mathcal{N}_{\mathcal{E}}.$ 对于这两个算子，我们有
 \begin{equation*}
-\mathcal{R}_{\nabla F} = \prox_{F, \mu}, \quad \mathcal{R}_{\mathcal{N}_E} = \Pi_{E},
+\mathcal{R}_{\nabla F} = \prox_{F, \mu}, \quad \mathcal{R}_{\mathcal{N}_{\mathcal{E}}} = \Pi_{\mathcal{E}},
 \end{equation*}
 其中$s = \frac{1}{\mu},$ 同时对于分块可分离的目标函数，其临近算子是可分块计算的，即有
 \begin{align*}
