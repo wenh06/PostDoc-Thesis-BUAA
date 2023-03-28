@@ -4,15 +4,17 @@
 
 % NOT finished
 
-我们已经在上一节\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步''(Skipping)更新技术的联邦学习算法了。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用。
+我们已经在\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步''(Skipping)更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用。
 
-再一次考虑建模为共识优化~\eqref{eq:fedsplit-pen}~的联邦学习问题
+再一次考虑建模为共识优化~\eqref{eq:fl-basic-constraint}~的联邦学习问题
 \begin{equation*}
 \begin{array}{rl}
-\minimize & F(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + \iota_{\mathcal{E}}(\Theta), \\
+\minimize & F(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k), \\
+\text{subject to} & \Theta \in \mathcal{E}, \\
 \text{where} & \Theta = \col(\theta_1, \cdots, \theta_K) \in \R^{Kd}, \\
 & \mathcal{E} = \{ \Theta ~|~ \theta_1 = \cdots = \theta_K \}.
 \end{array}
 \end{equation*}
+我们已经在\S\ref{subsec:chap2-overview-fedavg-opt}~对联邦平均算法\texttt{FedAvg}进行理论分析，以及在\S\ref{sec:chap2-operator-split}~讨论联邦学习算子分裂算法等多个地方使用了这一优化模型。
 
 \input{algorithms/proxskip}

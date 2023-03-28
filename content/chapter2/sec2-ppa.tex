@@ -18,12 +18,18 @@ h_k(\theta_k, \theta^{(t)}) := \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \the
 \label{eq:prox-op}
 \theta_k^{(t)} \approx \prox_{f_k, \mu} (\theta^{(t)}) := \argmin\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2 \right\},
 \end{equation}
-其中的$\prox_{f_k, \mu}$为临近算子(Proximity Operator)。令$s = \frac{1}{\mu},$ 因为$\prox_{f_k, \mu} = \prox_{sf_k, 1},$ 我们也把$\prox_{f_k, \mu}$记为$\prox_{sf_k}.$ 相应的函数
+其中的$\prox_{f_k, \mu}$为临近算子(Proximity Operator)\cite{Parikh_2014_pa}。令$s = \frac{1}{\mu},$ 因为$\prox_{f_k, \mu} = \prox_{sf_k, 1},$ 我们也把$\prox_{f_k, \mu}$记为$\prox_{sf_k}.$ 相应的函数
 \begin{equation}
 \label{eq:moreau_env}
-\mathcal{M}_{f_k, \mu} (\theta^{(t)}) := \inf\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2 \right\}
+\mathcal{M}_{sf_k} (\theta^{(t)}) = \mathcal{M}_{f_k, \mu} (\theta^{(t)}) := \inf\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2 \right\}
 \end{equation}
-被称作$f_k$的Moreau包络 (Moreau Envelope) 或者Moreau-Yosida正规化 (Moreau-Yosida Regularization)。关于联邦临近点算法\texttt{FedProx}在非凸情况下的收敛性，文献\parencite{sahu2018fedprox}有如下的结论
+被称作$f_k$的Moreau包络(Moreau Envelope)或者Moreau-Yosida正规化(Moreau-Yosida Regularization)。函数$f_k$的Moreau包络与它的临近算子有如下关系\cite{Parikh_2014_pa}
+\begin{equation*}
+\prox_{sf_k} (\theta_k) = \theta_k - s \nabla \mathcal{M}_{sf_k} (\theta_k),
+\end{equation*}
+也就是说，$\prox_{sf_k}$可以视作是以$s$为步长进行的极小化函数$\mathcal{M}_{sf_k}$的梯度下降算子。
+
+关于联邦临近点算法\texttt{FedProx}在非凸情况下的收敛性，文献\parencite{sahu2018fedprox}有如下的结论
 \begin{theorem}[\parencite{sahu2018fedprox} Theorem 4]
 \label{thm:fedprox}
 假设子节点的目标函数$\{f_k\}_{k=1}^K$都是非凸、$L$−光滑(定义见式~\eqref{eq:l-smooth})函数，并且存在常数$L_- > 0,$使得$\nabla^2 f_k \succcurlyeq -L_- I_d.$ 又假设$\{f_k\}_{k=1}^K$满足差异有解条件(Bounded Dissimilarity)，即对$\varepsilon > 0,$ 存在常数$B_{\varepsilon} > 0,$ 使得集合$\mathcal{S}_{\varepsilon}^c := \{ \theta ~|~ \lVert \nabla f(\theta) \rVert^2 > \varepsilon\}$中的任何一点$\theta$都满足不等式
@@ -47,5 +53,5 @@ B(\theta) := \frac{\expectation_k [\lVert \nabla f_k(\theta) \rVert^2]}{\lVert \
 当子节点之间的数据分布完全一致的时候（理想情况下），$B_{\varepsilon}$恒为1，就不会有这个问题。这也是后续一系列文章\cite{pathak2020fedsplit,tran2021feddr}进行改进的出发点。
 \end{rem}
 
-联邦临近点算法\texttt{FedProx}的积极意义在于，首次将临近点算法(Proximal Point Algorithms, PPA)引入联邦学习领域中。临近点算法不仅仅在理论分析上可以提供一个好的框架，在算法设计上也能提供一个支撑。后续在\$\ref{chap3}~我们将要详细研究的有关个性化联邦学习的工作\cite{hanzely2020federated,li_2021_ditto,t2020pfedme,li2021pfedmac}都依赖于引入临近项(或者类似的项)作为模型个性化的主要技术手段。
+联邦临近点算法\texttt{FedProx}的积极意义在于，首次将临近点算法(Proximal Point Algorithms, PPA)引入联邦学习领域中，虽然临近点算法只是用做了(内循环问题的)子节点上的子问题的求解器，而\texttt{FedProx}算法整体严格意义上来看并不是临近点算法。临近点算法不仅仅在理论分析上可以提供一个好的框架，在算法设计上也能提供一个支撑。后续在\$\ref{chap3}~中我们将要详细研究的有关个性化联邦学习的工作\cite{hanzely2020federated,acar2021feddyn,li_2021_ditto,t2020pfedme,li2021pfedmac}都依赖于引入临近项(或者类似的项)作为模型个性化的主要技术手段。关于临近点算法本身在联邦学习的进一步研究，也有将临近点算法与方差缩减技术相结合(\texttt{FedProxVR}算法)\cite{Dinh_2020_FL_PSVRG}等方面的工作。
 

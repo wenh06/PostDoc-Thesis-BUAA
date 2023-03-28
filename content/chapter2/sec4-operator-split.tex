@@ -8,7 +8,7 @@
 
 \begin{example}
 \label{eg:correctness}
-假设我们要拟合线性模型$y = mx$, $m$为需要拟合的变量，使用均方误差(Mean Squared Error, MSE)做损失函数 (目标函数)，即我们考虑的是一个最小二乘问题。假设我们有两个参与方，参与方1的拥有的训练数据为$\{ (0, 2), (1, 2) \},$ 相应的目标函数为
+假设我们要拟合线性模型$y = mx$, $m$为需要拟合的变量，使用均方误差(Mean Squared Error, MSE)做损失函数(目标函数)，即我们考虑的是一个最小二乘问题。假设我们有两个参与方，参与方1的拥有的训练数据为$\{ (0, 2), (1, 2) \},$ 相应的目标函数为
 \begin{equation*}
 f_1(m_1) = \frac{1}{2} (4 + (m_1 - 2)^2);
 \end{equation*}
@@ -23,7 +23,7 @@ m = \frac{18 + 4\mu}{16 + 9\mu},
 \end{equation}
 其中$\mu$为临近项相关的系数 (见式~\eqref{eq:fedprox})。
 
-数据都拿一起拟合结果为$k = \frac{4}{9}.$ 注意，这里一起拟合的结果并不等于单独拟合的均值 (\texttt{FedAvg}的结果)，原因就在于loss function里的k是2次的，不是线性的。
+数据都拿一起拟合结果为$k = \frac{4}{9}.$ 注意，这里一起拟合的结果并不等于单独拟合的均值(\texttt{FedAvg}的结果)，原因就在于目标函数里的k是2次的，不是线性的。
 \end{example}
 
 文献\cite{pathak2020fedsplit}首先注意到这个问题，并具体分析了联邦平均算法\texttt{FedAvg}与联邦临近点算法\texttt{FedProx}的理论收敛结果，如下
@@ -303,7 +303,7 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 \begin{equation*}
 \mathcal{R}_{\nabla F} = \prox_{F, \mu}, \quad \mathcal{R}_{\mathcal{N}_E} = \Pi_{E},
 \end{equation*}
-其中$s = \frac{1}{\mu},$ 同时又有
+其中$s = \frac{1}{\mu},$ 同时对于分块可分离的目标函数，其临近算子是可分块计算的，即有
 \begin{align*}
 \prox_{F, \mu}(\Theta) & = \argmin_{\omega} \left\{ F(\omega) + \frac{\mu}{2} \lVert \omega - \Theta \rVert^2 \right\} \\
 & = \argmin_{\omega} \left\{ \sum_{k=1}^K f_k(\omega_k) + \frac{\mu}{2} \sum_{k=1}^K \lVert \omega_k - \theta_k \rVert^2 \right\} \\
