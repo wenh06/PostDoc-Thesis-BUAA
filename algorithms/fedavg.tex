@@ -11,8 +11,12 @@
     broadcast $\theta^{(t)}$ to clients $k \in S^{(t)}$\;
     \For{each client $k \in \mathcal{S}^{(t)}$ {\bfseries in parallel}}{
         $\theta_k^{(t)} \gets$ {\bfseries ClientUpdate}$(k, \theta^{(t)})$\;
-        }
+        send $\theta_k^{(t)}$ to server\;
+    }
+    {\bfseries Server Update:}\;
+    \Indp
     $\theta^{(t+1)} \gets \frac{1}{\lvert \mathcal{S}^{(t)} \rvert} \sum\limits_{k\in \mathcal{S}^{(t)}} \theta_k^{(t)}$\;
+    \Indm
 }
 % \Indm
 \vspace{0.2em}

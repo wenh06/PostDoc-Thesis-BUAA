@@ -11,7 +11,10 @@
         Find a $\gamma$-inexact solution $\theta_k^{(t)}$ to $\argmin\limits_{\theta_k} h_k(\theta_k, \theta^{(t)}) := f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2.$\;
         \tcc{Definition of $\gamma$-inexactness: $\nabla h_k(\theta_k^*, \theta^{(t)}) \leqslant \gamma h_k(\theta_k, \theta^{(t)}),$ where $\theta_k^*$ is the exact solution to $h_k.$}
     }
+    {\bfseries Server Update:}\;
+    \Indp
     $\theta^{(t+1)} \gets \frac{1}{\lvert \mathcal{S}^{(t)} \rvert} \sum\limits_{k\in \mathcal{S}^{(t)}} \theta_k^{(t)}$\;
+    \Indm
 }
 \caption{联邦临近算法\texttt{FedFrox}\cite{sahu2018fedprox}的伪代码}
 \label{algo:fedprox}

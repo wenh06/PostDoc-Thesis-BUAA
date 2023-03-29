@@ -9,7 +9,8 @@
     \For{each client $k = 1, \cdots, K$ {\bfseries in parallel}}{
         $\theta_k^{(t)} \gets \theta^{(t)}$\;
         $\theta_k^{(t+1/2)} \gets$ $\texttt{prox\_update}_k(2\theta^{(t)} - \theta_k^{(t)})$ \tcc*[h]{local prox step}\;
-        $\theta_k^{(t+1)} \gets$ $\theta_k^{(t)} + 2(\theta_k^{(t+1/2)} - \theta^{(t)})$ \tcc*[h]{local centering step}
+        $\theta_k^{(t+1)} \gets$ $\theta_k^{(t)} + 2(\theta_k^{(t+1/2)} - \theta^{(t)})$ \tcc*[h]{local centering step}\;
+        send $\theta_k^{(t+1)}$ to server\;
         }
     {\bfseries Server Update:}\;
     \Indp
