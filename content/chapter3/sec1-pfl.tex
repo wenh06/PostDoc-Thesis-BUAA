@@ -6,17 +6,3 @@
 % NOT indexed
 
 待写。。。。
-
-
-文献\parencite{li_2021_ditto}进一步发展了\texttt{FedProx}\cite{sahu2018fedprox}添加临近项的思想，将子节点的优化问题~\eqref{eq:fedprox}~改进为一个双层优化问题 (Bi-level Optimization Problem)\index{双层优化问题, Bi-level Optimization Problem}
-\begin{equation}
-\label{eq:ditto}
-\begin{array}{cl}
-\minimize & h_k(\theta_k, \omega^*) := f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \omega^* \rVert^2, \\
-\text{subject to} & \omega^* \in \argmin_{\omega} G(f_1(\omega)， \cdots, f_K(\omega)),
-\end{array}
-\end{equation}
-其中$G$是中心节点上执行子节点模型参数聚合的函数，例如\texttt{FedAvg}算法中采用的求均值函数。
-
-待写。。。。
-

@@ -2,8 +2,22 @@
 % \SetAlgoNoLine
 % \DontPrintSemicolon
 \SetKwInOut{Input}{Input}
-\Input{xx}
+\Input{penalty coeffecient $\mu,$ learning rate $\eta,$ method $\operatorname{\mathbf{UpdateGlobal}}$}
 {\bfseries Initiation:}\;
+\Indp
+    {\bfseries Init server:} global model parameters $\theta^{(0)} \in \R^d$\;
+    {\bfseries Init clients:} local model parameters $\omega_k^{(0)} \in \R^d, ~ \forall k \in [K]$\;
+\Indm
+\For{each round $t = 0, 1, \cdots, T-1$}{
+    $S^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
+    broadcast $\theta^{(t)}$ to clients $k \in S^{(t)}$\;
+    \For{each client $k \in \mathcal{S}^{(t)}$ {\bfseries in parallel}}{
+        \tcc{solve the local sub-problem of $G(\dot)$ inexactly starting from $\theta^{(t)}$ to obtain $\theta_k^{(t)}$}
+        $\theta_k^{(t)} \gets \operatorname{\mathbf{UpdateGlobal}}(\theta^{(t)}, f_k)$\;
+        \tcc{update the personalized model via solving \eqref{eq:ditto-local}}
+        $\omega_k^{(t+1)} \gets \omega_k^{(t)} - \eta \left( \nabla f_k(\omega_k^{(t)}) + \mu (\omega_k^{(t)} - \theta^{(t)}) \right)$\;
+    }
+}
 \caption{算法\texttt{Ditto}\cite{li_2021_ditto}的伪代码}
 \label{algo:ditto}
 \end{algorithm}
