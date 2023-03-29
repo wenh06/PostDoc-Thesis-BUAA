@@ -36,4 +36,5 @@ dist
 *.tmppart
 *.abs
 *.sav
+*.bcf
 /build
