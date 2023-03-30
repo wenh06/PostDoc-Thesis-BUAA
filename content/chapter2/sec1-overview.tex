@@ -26,7 +26,7 @@
 \minimize\limits_{\theta \in \R^d} & f(\theta) = \sum\limits_{k=1}^K w_k f_k(\theta).
 \end{array}
 \end{equation}
-通常，为了形式简便，我们令$w_k = \frac{1}{K}.$ 对于$f$以及$f_k,$ 我们一般都假设它满足如下几条最基本的假设
+通常，为了形式简便，我们令$w_k = \frac{1}{K}.$ 对于$f$以及$f_k,$ 我们一般都假设它满足如下几条最基本的假设\cite{kairouz2019advances_fl,zhang2020fedpd,sahu2018fedprox,li2019convergence,stich2018local,karimireddy2020scaffold}
 \begin{itemize}
 \item[(A1)] $f$以及$f_k$都是$L-$光滑的 ($L-$smooth, $L > 0$)\index{$L-$光滑, $L-$smooth}，亦即它们有Lipschitz-连续的梯度：
 \begin{equation}
@@ -100,6 +100,8 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \rangle \pm \frac{\mu}{2} \lVert \theta' - \theta \rVert^2
 \end{equation}
 \end{definition}
+
+关于目标函数在大规模随机性的场景下 (尤其是联邦学习的场景下) 更一般的假设，可以参阅文献\parencite{Gower2019_sgd}等。
 
 由于联邦学习天然的分层以及可解耦的结构 (见\S\ref{sec:chap1-fl-origin})，更方便以及自然的做法，是将问题~\eqref{eq:fl-basic}~写成约束优化问题的格式：
 \begin{equation}

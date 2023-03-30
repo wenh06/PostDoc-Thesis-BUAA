@@ -2,10 +2,10 @@
 \addcontentsline{toe}{section}{{2.5\ \ Skipping Algorithms in Federated Learning}\numberline\,}
 \label{sec:chap2-skip-alg}
 
-% NOT finished
-% NOT indexed
+% almost finished
+% indexed
 
-我们已经在\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用，并提出了\texttt{ProxSkip}算法，其伪代码见算法~\ref{algo:proxskip}。需要注意的是，此算法在文献\parencite{proxskip}中实际上被当做相关跳步算法在联邦学习中的应用，并将其命名为\texttt{Scaffnew}。我们也很容易从算法~\ref{algo:proxskip}~中看出，它实际上就是\texttt{SCAFFOLD}算法~\ref{algo:scaffold}结合了跳步更新技术的改进算法。
+本文已经在\S\ref{sec:chap2-primal-dual}~初步涉及了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用，并提出了\texttt{ProxSkip}算法，其伪代码见算法~\ref{algo:proxskip}。需要注意的是，此算法在文献\parencite{proxskip}中实际上被当做一般性的跳步算法在联邦学习中的应用，并将其命名为\texttt{Scaffnew}。我们也很容易从算法~\ref{algo:proxskip}~中看出，它在某种意义上来说就是\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~结合了跳步更新技术的改进算法。
 
 \input{algorithms/proxskip}
 
@@ -42,4 +42,4 @@
 \end{equation*}
 使用临近梯度下降法$\Theta^{(t+1)} = \prox_{sg}(\Theta^{(t)} - s\nabla F(\Theta^{(t)}))$的一个潜在的困难在于CCP函数$g$的临近算子$\prox_{sg}$求解比较困难，计算代价较大\cite{friedlander2017efficient}。对应到联邦学习中，就是投影步对应的通信代价 (从子节点到中心节点的模型参数聚合，以及中心节点到子节点的模型参数广播) 较大。基于这种考虑，以一定概率跳过这一类的性能瓶颈步骤，是值得尝试的方法。
 
-需要注意的是，与\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~不同的是，\texttt{ProxSkip}算法~\ref{algo:proxskip}~并未使用梯度方差缩减的技术。控制变量 (Control Variates) $c_k$起的作用是保证算法整体的正确收敛性。即可以证明$c_k$收敛到$\nabla f_k(\theta_k^*),$ 其中$\theta_k^*$是相应的优化问题的解点 (即极小值点)。那么\texttt{ProxSkip}算法迭代的稳定点即是原问题的解点。\texttt{ProxSkip}算法整体上来说，并没有一个全局的控制变量，与子节点之间进行通信，对子节点上的局部控制变量进行更新调节。
+需要注意的是，与\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~不同的是，\texttt{ProxSkip}算法~\ref{algo:proxskip}~并未显式地使用梯度方差缩减的技术。控制变量 (Control Variates) $c_k$起的首要作用是保证算法整体的正确收敛性。即可以证明$c_k$收敛到$\nabla f_k(\theta^*),$ 其中$\theta_k^*$是原优化问题~\ref{eq:fl-basic}的解点 (即极小值点)。那么\texttt{ProxSkip}算法迭代的稳定点即是原问题的解点。这是\texttt{ProxSkip}算法的一个关键所在。\texttt{ProxSkip}算法整体上来说，并没有一个全局的控制变量，与子节点之间进行通信，对子节点上的局部控制变量进行更新调节。相反，在有子节点与中心节点通信发生的时候 (算法~\ref{algo:proxskip}~13-17行)，子节点上的局部控制变量$c_k$``隐式''地被起到全局控制变量作用的$\frac{p}{\gamma}(\theta^{(t+1)} - \theta^{(t+\frac{1}{2})}_{k})$更新。这一点类似于\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~子节点局部控制变量更新规则的Option 2。这样做的好处是子节点与中心节点之间不需要进行额外的参数通信与传递，缺点是损失了控制变量更新方法的灵活性。

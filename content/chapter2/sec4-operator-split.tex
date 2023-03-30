@@ -251,9 +251,9 @@ x \in u + s\mathcal{A}(u), ~~ y \in v + s\mathcal{A}(v).
 当$s$明确取定的时候，我们可以把算子$\mathcal{R}_{s\mathcal{A}}, \mathcal{R}_{s\mathcal{B}}, \mathcal{C}_{s\mathcal{A}}, \mathcal{C}_{s\mathcal{B}}$分别简写为$\mathcal{R}_{\mathcal{A}}, \mathcal{R}_{\mathcal{B}}, \mathcal{C}_{\mathcal{A}}, \mathcal{C}_{\mathcal{B}}.$ 这个命题告诉了我们，求解单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$等价于求解非扩张算子$\mathcal{C}_{\mathcal{A}} \mathcal{C}_{\mathcal{B}}$的不动点问题。命题~\ref{prop:os}~所涉及到的算子$\mathcal{R}_{\mathcal{A}}, \mathcal{R}_{\mathcal{B}}$被称作算子$s\mathcal{A}, s\mathcal{B}$的预解式 (Resolvent)\index{预解式, Resolvent}，即算子$s\mathcal{A}, s\mathcal{B}$的逆算子；$\mathcal{C}_{\mathcal{A}}, \mathcal{C}_{\mathcal{B}}$被称作反射预解式 (Reflected Resolvent)\index{反射预解式, Reflected Resolvent}，或者Cayley算子\index{Cayley算子}。特别地，当算子$\mathcal{A}$是某个函数$f$的次梯度 (或者梯度) 的时候，有
 \begin{equation}
 \label{eq:resolvent-prox-relation}
-\mathcal{R}_{s\partial f} = (1 + s\partial f)^{-1} = \prox_{sf}
+\mathcal{R}_{s\partial f} = (1 + s\partial f)^{-1} = \prox_{sf}.
 \end{equation}
-关于预解式相关的基础知识以及重要结果，读者可参阅\parencite[\S 2.5]{ryu2022large}。
+关于预解式相关的基础知识以及重要结果，读者可参阅文献\parencite{ryu2022large}的\S~2.5。
 \end{rem}
 
 这样，我们就把我们需要求解的单调包含问题~\eqref{eq:fedsplit-mono-incl}~转化为了以下的不动点问题
