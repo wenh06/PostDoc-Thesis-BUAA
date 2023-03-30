@@ -2,7 +2,7 @@
 % \SetAlgoNoLine
 % \DontPrintSemicolon
 \SetKwInOut{Input}{Input}
-\Input{penalty coeffecient $\mu,$ learning rate $\eta,$ method $\operatorname{\mathbf{UpdateGlobal}}$}
+\Input{penalty coeffecient $\mu,$ learning rate $\eta,$ methods $\operatorname{\mathbf{UpdateGlobal}}, \operatorname{\mathbf{Aggregate}}$}
 {\bfseries Initiation:}\;
 \Indp
     {\bfseries Init server:} global model parameters $\theta^{(0)} \in \R^d$\;
@@ -16,7 +16,12 @@
         $\theta_k^{(t)} \gets \operatorname{\mathbf{UpdateGlobal}}(\theta^{(t)}, f_k)$\;
         \tcc{update the personalized model via solving \eqref{eq:ditto-local}}
         $\omega_k^{(t+1)} \gets \omega_k^{(t)} - \eta \left( \nabla f_k(\omega_k^{(t)}) + \mu (\omega_k^{(t)} - \theta^{(t)}) \right)$\;
+        send $\Delta_k^{(t)} \gets \theta_k^{(t)} - \theta^{(t)}$ to server\;
     }
+    {\bfseries Server Update:}\;
+    \Indp
+    $\theta^{(t+1)} \gets \operatorname{\mathbf{Aggregate}} (\theta^{(t)}, \{ \Delta_k^{(t)} \}_{k \in S^{(t)}})$\;
+    \Indm
 }
 \caption{算法\texttt{Ditto}\cite{li_2021_ditto}的伪代码}
 \label{algo:ditto}

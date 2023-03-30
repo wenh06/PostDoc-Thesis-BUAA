@@ -23,7 +23,8 @@
         $\omega^{(t+1)} \gets \omega^{(t)} + \alpha (\overline{\theta}^{(t)} - \omega^{(t)})$\;
         $\widetilde{\theta}^{(t+1)} \gets \widetilde{\theta}^{(t)} + \frac{1}{K}\sum_{k \in \mathcal{S}^{(t)}} \Delta \widehat{\theta}_k^{(t)}$\;
         $\overline{\theta}^{(t+1)} \gets \prox_{g, \frac{K+1}{Ks}} \left( \frac{K}{K+1} \widetilde{\theta}^{(t+1)} + \frac{1}{K+1} \omega^{(t+1)} \right)$ \;
+    \Indm
 }
-\caption{联邦DR分裂算法FedDR\cite{tran2021feddr}伪代码}
+\caption{联邦DR分裂算法\texttt{FedDR}\cite{tran2021feddr}伪代码}
 \label{algo:feddr}
 \end{algorithm}

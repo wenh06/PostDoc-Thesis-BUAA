@@ -5,9 +5,11 @@
 % NOT finished
 % NOT indexed
 
-我们已经在\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用。
+我们已经在\S\ref{sec:chap2-primal-dual}~已经接触到了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用，并提出了\texttt{ProxSkip}算法，其伪代码见算法~\ref{algo:proxskip}。需要注意的是，此算法在文献\parencite{proxskip}中实际上被当做相关跳步算法在联邦学习中的应用，并将其命名为\texttt{Scaffnew}。我们也很容易从算法~\ref{algo:proxskip}~中看出，它实际上就是\texttt{SCAFFOLD}算法~\ref{algo:scaffold}结合了跳步更新技术的改进算法。
 
-再一次考虑建模为共识优化~\eqref{eq:fl-basic-constraint}~的联邦学习问题
+\input{algorithms/proxskip}
+
+我们从最优化理论的角度来分析\texttt{ProxSkip}算法~\ref{algo:proxskip}。再一次考虑建模为共识优化~\eqref{eq:fl-basic-constraint}~的联邦学习问题
 \begin{equation*}
 \begin{array}{cl}
 \minimize & F(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k), \\
@@ -32,9 +34,12 @@
 \end{align*}
 相对应的算子分裂方法被称作向前-向后分裂 (Forward-Backward Splitting, FBS)\index{向前-向后分裂, Forward-Backward Splitting, FBS}。具体应用到$\mathcal{A} = \nabla F,$ $\mathcal{B} = \partial \iota_{\mathcal{E}},$ 即得到要进行迭代求解的不动点问题
 \begin{equation*}
-\Theta = \mathcal{R}_{s\partial\iota_{\mathcal{E}}}(\mathcal{I} - s\nabla F)(\Theta) = \Pi_{\mathcal{E}}(\mathcal{I} - s\nabla F)(\Theta).
+\Theta = \mathcal{R}_{s\partial\iota_{\mathcal{E}}}(\Theta - s\nabla F(\Theta)) = \prox_{s\iota_{\mathcal{E}}}(\Theta - s\nabla F(\Theta)) = \Pi_{\mathcal{E}}(\Theta - s\nabla F(\Theta)).
 \end{equation*}
-这也正好是联邦平均算法\texttt{FedAvg} (或者说梯度投影法, 见\S\ref{subsec:chap2-overview-fedavg-opt}) 从单调算子理论的角度进行的另一种解读。
+这也正好是联邦平均算法\texttt{FedAvg} (或者说投影梯度法, 见\S\ref{subsec:chap2-overview-fedavg-opt}) 从单调算子理论的角度进行的另一种解读。更一般地，如果将指示函数$\iota_{\mathcal{E}}$换成一个CCP函数$g(\Theta),$相对应的不动点迭代求解方法即为临近梯度下降法 (Proximal Gradient Descent, ProxGD)\index{临近梯度下降, Proximal Gradient Descent, ProxGD}。对于一个一般的优化问题
+\begin{equation*}
+\minimize \quad F(\Theta) + g(\Theta),
+\end{equation*}
+使用临近梯度下降法$\Theta^{(t+1)} = \prox_{sg}(\Theta^{(t)} - s\nabla F(\Theta^{(t)}))$的一个潜在的困难在于CCP函数$g$的临近算子$\prox_{sg}$求解比较困难，计算代价较大\cite{friedlander2017efficient}。对应到联邦学习中，就是投影步对应的通信代价 (从子节点到中心节点的模型参数聚合，以及中心节点到子节点的模型参数广播) 较大。基于这种考虑，以一定概率跳过这一类的性能瓶颈步骤，是值得尝试的方法。
 
-
-\input{algorithms/proxskip}
+需要注意的是，与\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~不同的是，\texttt{ProxSkip}算法~\ref{algo:proxskip}~并未使用梯度方差缩减的技术。控制变量 (Control Variates) $c_k$起的作用是保证算法整体的正确收敛性。即可以证明$c_k$收敛到$\nabla f_k(\theta_k^*),$ 其中$\theta_k^*$是相应的优化问题的解点 (即极小值点)。那么\texttt{ProxSkip}算法迭代的稳定点即是原问题的解点。\texttt{ProxSkip}算法整体上来说，并没有一个全局的控制变量，与子节点之间进行通信，对子节点上的局部控制变量进行更新调节。

@@ -21,13 +21,15 @@
 % \Indm
 \vspace{0.2em}
 {\bfseries ClientUpdate}$(k, \theta)$: \tcc*[h]{on client $k$}\;
-\Indp $\mathcal{B} \gets$ (split $\mathcal{D}_k$ into batches of size $B$)\;
+\Indp
+$\mathcal{B} \gets$ (split $\mathcal{D}_k$ into batches of size $B$)\;
 \For{local step $r = 0, 1, \cdots, R-1$}{
     \For{batch $b \in \mathcal{B}$}{
         $\theta \gets \theta - \eta \nabla \ell_k(\theta; b)$ \tcc*[h]{SGD} \;
     }
 }
-return $\theta$\;
-\caption{联邦平均算法(\texttt{FedAvg})\cite{mcmahan2017fed_avg}的伪代码}
+\Indm
+\Return{$\theta$\;}
+\caption{联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}的伪代码}
 \label{algo:fedavg}
 \end{algorithm}

@@ -26,11 +26,10 @@
     \Indm
     with probability $p$ skip global communication:\;
     \Indp
-    {\bfseries Client Update:} $\theta^{(t+1)}_{k} \gets \theta_{k}^{(t+\frac{1}{2})}, ~ c_k^{(t+1)} \gets c_k^{(t)} + \frac{p}{\gamma}(\theta^{(t+1)}_{k} - \theta^{(t+\frac{1}{2})}_{k}), ~ \forall k \in [K]$\;
+    {\bfseries Client Update:} $\theta^{(t+1)}_{k} \gets \theta_{k}^{(t+\frac{1}{2})}, ~ c_k^{(t+1)} \gets c_k^{(t)}, ~ \forall k \in [K]$\;
     \tcc{on server, $\theta^{(t+1)} \gets \theta^{(t)}$}
     \Indm
 }
-
 \caption{算法\texttt{ProxSkip}\cite{proxskip}的伪代码}
 \label{algo:proxskip}
 \end{algorithm}
