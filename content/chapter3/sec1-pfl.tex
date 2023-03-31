@@ -5,4 +5,23 @@
 % NOT finished
 % NOT indexed
 
-待写。。。。
+统计异质性带来的挑战性，不仅在于联邦学习优化算法的收敛性、收敛速率，更在于训练得到模型的有效性\cite{kairouz2019advances_fl}。当联邦学习的参与方持有的数据分布的非独立同分布性强到一定程度，通过一般的联邦学习得到的公有模型可能在部分参与方上的使用效果不佳。这个时候，往往需要为每一个参与方的模型进行一定程度上的``定制''，即进行所谓的个性化联邦学习 (Personalized Federated Learning, PFL)\index{个性化联邦学习, Personalized Federated Learning, PFL}。目前，个性化联邦学习越来越受到重视\cite{Kulkarni_2020_pfl,Tan_2022_pfl}，并且已经在辅助键盘输入\cite{wang2019_pfl}、语音识别\cite{Sim_2019_pfl_audio}、医疗辅助诊断\cite{Tang_2021_pfl_ecg}等一些应用领域的问题上取得了模型效果上的显著提升。
+
+这里需要再次强调的是，这种``定制''并不是将参与方完全割裂，仅仅使用其自身拥有的数据进行训练，这种做法往往会因为单个参与方数据量、数据分布的问题造成更严重的欠拟合或者过拟合的现象。相反，这种``定制''是基于联邦学习这一机制，通过协同训练，得到一个具有某种``共识''性质、掌握数据最稳健特征的公有模型，并从此公有模型出发，通过特定的一些方法或者技术手段，得到适应参与方本地数据独有特征的个性化模型。设计这样的``定制''化的方法，是个性化联邦学习最主要的问题。
+
+
+
+方法：待写：
+
+微调：\cite{zhao2018_fl_noniid} \cite{Sim_2019_pfl_audio}
+
+多任务
+\cite{Smith2017_fl_mtl} \cite{smith2017mocha}
+
+weighted combination method \cite{zhang2021fomo}
+
+元学习 \cite{jiang2019improving} \cite{fallah2020personalized} \cite{chen2018_fml}
+
+神经网络模型特有\cite{arivazhagan2019_pfl_layer} \cite{Krishna_2022_partial_per_fl}
+
+待写

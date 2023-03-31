@@ -49,7 +49,7 @@ $\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量 (Dual Variab
 \begin{equation*}
 \operatorname{\mathbf{Oracle}}_k(\mathcal{L}_k(\theta_{k, 0}^{(t)}, \theta_k, \lambda_k^{(t)}), \theta_k^{(t)})
 \end{equation*}
-可以是任何一个求解算法，例如随机梯度下降，亦或是与在SCAFFOLD算法~\ref{algo:scaffold}~中应用过的方差缩减技术进行结合。这种灵活性，是联邦学习的显著特点，这一点我们已经在\S\ref{sec:chap2-overview}~中介绍\texttt{FedOpt}算法的时候已经强调过了。文献\parencite{zhang2020fedpd}进一步特别提到的是，在方差缩减技术的时候，可以进一步结合线性化的方法进行加速,即把需要优化的 (局部) 拉格朗日函数进行线性化，或者更准确的说，是将$f_k$在$\theta_{k}^{(t,r)}$处线性化：
+可以是任何一个求解算法，例如随机梯度下降，亦或是与在SCAFFOLD算法~\ref{algo:scaffold}~中应用过的方差缩减技术进行结合。这种灵活性，是联邦学习的显著特点，这一点我们已经在\S~\ref{sec:chap2-overview}~中介绍\texttt{FedOpt}算法的时候已经强调过了。文献\parencite{zhang2020fedpd}进一步特别提到的是，在方差缩减技术的时候，可以进一步结合线性化的方法进行加速,即把需要优化的 (局部) 拉格朗日函数进行线性化，或者更准确的说，是将$f_k$在$\theta_{k}^{(t,r)}$处线性化：
 \begin{equation*}
 \begin{aligned}
 \widetilde{\mathcal{L}}(\theta_{k}) & := \mathcal{L}_k(\theta_{k, 0}^{(t)}, \theta_k, \lambda_k^{(t)}) = f_k(\theta_k) + \langle \lambda_k^{(t)}, \theta_k - \theta_{k, 0}^{(t)} \rangle + \frac{1}{2s} \lVert \theta_k - \theta_{k, 0}^{(t)} \rVert^2 \\
@@ -83,7 +83,7 @@ $\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量 (Dual Variab
 \end{cases}
 \end{equation*}
 
-跳步更新的方式在提高联邦学习算法的通信效率上有非常明显的优势，而我们已经在\S\ref{sec:chap1-fl-applications}~中介绍过了，通信效率恰恰是大部分联邦学习问题的瓶颈所在。文献~\parencite[TABLE III]{zhang2020fedpd}~进一步给出了跳步更新概率$p$与节点间数据分布异质程度的关系
+跳步更新的方式在提高联邦学习算法的通信效率上有非常明显的优势，而我们已经在\S~\ref{sec:chap1-fl-applications}~中介绍过了，通信效率恰恰是大部分联邦学习问题的瓶颈所在。文献~\parencite[TABLE III]{zhang2020fedpd}~进一步给出了跳步更新概率$p$与节点间数据分布异质程度的关系
 \begin{equation*}
 p \approx \begin{cases}
 \sqrt{\frac{1}{36s} \cdot \frac{\varepsilon}{G^2}}, & \text{当$0 \leqslant p < \frac{1-2Ls}{1+Ls},$} \\

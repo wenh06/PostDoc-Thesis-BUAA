@@ -5,7 +5,7 @@
 % almost finished
 % indexed
 
-本文已经在\S\ref{sec:chap2-primal-dual}~初步涉及了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用，并提出了\texttt{ProxSkip}算法，其伪代码见算法~\ref{algo:proxskip}。需要注意的是，此算法在文献\parencite{proxskip}中实际上被当做一般性的跳步算法在联邦学习中的应用，并将其命名为\texttt{Scaffnew}。我们也很容易从算法~\ref{algo:proxskip}~中看出，它在某种意义上来说就是\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~结合了跳步更新技术的改进算法。
+本文已经在\S~\ref{sec:chap2-primal-dual}~初步涉及了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用，并提出了\texttt{ProxSkip}算法，其伪代码见算法~\ref{algo:proxskip}。需要注意的是，此算法在文献\parencite{proxskip}中实际上被当做一般性的跳步算法在联邦学习中的应用，并将其命名为\texttt{Scaffnew}。我们也很容易从算法~\ref{algo:proxskip}~中看出，它在某种意义上来说就是\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~结合了跳步更新技术的改进算法。
 
 \input{algorithms/proxskip}
 
@@ -18,7 +18,7 @@
 & \mathcal{E} = \{ \Theta ~|~ \theta_1 = \cdots = \theta_K \}.
 \end{array}
 \end{equation*}
-我们已经在\S\ref{subsec:chap2-overview-fedavg-opt}~对联邦平均算法\texttt{FedAvg}进行理论分析，以及在\S\ref{sec:chap2-operator-split}~讨论联邦学习算子分裂方法等多个地方使用了这一优化模型。在\S\ref{sec:chap2-operator-split}~中，我们利用凸集$\mathcal{E}$的指示函数作为罚函数，将上述问题转换为了无约束优化问题
+我们已经在\S~\ref{subsec:chap2-overview-fedavg-opt}~对联邦平均算法\texttt{FedAvg}进行理论分析，以及在\S~\ref{sec:chap2-operator-split}~讨论联邦学习算子分裂方法等多个地方使用了这一优化模型。在\S~\ref{sec:chap2-operator-split}~中，我们利用凸集$\mathcal{E}$的指示函数作为罚函数，将上述问题转换为了无约束优化问题
 \begin{equation*}
 \minimize \quad F(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + \iota_{\mathcal{E}}(\Theta),
 \end{equation*}
@@ -26,7 +26,7 @@
 \begin{equation*}
 0 \in \nabla F(\Theta) + \partial \iota_{\mathcal{E}}(\Theta).
 \end{equation*}
-事实上，我们在\S\ref{sec:chap2-operator-split} (命题~\ref{prop:os}) 使用的分裂方法\eqref{eq:fixed-pt-pr}，即PRSM~\eqref{eq:prsm}~与DRSM~\eqref{eq:drsm}~，都属于向后-向前分裂 (Backward-Forward Splitting, BFS)\index{向后-向前分裂, Backward-Forward Splitting, BFS} 这一类的方法。考虑一个一般的单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$ 类似命题\ref{prop:os}~有\cite{ryu2022large}
+事实上，我们在\S~\ref{sec:chap2-operator-split} (命题~\ref{prop:os}) 使用的分裂方法\eqref{eq:fixed-pt-pr}，即PRSM~\eqref{eq:prsm}~与DRSM~\eqref{eq:drsm}~，都属于向后-向前分裂 (Backward-Forward Splitting, BFS)\index{向后-向前分裂, Backward-Forward Splitting, BFS} 这一类的方法。考虑一个一般的单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$ 类似命题\ref{prop:os}~有\cite{ryu2022large}
 \begin{align*}
 0 \in \mathcal{A}(x) + \mathcal{B}(x) & \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{B})(x) - (\mathcal{I} - s\mathcal{A})(x) \\
 & \Longleftrightarrow (\mathcal{I} + s\mathcal{B})(x) \ni (\mathcal{I} - s\mathcal{A})(x) \\
@@ -36,7 +36,7 @@
 \begin{equation*}
 \Theta = \mathcal{R}_{s\partial\iota_{\mathcal{E}}}(\Theta - s\nabla F(\Theta)) = \prox_{s\iota_{\mathcal{E}}}(\Theta - s\nabla F(\Theta)) = \Pi_{\mathcal{E}}(\Theta - s\nabla F(\Theta)).
 \end{equation*}
-这也正好是联邦平均算法\texttt{FedAvg} (或者说投影梯度法, 见\S\ref{subsec:chap2-overview-fedavg-opt}) 从单调算子理论的角度进行的另一种解读。更一般地，如果将指示函数$\iota_{\mathcal{E}}$换成一个CCP函数$g(\Theta),$相对应的不动点迭代求解方法即为临近梯度下降法 (Proximal Gradient Descent, ProxGD)\index{临近梯度下降, Proximal Gradient Descent, ProxGD}。对于一个一般的优化问题
+这也正好是联邦平均算法\texttt{FedAvg} (或者说投影梯度法, 见\S~\ref{subsec:chap2-overview-fedavg-opt}) 从单调算子理论的角度进行的另一种解读。更一般地，如果将指示函数$\iota_{\mathcal{E}}$换成一个CCP函数$g(\Theta),$相对应的不动点迭代求解方法即为临近梯度下降法 (Proximal Gradient Descent, ProxGD)\index{临近梯度下降, Proximal Gradient Descent, ProxGD}。对于一个一般的优化问题
 \begin{equation*}
 \minimize \quad F(\Theta) + g(\Theta),
 \end{equation*}
