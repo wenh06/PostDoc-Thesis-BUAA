@@ -2,26 +2,15 @@
 \addcontentsline{toe}{section}{{3.1\ \ Model Personalization in Federated Learning}\numberline\,}
 \label{sec:chap3-pfl}
 
-% NOT finished
-% NOT indexed
+% almost finished
+% indexed
 
 统计异质性带来的挑战性，不仅在于联邦学习优化算法的收敛性、收敛速率，更在于训练得到模型的有效性\cite{kairouz2019advances_fl}。当联邦学习的参与方持有的数据分布的非独立同分布性强到一定程度，通过一般的联邦学习得到的公有模型可能在部分参与方上的使用效果不佳。这个时候，往往需要为每一个参与方的模型进行一定程度上的``定制''，即进行所谓的个性化联邦学习 (Personalized Federated Learning, PFL)\index{个性化联邦学习, Personalized Federated Learning, PFL}。目前，个性化联邦学习越来越受到重视\cite{Kulkarni_2020_pfl,Tan_2022_pfl}，并且已经在辅助键盘输入\cite{wang2019_pfl}、语音识别\cite{Sim_2019_pfl_audio}、医疗辅助诊断\cite{Tang_2021_pfl_ecg}等一些应用领域的问题上取得了模型效果上的显著提升。
 
 这里需要再次强调的是，这种``定制''并不是将参与方完全割裂，仅仅使用其自身拥有的数据进行训练，这种做法往往会因为单个参与方数据量、数据分布的问题造成更严重的欠拟合或者过拟合的现象。相反，这种``定制''是基于联邦学习这一机制，通过协同训练，得到一个具有某种``共识''性质、掌握数据最稳健特征的公有模型，并从此公有模型出发，通过特定的一些方法或者技术手段，得到适应参与方本地数据独有特征的个性化模型。设计这样的``定制''化的方法，是个性化联邦学习最主要的问题。
 
+个性化联邦学习最直接简便的方法是模型微调 (Fine-tuning)\index{模型微调, Fine-tuning}\cite{zhao2018_fl_noniid, Sim_2019_pfl_audio}， 即通过一般的联邦训练得到的公有模型之后，每一个参与训练的子节点利用本地数据对公有模型执行一定数量的优化迭代 (例如梯度下降)，得到个性化的本地模型。模型微调是从被训练的模型入手，通过一定的技术手段达到个性化的目的。类似的方法还包括调整被训练模型的结构，特别是神经网络模型 (Neural Network Model)\index{神经网络模型, Neural Network Model}，进行分解定制\cite{arivazhagan2019_pfl_layer} \cite{Krishna_2022_partial_per_fl}，将模型参数本身分解为公有部分以及个性化的私有部分。利用知识蒸馏 (Knowledge Distillation)\index{知识蒸馏, Knowledge Distillation}\cite{shen2020_fml}、模型蒸馏 (Model Distillation)\index{模型蒸馏, Model Distillation}\cite{li2019_fedmd}等方式，将模型异构化 (通常来说，子节点上的个性化模型是比公有模型更小的模型)，也是常用的方法。
 
+元学习 (Meta Learning)\index{元学习, Meta Learning}\cite{jiang2019improving, fallah2020personalized, chen2018_fml}与多任务学习 (Multi-Task Learning, MTL)\index{多任务学习, Multi-Task Learning, MTL}\cite{Smith2017_fl_mtl, smith2017mocha, zhang2021fomo}也是常用的个性化联邦学习的方法。此外，利用模型参数进行聚类\cite{Sattler_2021_cfl, fl_fpfc_2022, Ghosh_2022_cfl, Zhang_2023_fedmds}也是近年来关于个性化联邦学习比较热门的研究方法。
 
-方法：待写：
-
-微调：\cite{zhao2018_fl_noniid} \cite{Sim_2019_pfl_audio}
-
-多任务
-\cite{Smith2017_fl_mtl} \cite{smith2017mocha}
-
-weighted combination method \cite{zhang2021fomo}
-
-元学习 \cite{jiang2019improving} \cite{fallah2020personalized} \cite{chen2018_fml}
-
-神经网络模型特有\cite{arivazhagan2019_pfl_layer} \cite{Krishna_2022_partial_per_fl}
-
-待写
+本文主要关注的个性化联邦学习方法则是从优化目标入手，通过对整体的优化目标$\sum\limits_{k=1}^K f_k(\theta)$或者子节点上局部的优化目标$f_k(\theta)$引入特定形式、具有特殊含义的正则项，达到模型个性化的目的\cite{hanzely2020federated,t2020pfedme,dinh2021fedu,li2021pfedmac,li_2021_ditto,acar2021feddyn}。广义上来说，这些方法属于正则化多任务学习方法\cite{Caruana_1997_mtl, evgeniou2004regularized}。从最优化角度来看，这类方法有较为坚实的理论基础与算法收敛性支撑，是被研究得最多的一类方法。
