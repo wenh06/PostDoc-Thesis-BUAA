@@ -37,6 +37,11 @@
 
 
 \begin{equation}
+\label{eq:fedu}
+\minimize \quad \sum\limits_{k=1}^K f_k(x_k) + \dfrac{\lambda}{2} \sum\limits_{k=1}^K \sum\limits_{j\in\mathcal{N}_k} \lVert \theta_k - \theta_j \rVert^2
+\end{equation}
+
+\begin{equation}
 \label{eq:pfedmac-sparse}
 \begin{array}{cl}
 \minimize & F(\theta) = \frac{1}{K} \sum\limits_{k=1}^K F_i(\theta), \\
