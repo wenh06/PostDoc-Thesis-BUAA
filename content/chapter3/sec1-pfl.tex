@@ -13,7 +13,7 @@
 
 元学习 (Meta Learning)\index{元学习, Meta Learning}\cite{jiang2019improving, fallah2020personalized, chen2018_fml}与多任务学习 (Multi-Task Learning, MTL)\index{多任务学习, Multi-Task Learning, MTL}\cite{Smith2017_fl_mtl, smith2017mocha, zhang2021fomo}也是常用的个性化联邦学习的方法。此外，利用模型参数进行聚类\cite{Sattler_2021_cfl, fl_fpfc_2022, Ghosh_2022_cfl, Zhang_2023_fedmds}也是近年来关于个性化联邦学习比较热门的研究方法。
 
-本文主要关注的个性化联邦学习方法则是从优化目标入手，通过对整体的优化目标$\sum\limits_{k=1}^K f_k(\theta)$或者子节点上局部的优化目标$f_k(\theta)$引入特定形式、具有特殊含义的正则项，达到模型个性化的目的\cite{hanzely2020federated,t2020pfedme,dinh2021fedu,li2021pfedmac,li_2021_ditto,acar2021feddyn}，其一般形式可以写作
+本文主要关注的个性化联邦学习方法则是从优化目标入手，通过对整体的优化目标$\sum\limits_{k=1}^K f_k(\theta)$或者子节点上局部的优化目标$f_k(\theta)$引入特定形式、具有特殊含义的正则项，达到模型个性化的目的\cite{hanzely2020federated,t2020pfedme,deng2020_apfl,dinh2021fedu,li2021pfedmac,li_2021_ditto,acar2021feddyn}，其一般形式可以写作
 \begin{equation}
 \label{eq:pfl-general}
 \minimize \frac{1}{K}\sum\limits_{k=1}^K f_k(\theta_k) + \mathcal{R}(\theta, \theta_1, \cdots, \theta_K),
