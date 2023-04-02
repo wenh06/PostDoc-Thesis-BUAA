@@ -9,7 +9,7 @@
     {\bfseries Init clients:} $\omega_k^{(0)} = \theta^{(0)}$, $\theta_k^{(0)} \approx \prox_{f_k, \mu}(\omega_k^{(0)})$, $\widehat{\theta}_k^{(0)} = 2\theta_k^{(0)} - \omega_k^{(0)}, ~ \forall k \in [K]$\;
 \Indm
 \For{$t = 0, 1, \cdots, T-1$}{
-    $S^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
+    $\mathcal{S}^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
     each client $k \in \mathcal{S}^{(t)}$ receives $\overline{\theta}^{(t)}$ from server \tcc*[h]{communication}\;
     \For{each client $k \in \mathcal{S}^{(t)}$ {\bfseries in parallel}}{
         choose $\varepsilon_{k,t+1} \geqslant 0$\;

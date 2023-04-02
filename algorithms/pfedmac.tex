@@ -7,8 +7,8 @@
 % \Indp
 {\bfseries Initiation:} global (server) model parameters $\theta^{(0)} \in \R^d$\;
 \For{each round $t = 0, 1, \cdots, T-1$}{
-    $S^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
-    broadcast $\theta^{(t)}$ to clients $k \in S^{(t)}$\;
+    $\mathcal{S}^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
+    broadcast $\theta^{(t)}$ to clients $k \in \mathcal{S}^{(t)}$\;
     \For{each client $k \in \mathcal{S}^{(t)}$ {\bfseries in parallel}}{
         $\theta_k^{(t)} \gets$ {\bfseries ClientUpdate}$(k, \theta^{(t)})$\;
         send $\theta_k^{(t)}$ to server\;
