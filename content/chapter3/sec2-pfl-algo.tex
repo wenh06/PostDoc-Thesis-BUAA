@@ -5,7 +5,20 @@
 % NOT finished
 % NOT indexed
 
-待写。。。。
+本节主要介绍已有的一些基于正则化目标函数的个性化联邦学习算法，此类算法的基本形式见上一节\S~\ref{sec:chap3-pfl}~的式~\eqref{eq:pfl-general}。这一类算法形式最简单的是文献\cite{hanzely2020federated}所引入的无环随机梯度下降 (Loopless Local SGD, L2SGD)\index{无环随机梯度下降, Loopless Local SGD, L2SGD} 算法。其考虑的优化问题格式为
+\begin{equation}
+\label{eq:l2sgd}
+\begin{array}{cl}
+\minimize & F(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_i(\theta_i) + \lambda \varphi(\Theta) \\
+\text{where} & \varphi(\Theta) = \frac{1}{2K} \sum\limits_{k=1}^K \left\lVert \theta_k - \bar{\theta} \right\rVert^2 = \frac{1}{2K} \sum\limits_{k=1}^K \left\lVert \theta_k - \frac{1}{K} \sum\limits_{j=1}^K \theta_j \right\rVert^2 \\
+& \Theta = \col(\theta_1, \ldots, \theta_K).
+\end{array}
+\end{equation}
+其中$\lambda \geqslant 0$是罚参数。当$0 < \lambda < \infty,$ 求解上述优化问题得到的模型$\bar{\theta}, \theta_1, \ldots, \theta_K$被称作是混合模型 (Mixed Models)。很容易看出，上述问题可以等价地转化为联邦临近算法\texttt{FedProx}所考察的问题~\eqref{eq:fedprox-whole}。文献\cite{hanzely2020federated}对子节点上的目标函数做了进一步的假设，即假设$f_k$有有限和的结构
+\begin{equation*}
+f_k = \sum\limits_{j=1}^m f_{k,j},
+\end{equation*}
+并基于随机块坐标下降方法 (Randomized Block Coordinate Descent, RBCD)\index{随机块坐标下降, Randomized Block Coordinate Descent, RBCD}，为问题~\eqref{eq:l2sgd}~的求解设计了所谓的无环随机梯度下降法。具体来说，待写。。。。
 
 \input{algorithms/l2sgd}
 

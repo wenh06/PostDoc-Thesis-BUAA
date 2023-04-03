@@ -273,7 +273,7 @@ x \in u + s\mathcal{A}(u), ~~ y \in v + s\mathcal{A}(v).
 \end{equation}
 称这种转化为Douglas-Rachford分裂 (Douglas-Rachford Splitting, DRS)\cite{Douglas_1956_drsm,Lions_1979_splitting}\index{Douglas-Rachford分裂, Douglas-Rachford Splitting, DRS}。
 
-求解不动点问题~\eqref{eq:fixed-pt-pr}, \eqref{eq:fixed-pt-general}, \eqref{eq:fixed-pt-dr}~的一般方法是进行不动点迭代 (Fixed Point Iteration, FPI)\index{不动点迭代, Fixed Point Iteration}
+求解不动点问题~\eqref{eq:fixed-pt-pr}, \eqref{eq:fixed-pt-general}, \eqref{eq:fixed-pt-dr}~的一般方法是进行如下格式的不动点迭代 (Fixed Point Iteration, FPI)\index{不动点迭代, Fixed Point Iteration, FPI}
 \begin{equation}
 \label{eq:fixed-pt-iter}
 z^{(t+1)} = \mathcal{T}(z^{(t)}), ~~ \text{$\mathcal{T}$是某个非扩张算子。}
@@ -392,11 +392,11 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 \overline{\theta}^{(t+1)} & = \prox_{g, \frac{K+1}{Ks}} \left( \frac{K}{K+1} \widetilde{\theta}^{(t+1)} + \frac{1}{K+1} \omega^{(t+1)} \right)
 \end{aligned}
 \end{equation*}
-至此，我们可以把联邦DR分裂算法\texttt{FedDR}以伪代码的形式总结为算法~\ref{algo:feddr}。
+至此，可以把联邦DR分裂算法\texttt{FedDR}以伪代码的形式总结为算法~\ref{algo:feddr}。
 
 \input{algorithms/feddr.tex}
 
-关于联邦DR分裂算法\texttt{FedDR}的收敛性，有如下的结论\cite{tran2021feddr}
+关于联邦DR分裂算法\texttt{FedDR}的收敛性，有如下的结论\cite{tran2021feddr}，这里略去它的证明。
 
 \begin{theorem}[\parencite{tran2021feddr} Appendix A.]
 \label{thm:feddr-convergence}
