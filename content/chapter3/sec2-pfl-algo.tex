@@ -9,18 +9,30 @@
 \begin{equation}
 \label{eq:l2sgd}
 \begin{array}{cl}
-\minimize & F(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_i(\theta_i) + \lambda \varphi(\Theta) \\
-\text{where} & \varphi(\Theta) = \frac{1}{2K} \sum\limits_{k=1}^K \left\lVert \theta_k - \bar{\theta} \right\rVert^2 = \frac{1}{2K} \sum\limits_{k=1}^K \left\lVert \theta_k - \frac{1}{K} \sum\limits_{j=1}^K \theta_j \right\rVert^2 \\
+\minimize & F(\Theta) = f(\Theta) + \lambda \varphi(\Theta) \\
+\text{where} & f(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_i(\theta_i) \\
+& \varphi(\Theta) = \frac{1}{2K} \sum\limits_{k=1}^K \left\lVert \theta_k - \bar{\theta} \right\rVert^2 = \frac{1}{2K} \sum\limits_{k=1}^K \left\lVert \theta_k - \frac{1}{K} \sum\limits_{j=1}^K \theta_j \right\rVert^2 \\
 & \Theta = \col(\theta_1, \ldots, \theta_K).
 \end{array}
 \end{equation}
-其中$\lambda \geqslant 0$是罚参数。当$0 < \lambda < \infty,$ 求解上述优化问题得到的模型$\bar{\theta}, \theta_1, \ldots, \theta_K$被称作是混合模型 (Mixed Models)。很容易看出，上述问题可以等价地转化为联邦临近算法\texttt{FedProx}所考察的问题~\eqref{eq:fedprox-whole}。文献\cite{hanzely2020federated}对子节点上的目标函数做了进一步的假设，即假设$f_k$有有限和的结构
-\begin{equation*}
-f_k = \sum\limits_{j=1}^m f_{k,j},
-\end{equation*}
-并基于随机块坐标下降方法 (Randomized Block Coordinate Descent, RBCD)\index{随机块坐标下降, Randomized Block Coordinate Descent, RBCD}，为问题~\eqref{eq:l2sgd}~的求解设计了所谓的无环随机梯度下降法。具体来说，待写。。。。
+其中$\lambda \geqslant 0$是罚参数。当$0 < \lambda < \infty,$ 求解上述优化问题得到的模型$\bar{\theta}, \theta_1, \ldots, \theta_K$被称作是混合模型 (Mixed Models)。很容易看出，上述问题可以等价地转化为联邦临近算法\texttt{FedProx}所考察的问题~\eqref{eq:fedprox-whole}。文献\parencite{hanzely2020federated}定义问题~\ref{eq:l2sgd}目标函数$F(\Theta)$的随机梯度为
+\begin{equation}
+\label{eq:l2sgd-grad}
+G(\Theta) := \begin{cases}
+\frac{\nabla f(\Theta)}{1 - p}, & \text{概率$1-p$} \\
+\frac{\lambda \nabla \varphi(\Theta)}{p}, & \text{概率$p$}
+\end{cases}
+\end{equation}
+以上定义的随机梯度是是梯度$\nabla F$的无偏估计。这样的方法简化了$\nabla F$的计算，提高了整体算法的收敛率\cite{Kovalev2020_loopless}。文献\cite{hanzely2020federated}对子节点上的目标函数做了进一步的假设，即假设$f_k$有有限和的结构
+\begin{equation}
+f_k(\theta_k) = \sum\limits_{j=1}^m f_{k,j}(\theta_k),
+\end{equation}
+并结合随机Kaczmarz方法 (Randomized Kaczmarz Method)\index{随机Kaczmarz方法, Randomized Kaczmarz Method}\cite{Strohmer_2008_Kaczmarz,Needell_2015_Kaczmarz} 或者说结合基于采样的随机梯度下降法\cite{Needell_2015_Kaczmarz,Zhao2015_sampling}，为问题~\eqref{eq:l2sgd}~的求解设计了所谓的无环随机梯度下降法，其伪代码见算法~\ref{algo:l2sgd}。
 
 \input{algorithms/l2sgd}
+
+
+\texttt{pFedMe}待写。。。。
 
 \input{algorithms/pfedme}
 
