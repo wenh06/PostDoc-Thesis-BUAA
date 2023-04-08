@@ -50,12 +50,28 @@ f_k(\theta_k) = \sum\limits_{j=1}^m f_{k,j}(\theta_k),
 \text{where} & F_k(\theta) = \min\limits_{\theta_k \in \R^d} \left\{ f_k(\theta_k) + \frac{\lambda}{2} \left\lVert \theta_k - \theta \right\rVert^2 \right\},
 \end{array}
 \end{equation}
-相应求解算法\texttt{pFedMe}的伪代码见算法~\ref{algo:pfedme}。很容易看到问题~\eqref{eq:pfedme-bilevel}~的$F_k(\theta)$即为$f_k(\theta_k)$的Moreau包络~\eqref{eq:moreau_env}
+相应求解算法\texttt{pFedMe}的伪代码见算法~\ref{algo:pfedme}。
+
+\input{algorithms/pfedme}
+
+很容易看到问题~\eqref{eq:pfedme-bilevel}~中的$F_k(\theta)$即为$f_k(\theta_k)$的Moreau包络~\eqref{eq:moreau_env}
 \begin{equation*}
 F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\lambda}{2} \lVert \theta_k - \theta \rVert^2 \right\}
 \end{equation*}
-
-\input{algorithms/pfedme}
+相应最优化问题的解点即为临近算子
+\begin{equation*}
+\prox_{f_k, \lambda}: \theta \mapsto \argmin_{\theta_k} \left\{ f_k(\theta_k) + \frac{\lambda}{2} \lVert \theta_k - \theta \rVert^2 \right\}
+\end{equation*}
+在全局模型$\theta$处的取值。这个值即为算法\texttt{pFedMe}得到的子节点$k$上的个性化模型。算法\texttt{pFedMe}对~\ref{eq:pfedme-bilevel}~的外层问题，即$F(\theta)$的优化求解采取的是随机梯度下降法。通过 Moreau 包络与临近算子的关系式~\eqref{eq:prox-moreau-relation}~可知$F(\theta)$的梯度可以通过下式计算
+\begin{equation}
+\label{eq:pfedme-grad}
+\nabla F(\theta) = \frac{1}{K} \sum\limits_{k=1}^K \nabla F_k(\theta) = \frac{1}{K} \sum\limits_{k=1}^K \nabla \mathcal{M}_{f_k, \lambda} (\theta) = \frac{1}{K} \sum\limits_{k=1}^K \lambda \left( \theta - \prox_{f_k, \lambda} (\theta) \right),
+\end{equation}
+相应的梯度下降的迭代格式为
+\begin{equation}
+\label{eq:pfedme-iter}
+\theta^{(t+1)} = \theta^{(t)} - \eta \nabla F(\theta^{(t)}) = \theta^{(t)} - \eta \lambda \frac{1}{K} \sum\limits_{k=1}^K \left( \theta^{(t)} - \prox_{f_k, \lambda} (\theta^{(t)}) \right)
+\end{equation}
 
 文献\parencite{li_2021_ditto}进一步发展了\texttt{FedProx}\cite{sahu2018fedprox}添加临近项的思想，将子节点的优化问题~\eqref{eq:fedprox}~改进为一个双层优化问题
 \begin{equation}

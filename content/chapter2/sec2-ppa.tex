@@ -37,7 +37,7 @@ h_k(\theta_k, \theta^{(t)}) := \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \the
 被称作$f_k$的Moreau包络 (Moreau Envelope)\index{Moreau包络, Moreau Envelope} 或者Moreau-Yosida正规化 (Moreau-Yosida Regularization)\index{Moreau-Yosida正规化, Moreau-Yosida Regularization}。函数$f_k$的Moreau包络与它的临近算子有如下关系\cite{Parikh_2014_pa}
 \begin{equation}
 \label{eq:prox-moreau-relation}
-\prox_{sf_k} (\theta_k) = \theta_k - s \nabla \mathcal{M}_{sf_k} (\theta_k),
+\prox_{sf_k} (\theta) = \theta - s \nabla \mathcal{M}_{sf_k} (\theta), ~ \forall \theta \in \R^d,
 \end{equation}
 也就是说，$\prox_{sf_k}$可以视作是以$s$为步长进行的极小化函数$\mathcal{M}_{sf_k}$的梯度下降算子。
 
