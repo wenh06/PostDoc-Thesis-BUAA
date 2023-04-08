@@ -5,7 +5,9 @@
 % NOT finished
 % NOT indexed
 
-本节主要介绍已有的一些基于正则化目标函数的个性化联邦学习算法，此类算法的基本形式见上一节\S~\ref{sec:chap3-pfl}~的式~\eqref{eq:pfl-general}。这一类算法形式最简单的是文献\cite{hanzely2020federated}所引入的无环随机梯度下降 (Loopless Local SGD, L2SGD)\index{无环随机梯度下降, Loopless Local SGD, L2SGD} 算法。其考虑的优化问题格式为
+本节主要介绍已有的一些基于正则化目标函数的个性化联邦学习算法，此类算法的基本形式见上一节\S~\ref{sec:chap3-pfl}~的式~\eqref{eq:pfl-general}。本文称这一类的基于正则化目标函数的最优化问题为弱共识问题 (Weak Consensus Problem)\index{弱共识问题, Weak Consensus Problem}。
+
+这一类算法形式最简单的是文献\cite{hanzely2020federated}所引入的无环随机梯度下降 (Loopless Local SGD, L2SGD)\index{无环随机梯度下降, Loopless Local SGD, L2SGD} \texttt{L2SGD}算法。其考虑的优化问题格式为
 \begin{equation}
 \label{eq:l2sgd}
 \begin{array}{cl}
@@ -15,7 +17,11 @@
 & \Theta = \col(\theta_1, \ldots, \theta_K).
 \end{array}
 \end{equation}
-其中$\lambda \geqslant 0$是罚参数。当$0 < \lambda < \infty,$ 求解上述优化问题得到的模型$\bar{\theta}, \theta_1, \ldots, \theta_K$被称作是混合模型 (Mixed Models)。很容易看出，上述问题可以等价地转化为联邦临近算法\texttt{FedProx}所考察的问题~\eqref{eq:fedprox-whole}。文献\parencite{hanzely2020federated}定义问题~\ref{eq:l2sgd}目标函数$F(\Theta)$的随机梯度为
+其中$\lambda \geqslant 0$是罚参数。当$0 < \lambda < \infty,$ 求解上述优化问题得到的模型$\bar{\theta}, \theta_1, \ldots, \theta_K$被称作是混合模型 (Mixed Models)。很容易看出，上述问题可以等价地转化为联邦临近算法\texttt{FedProx}所考察的问题~\eqref{eq:fedprox-whole}。
+
+\input{algorithms/l2sgd}
+
+文献\parencite{hanzely2020federated}定义问题~\ref{eq:l2sgd}目标函数$F(\Theta)$的随机梯度为
 \begin{equation}
 \label{eq:l2sgd-grad}
 G(\Theta) := \begin{cases}
@@ -23,19 +29,35 @@ G(\Theta) := \begin{cases}
 \frac{\lambda \nabla \varphi(\Theta)}{p}, & \text{概率$p$}
 \end{cases}
 \end{equation}
-以上定义的随机梯度是是梯度$\nabla F$的无偏估计。这样的方法简化了$\nabla F$的计算，提高了整体算法的收敛率\cite{Kovalev2020_loopless}。文献\parencite{hanzely2020federated}对子节点上的目标函数做了进一步的假设，即假设$f_k$有有限和的结构
+以上定义的随机梯度是是梯度$\nabla F$的无偏估计。这样的方法简化了$\nabla F$的计算，提高了整体算法的收敛率\cite{Kovalev2020_loopless}。值得特别注意的是，在随机梯度$G$的定义式~\eqref{eq:l2sgd-grad}~中，$\nabla f(\Theta) = \col(\nabla f_1(\theta_1), \cdots, \nabla f_K(\theta_K))$的计算是完全块分离的，在联邦学习的场景下，这一计算步骤只需要在子节点上执行计算，并不涉及与中心节点的通信，这对于以通信为主要瓶颈的联邦学习场景是巨大的优势。从这个意义上来说，无环随机梯度下降\texttt{L2SGD}也融入了``跳步''更新的思想。
+
+文献\parencite{hanzely2020federated}对子节点上的目标函数做了进一步的假设，即假设$f_k$有有限和的结构
 \begin{equation}
 f_k(\theta_k) = \sum\limits_{j=1}^m f_{k,j}(\theta_k),
 \end{equation}
-并结合随机Kaczmarz方法 (Randomized Kaczmarz Method)\index{随机Kaczmarz方法, Randomized Kaczmarz Method}\cite{Strohmer_2008_Kaczmarz,Needell_2015_Kaczmarz} 或者说结合基于采样的随机梯度下降法\cite{Needell_2015_Kaczmarz,Zhao2015_sampling}，为问题~\eqref{eq:l2sgd}~的求解设计了所谓的无环随机梯度下降法，其伪代码见算法~\ref{algo:l2sgd}。
+并结合随机Kaczmarz方法 (Randomized Kaczmarz Method)\index{随机Kaczmarz方法, Randomized Kaczmarz Method}\cite{Strohmer_2008_Kaczmarz,Needell_2015_Kaczmarz} 或者说结合基于采样的随机梯度下降法 (SGD Algorithm with Importance Sampling)\cite{Needell_2015_Kaczmarz,Zhao2015_sampling}，为问题~\eqref{eq:l2sgd}~的求解设计了所谓的无环随机梯度下降法，其伪代码见算法~\ref{algo:l2sgd}。实际上，随机梯度~\eqref{eq:l2sgd-grad}~也是基于采样的随机梯度。基于采样的随机梯度算法从收敛率到通信效率都有提升，是值得进一步研究的联邦学习优化算法。
 
-\input{algorithms/l2sgd}
-
-文献\parencite{t2020pfedme}  \texttt{pFedMe}待写。。。。
+文献\parencite{t2020pfedme}考虑的是类似形式的问题
+\begin{equation}
+\label{eq:pfedme-one}
+\minimize_{\theta,\theta_1,\ldots,\theta_K} \quad \sum\limits_{k=1}^K \left\{ f_k(\theta_k) + \frac{\lambda}{2} \left\lVert \theta_k - \theta \right\rVert^2 \right\}.
+\end{equation}
+特别地，文献\parencite{t2020pfedme}基于联邦学习中心节点--子节点这一二元结构，进一步将上述问题等价地转换为一个双层优化问题 (Bi-level Optimization Problem)\index{双层优化问题, Bi-level Optimization Problem}
+\begin{equation}
+\label{eq:pfedme-bilevel}
+\begin{array}{cl}
+\minimize & F(\theta) := \frac{1}{K} \sum\limits_{k=1}^K F_k(\theta), \\
+\text{where} & F_k(\theta) = \min\limits_{\theta_k \in \R^d} \left\{ f_k(\theta_k) + \frac{\lambda}{2} \left\lVert \theta_k - \theta \right\rVert^2 \right\},
+\end{array}
+\end{equation}
+相应求解算法\texttt{pFedMe}的伪代码见算法~\ref{algo:pfedme}。很容易看到问题~\eqref{eq:pfedme-bilevel}~的$F_k(\theta)$即为$f_k(\theta_k)$的Moreau包络~\eqref{eq:moreau_env}
+\begin{equation*}
+F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \left\{ f_k(\theta_k) + \frac{\lambda}{2} \lVert \theta_k - \theta \rVert^2 \right\}
+\end{equation*}
 
 \input{algorithms/pfedme}
 
-文献\parencite{li_2021_ditto}进一步发展了\texttt{FedProx}\cite{sahu2018fedprox}添加临近项的思想，将子节点的优化问题~\eqref{eq:fedprox}~改进为一个双层优化问题 (Bi-level Optimization Problem)\index{双层优化问题, Bi-level Optimization Problem}
+文献\parencite{li_2021_ditto}进一步发展了\texttt{FedProx}\cite{sahu2018fedprox}添加临近项的思想，将子节点的优化问题~\eqref{eq:fedprox}~改进为一个双层优化问题
 \begin{equation}
 \label{eq:ditto-local}
 \begin{array}{cl}
