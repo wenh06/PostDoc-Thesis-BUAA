@@ -5,9 +5,11 @@
 % NOT finished
 % NOT indexed
 
-本节主要介绍已有的一些基于正则化目标函数的个性化联邦学习算法，此类算法的基本形式见上一节\S~\ref{sec:chap3-pfl}~的式~\eqref{eq:pfl-general}。本文称这一类的基于正则化目标函数的最优化问题为弱共识问题 (Weak Consensus Problem)\index{弱共识问题, Weak Consensus Problem}。
+本节主要介绍已有的一些基于正则化目标函数的个性化联邦学习算法，此类算法的基本形式见上一节\S~\ref{sec:chap3-pfl}~的式~\eqref{eq:pfl-general}。本文称这一类的基于正则化目标函数的最优化问题为弱共识问题 (Weak Consensus Problem)\index{弱共识问题, Weak Consensus Problem}。本节将介绍一些基于此类问题而提出的个性化联邦学习算法。
 
-这一类算法形式最简单的是文献\cite{hanzely2020federated}所引入的无环随机梯度下降 (Loopless Local SGD, L2SGD)\index{无环随机梯度下降, Loopless Local SGD, L2SGD} \texttt{L2SGD}算法。其考虑的优化问题格式为
+\subsection*{无环随机梯度下降算法\texttt{L2SGD}}
+
+这一类算法形式最简单的是文献\cite{hanzely2020federated}所引入的无环随机梯度下降 (Loopless Local SGD, L2SGD)\index{无环随机梯度下降, Loopless Local SGD, L2SGD} 算法\texttt{L2SGD}。其考虑的优化问题格式为
 \begin{equation}
 \label{eq:l2sgd}
 \begin{array}{cl}
@@ -29,7 +31,7 @@ G(\Theta) := \begin{cases}
 \frac{\lambda \nabla \varphi(\Theta)}{p}, & \text{概率$p$}
 \end{cases}
 \end{equation}
-以上定义的随机梯度是是梯度$\nabla F$的无偏估计。这样的方法简化了$\nabla F$的计算，提高了整体算法的收敛率\cite{Kovalev2020_loopless}。值得特别注意的是，在随机梯度$G$的定义式~\eqref{eq:l2sgd-grad}~中，$\nabla f(\Theta) = \col(\nabla f_1(\theta_1), \cdots, \nabla f_K(\theta_K))$的计算是完全块分离的，在联邦学习的场景下，这一计算步骤只需要在子节点上执行计算，并不涉及与中心节点的通信，这对于以通信为主要瓶颈的联邦学习场景是巨大的优势。从这个意义上来说，无环随机梯度下降\texttt{L2SGD}也融入了``跳步''更新的思想。
+以上定义的随机梯度是是梯度$\nabla F$的无偏估计。这样的方法简化了$\nabla F$的计算，提高了整体算法的收敛率\cite{Kovalev2020_loopless}。值得特别注意的是，在随机梯度$G$的定义式~\eqref{eq:l2sgd-grad}~中，$\nabla f(\Theta) = \col(\nabla f_1(\theta_1), \cdots, \nabla f_K(\theta_K))$的计算是完全块分离的，在联邦学习的场景下，这一计算步骤只需要在子节点上执行计算，并不涉及与中心节点的通信，这对于以通信为主要瓶颈的联邦学习场景是巨大的优势。从这个意义上来说，无环随机梯度下降\texttt{L2SGD}也融入了跳步更新的思想。
 
 文献\parencite{hanzely2020federated}对子节点上的目标函数做了进一步的假设，即假设$f_k$有有限和的结构
 \begin{equation}
@@ -37,7 +39,9 @@ f_k(\theta_k) = \sum\limits_{j=1}^m f_{k,j}(\theta_k),
 \end{equation}
 并结合随机Kaczmarz方法 (Randomized Kaczmarz Method)\index{随机Kaczmarz方法, Randomized Kaczmarz Method}\cite{Strohmer_2008_Kaczmarz,Needell_2015_Kaczmarz} 或者说结合基于采样的随机梯度下降法 (SGD Algorithm with Importance Sampling)\cite{Needell_2015_Kaczmarz,Zhao2015_sampling}，为问题~\eqref{eq:l2sgd}~的求解设计了所谓的无环随机梯度下降法，其伪代码见算法~\ref{algo:l2sgd}。实际上，随机梯度~\eqref{eq:l2sgd-grad}~也是基于采样的随机梯度。基于采样的随机梯度算法从收敛率到通信效率都有提升，是值得进一步研究的联邦学习优化算法。
 
-文献\parencite{t2020pfedme}考虑的是类似形式的问题
+\subsection*{\texttt{pFedMe}算法}
+
+文献\parencite{t2020pfedme}考虑了与~\eqref{eq:l2sgd}~类似形式的问题
 \begin{equation}
 \label{eq:pfedme-one}
 \minimize_{\theta,\theta_1,\ldots,\theta_K} \quad \sum\limits_{k=1}^K \left\{ f_k(\theta_k) + \frac{\lambda}{2} \left\lVert \theta_k - \theta \right\rVert^2 \right\}.
@@ -62,7 +66,7 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 \begin{equation*}
 \prox_{f_k, \lambda}: \theta \mapsto \argmin_{\theta_k} \left\{ f_k(\theta_k) + \frac{\lambda}{2} \lVert \theta_k - \theta \rVert^2 \right\}
 \end{equation*}
-在全局模型$\theta$处的取值。这个值即为算法\texttt{pFedMe}得到的子节点$k$上的个性化模型。算法\texttt{pFedMe}对~\ref{eq:pfedme-bilevel}~的外层问题，即$F(\theta)$的优化求解采取的是随机梯度下降法。通过 Moreau 包络与临近算子的关系式~\eqref{eq:prox-moreau-relation}~可知$F(\theta)$的梯度可以通过下式计算
+在全局模型$\theta$处的取值。这个值即为算法\texttt{pFedMe}得到的子节点$k$上的个性化模型。算法\texttt{pFedMe}对双层优化~\eqref{eq:pfedme-bilevel}~的外层问题，即$F(\theta)$的优化求解采取的是随机梯度下降法。通过Moreau包络与临近算子的关系式~\eqref{eq:prox-moreau-relation}~可知双层优化问题~\eqref{eq:pfedme-bilevel}~的外层目标函数$F(\theta)$的梯度可以通过下式计算
 \begin{equation}
 \label{eq:pfedme-grad}
 \nabla F(\theta) = \frac{1}{K} \sum\limits_{k=1}^K \nabla F_k(\theta) = \frac{1}{K} \sum\limits_{k=1}^K \nabla \mathcal{M}_{f_k, \lambda} (\theta) = \frac{1}{K} \sum\limits_{k=1}^K \lambda \left( \theta - \prox_{f_k, \lambda} (\theta) \right),
@@ -70,15 +74,36 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 相应的梯度下降的迭代格式为
 \begin{equation}
 \label{eq:pfedme-iter}
-\theta^{(t+1)} = \theta^{(t)} - \eta \nabla F(\theta^{(t)}) = \theta^{(t)} - \eta \lambda \frac{1}{K} \sum\limits_{k=1}^K \left( \theta^{(t)} - \prox_{f_k, \lambda} (\theta^{(t)}) \right)
+\begin{aligned}
+\theta^{(t+1)} & = \theta^{(t)} - \eta \nabla F(\theta^{(t)}) = \theta^{(t)} - \eta \lambda \frac{1}{K} \sum\limits_{k=1}^K \left( \theta^{(t)} - \prox_{f_k, \lambda} (\theta^{(t)}) \right) \\
+& = \frac{1}{K} \sum\limits_{k=1}^K \left( \theta^{(t)} - \eta \lambda \left( \theta^{(t)} - \prox_{f_k, \lambda} (\theta^{(t)}) \right) \right).
+\end{aligned}
 \end{equation}
+以上格式可以分解为两部分，第一部分是在子节点上依次执行临近算子$\prox_{f_k, \lambda}$的求解，以及全局模型的部分更新：
+\begin{equation}
+\label{eq:pfedme-local-1}
+\theta^{(t)} - \eta \lambda \left( \theta^{(t)} - \prox_{f_k, \lambda} (\theta^{(t)}) \right).
+\end{equation}
+实际上，算法\texttt{pFedMe}的子节点上有全局模型$\theta^{(t)}$的一份拷贝$\omega_k^{(t,r)}$，这一部分实际上执行的是$\omega_k^{(t,r)}$的更新：
+\begin{equation}
+\label{eq:pfedme-local-2}
+\omega_k^{(t,r+1)} \gets \omega_k^{(t,r)} - \eta \lambda \left( \omega_k^{(t,r)} - \prox_{f_k, \lambda} (\omega_k^{(t,r)}) \right).
+\end{equation}
+第二部分是子节点模型在中心节点上的聚合：
+\begin{equation}
+\label{eq:pfedme-avg}
+\theta^{(t+1)} \gets (1-\beta)\theta^{(t)} + \frac{\beta}{\# \mathcal{S}^{(t)}} \sum\limits_{k \in \mathcal{S}^{(t)}} \omega_{k}^{(t, R)}.
+\end{equation}
+算法\texttt{pFedMe}整个迭代循环值得特别注意的是，以上分解的两部分并不是交替进行的，而是在子节点上执行一定步数($R$步)的第一部分的迭代之后，才进行与中心节点的通信，在中心节点上执行第二部分的聚合。这是另一种形式的跳步更新的方法。
 
-文献\parencite{li_2021_ditto}进一步发展了\texttt{FedProx}\cite{sahu2018fedprox}添加临近项的思想，将子节点的优化问题~\eqref{eq:fedprox}~改进为一个双层优化问题
+\subsection*{\texttt{Ditto}算法}
+
+文献\parencite{li_2021_ditto}进一步发展了联邦临近算法\texttt{FedProx}\cite{sahu2018fedprox}添加临近项求解子问题的思想，将子节点的优化问题~\eqref{eq:fedprox}~改进为一个双层优化问题
 \begin{equation}
 \label{eq:ditto-local}
 \begin{array}{cl}
 \minimize & h_k(\theta_k, \omega^*) := f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \omega^* \rVert^2, \\
-\text{subject to} & \omega^* \in \argmin_{\omega} G(f_1(\omega)， \cdots, f_K(\omega)),
+\text{subject to} & \omega^* \in \argmin\limits_{\omega} G(f_1(\omega)， \cdots, f_K(\omega)),
 \end{array}
 \end{equation}
 其中$G$是中心节点上执行子节点模型参数聚合的函数，例如\texttt{FedAvg}算法中采用的求均值函数。
@@ -87,19 +112,26 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 
 \input{algorithms/ditto}
 
+\subsection*{自适应个性化联邦学习算法\texttt{APFL}}
+
 \parencite{deng2020_apfl}  \texttt{APFL}待写。。。。
 
 \input{algorithms/apfl}
+
+\subsection*{动态正则化联邦学习算法\texttt{FedDyn}}
 
 \parencite{acar2021feddyn}  \texttt{FedDyn}待写。。。。
 
 \input{algorithms/feddyn}
 
 
-\begin{equation}
-\label{eq:fedu}
-\minimize \quad \sum\limits_{k=1}^K f_k(x_k) + \dfrac{\lambda}{2} \sum\limits_{k=1}^K \sum\limits_{j\in\mathcal{N}_k} \lVert \theta_k - \theta_j \rVert^2
-\end{equation}
+% \begin{equation}
+% \label{eq:fedu}
+% \minimize \quad \sum\limits_{k=1}^K f_k(x_k) + \dfrac{\lambda}{2} \sum\limits_{k=1}^K \sum\limits_{j\in\mathcal{N}_k} \lVert \theta_k - \theta_j \rVert^2
+% \end{equation}
+
+
+\subsection*{\texttt{pFedMac}算法}
 
 \parencite{li2021pfedmac}  \texttt{pFedMac}待写。。。。
 

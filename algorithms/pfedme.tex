@@ -25,8 +25,8 @@
     each client in $\mathcal{S}^{(t)}$ sends the local model $\omega_{k}^{(t, R)}$ to the server\;
     Sever update $\theta^{(t+1)} \gets (1-\beta)\theta^{(t)} + \frac{\beta}{\# \mathcal{S}^{(t)}} \sum\limits_{k \in \mathcal{S}^{(t)}} \omega_{k}^{(t, R)}$
 }
-final global model: $\theta^* \gets \theta^{T}$\;
-final personalized models: $\theta_k^* \gets \theta_k^{T}$\;
+final global model: $\theta^* \gets \theta^{(T)}$\;
+final personalized models: $\theta_k^* \gets \theta_k^{(T)}$\;
 \caption{\texttt{pFedMe}\cite{t2020pfedme}算法伪代码}
 \label{algo:pfedme}
 \end{algorithm}
