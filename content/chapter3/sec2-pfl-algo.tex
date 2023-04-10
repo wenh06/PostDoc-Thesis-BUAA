@@ -8,6 +8,7 @@
 本节主要介绍已有的一些基于正则化目标函数的个性化联邦学习算法，此类算法的基本形式见上一节\S~\ref{sec:chap3-pfl}~的式~\eqref{eq:pfl-general}。本文称这一类的基于正则化目标函数的最优化问题为弱共识问题 (Weak Consensus Problem)\index{弱共识问题, Weak Consensus Problem}。本节将介绍一些基于此类问题而提出的个性化联邦学习算法。
 
 \subsection*{无环随机梯度下降算法\texttt{L2SGD}}
+% almost finished
 
 这一类算法形式最简单的是文献\cite{hanzely2020federated}所引入的无环随机梯度下降 (Loopless Local SGD, L2SGD)\index{无环随机梯度下降, Loopless Local SGD, L2SGD} 算法\texttt{L2SGD}。其考虑的优化问题格式为
 \begin{equation}
@@ -40,6 +41,7 @@ f_k(\theta_k) = \sum\limits_{j=1}^m f_{k,j}(\theta_k),
 并结合随机Kaczmarz方法 (Randomized Kaczmarz Method)\index{随机Kaczmarz方法, Randomized Kaczmarz Method}\cite{Strohmer_2008_Kaczmarz,Needell_2015_Kaczmarz} 或者说结合基于采样的随机梯度下降法 (SGD Algorithm with Importance Sampling)\cite{Needell_2015_Kaczmarz,Zhao2015_sampling}，为问题~\eqref{eq:l2sgd}~的求解设计了所谓的无环随机梯度下降法，其伪代码见算法~\ref{algo:l2sgd}。实际上，随机梯度~\eqref{eq:l2sgd-grad}~也是基于采样的随机梯度。基于采样的随机梯度算法从收敛率到通信效率都有提升，是值得进一步研究的联邦学习优化算法。
 
 \subsection*{\texttt{pFedMe}算法}
+% almost finished
 
 文献\parencite{t2020pfedme}考虑了与~\eqref{eq:l2sgd}~类似形式的问题
 \begin{equation}
@@ -79,12 +81,22 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 & = \frac{1}{K} \sum\limits_{k=1}^K \left( \theta^{(t)} - \eta \lambda \left( \theta^{(t)} - \prox_{f_k, \lambda} (\theta^{(t)}) \right) \right).
 \end{aligned}
 \end{equation}
-以上格式可以分解为两部分，第一部分是在子节点上依次执行临近算子$\prox_{f_k, \lambda}$的求解，以及全局模型的部分更新：
+以上格式可以分解为两部分，第一部分是在子节点上依次执行临近算子$\prox_{f_k, \lambda}$的求解
+\begin{equation}
+\label{eq:pfedme-prox-1}
+\texttt{prox\_update}_k (\theta^{(t)}),
+\end{equation}
+以及全局模型的部分更新：
 \begin{equation}
 \label{eq:pfedme-local-1}
 \theta^{(t)} - \eta \lambda \left( \theta^{(t)} - \prox_{f_k, \lambda} (\theta^{(t)}) \right).
 \end{equation}
-实际上，算法\texttt{pFedMe}的子节点上有全局模型$\theta^{(t)}$的一份拷贝$\omega_k^{(t,r)}$，这一部分实际上执行的是$\omega_k^{(t,r)}$的更新：
+实际上，算法\texttt{pFedMe}的子节点上有全局模型$\theta^{(t)}$的一份拷贝$\omega_k^{(t,r)}$，这两个部分的更新实际上执行的是，利用全局模型的拷贝$\omega_k^{(t,r)}$更新个性化模型$\theta_k^{(t, r)}:$
+\begin{equation}
+\label{eq:pfedme-prox-2}
+\theta_k^{(t, r)} \gets \texttt{prox\_update}_k (\omega_{k}^{(t, r)}; b_r)
+\end{equation}
+以及$\omega_k^{(t,r)}$自身的更新：
 \begin{equation}
 \label{eq:pfedme-local-2}
 \omega_k^{(t,r+1)} \gets \omega_k^{(t,r)} - \eta \lambda \left( \omega_k^{(t,r)} - \prox_{f_k, \lambda} (\omega_k^{(t,r)}) \right).
@@ -97,28 +109,48 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 算法\texttt{pFedMe}整个迭代循环值得特别注意的是，以上分解的两部分并不是交替进行的，而是在子节点上执行一定步数($R$步)的第一部分的迭代之后，才进行与中心节点的通信，在中心节点上执行第二部分的聚合。这是另一种形式的跳步更新的方法。
 
 \subsection*{\texttt{Ditto}算法}
+% almost finished
 
 文献\parencite{li_2021_ditto}进一步发展了联邦临近算法\texttt{FedProx}\cite{sahu2018fedprox}添加临近项求解子问题的思想，将子节点的优化问题~\eqref{eq:fedprox}~改进为一个双层优化问题
 \begin{equation}
-\label{eq:ditto-local}
+\label{eq:ditto-bilevel}
 \begin{array}{cl}
-\minimize & h_k(\theta_k, \omega^*) := f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \omega^* \rVert^2, \\
-\text{subject to} & \omega^* \in \argmin\limits_{\omega} G(f_1(\omega)， \cdots, f_K(\omega)),
+\minimize\limits_{\omega_k} & h_k(\omega_k, \theta^*) := f_k(\omega_k) + \frac{\mu}{2} \lVert \omega_k - \theta^* \rVert^2, \\
+\text{subject to} & \theta^* \in \argmin\limits_{\theta} G(f_1(\theta)， \cdots, f_K(\theta)),
 \end{array}
 \end{equation}
-其中$G$是中心节点上执行子节点模型参数聚合的函数，例如\texttt{FedAvg}算法中采用的求均值函数。
-
-待写。。。。
+其中$G$是中心节点上执行子节点模型参数聚合的函数，例如\texttt{FedAvg}算法中采用的求均值函数。这一问题格式是以子节点为主视角的格式，是首个基于这一视角的个性化联邦学习建模、求解方法。基于这一问题格式，文献\parencite{li_2021_ditto}设计了\texttt{Ditto}算法进行优化求解，其伪代码见算法~\ref{algo:ditto}。
 
 \input{algorithms/ditto}
 
+可以看到，文献\parencite{li_2021_ditto}考虑的双层优化问题~\eqref{eq:ditto-bilevel}~的内层问题实际上可以视作一个独立的联邦优化问题，只对全局模型参数进行优化求解；外层问题实际上只涉及了子节点上求解临近算子的问题。如果以中心节点为主视角，那么问题~\eqref{eq:ditto-bilevel}~实际上就是联邦平均算法\texttt{FedAvg}考虑的问题~\eqref{eq:fedavg-constraint}，同时在每个子节点上附带一个求解临近算子的问题达到模型个性化的目的。这个个性化的模型并不参与全局模型的更新。这样，全局模型与个性化模型被解耦合，迭代更新可以更灵活地进行。
+
+类似于\texttt{pFedMe}算法~\ref{algo:pfedme}，\texttt{Ditto}算法~\ref{algo:ditto}~的子节点实际要执行2个优化问题的求解，即全局模型的更新 (双层优化问题~\eqref{eq:ditto-bilevel}~内层问题的求解)
+\begin{equation}
+\label{eq:ditto-global}
+\theta_k^{(t)} \gets \operatorname{\mathbf{UpdateGlobal}}(\theta^{(t)}, f_k),
+\end{equation}
+以及临近算子的求解 (双层优化问题~\eqref{eq:ditto-bilevel}~外层问题的求解)
+\begin{equation}
+\label{eq:ditto-local-1}
+\omega_k^{(t+1)} \gets \prox_{f_k, \mu} (\theta^{(t)}) = \argmin\limits_{\omega_k} \left\{ f_k(\omega_k) + \frac{\mu}{2} \lVert \omega_k - \theta^{(t)} \rVert^2 \right\}.
+\end{equation}
+与本文之前介绍的算法 (\texttt{FedSplit}算法~\ref{algo:fedsplit}、\texttt{pFedMe}算法~\ref{algo:pfedme}~等) 不同之处在于，\texttt{Ditto}算法在每次循环对以上问题的求解只执行一步 (随机) 梯度下降
+\begin{equation}
+\label{eq:ditto-local-2}
+\omega_k^{(t+1)} \gets \omega_k^{(t)} - \eta \left( \nabla f_k(\omega_k^{(t)}) + \mu (\omega_k^{(t)} - \theta^{(t)}) \right),
+\end{equation}
+这样以伴随全局模型的更新而不断修正临近算子的中心项$\theta^{(t)},$ 而完成双层优化问题~\eqref{eq:ditto-bilevel}~外层问题的求解。这是自然的，因为这部分更新是双层优化问题的外层问题的迭代更新，而\texttt{FedSplit}算法、\texttt{pFedMe}算法相应的则是内循环以及内层问题的更新。
+
 \subsection*{自适应个性化联邦学习算法\texttt{APFL}}
+% NOT finished
 
 \parencite{deng2020_apfl}  \texttt{APFL}待写。。。。
 
 \input{algorithms/apfl}
 
 \subsection*{动态正则化联邦学习算法\texttt{FedDyn}}
+% NOT finished
 
 \parencite{acar2021feddyn}  \texttt{FedDyn}待写。。。。
 
@@ -132,6 +164,7 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 
 
 \subsection*{\texttt{pFedMac}算法}
+% NOT finished
 
 \parencite{li2021pfedmac}  \texttt{pFedMac}待写。。。。
 
