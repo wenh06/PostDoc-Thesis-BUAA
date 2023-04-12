@@ -119,7 +119,7 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 \text{subject to} & \theta^* \in \argmin\limits_{\theta} G(f_1(\theta)， \cdots, f_K(\theta)),
 \end{array}
 \end{equation}
-其中$G$是中心节点上执行子节点模型参数聚合的函数，例如\texttt{FedAvg}算法中采用的求均值函数。这一问题格式是以子节点为主视角的格式，是首个基于这一视角的个性化联邦学习建模、求解方法。基于这一问题格式，文献\parencite{li_2021_ditto}设计了\texttt{Ditto}算法进行优化求解，其伪代码见算法~\ref{algo:ditto}。
+其中$G$是中心节点上执行子节点模型参数聚合的函数，例如\texttt{FedAvg}算法中采用的求均值函数。这一问题格式是以子节点为主视角的格式，是第一批\footnote{稍早提出的自适应个性化联邦学习算法\texttt{APFL}\cite{deng2020_apfl}~\ref{algo:apfl}~也采用了类似的视角}明确基于这一视角的个性化联邦学习建模、求解方法。基于这一问题格式，文献\parencite{li_2021_ditto}设计了\texttt{Ditto}算法进行优化求解，其伪代码见算法~\ref{algo:ditto}。
 
 \input{algorithms/ditto}
 
@@ -145,9 +145,19 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 \subsection*{自适应个性化联邦学习算法\texttt{APFL}}
 % NOT finished
 
-\parencite{deng2020_apfl}  \texttt{APFL}待写。。。。
+比\parencite{li_2021_ditto}稍早的文献\parencite{deng2020_apfl}也考虑了类似~\eqref{eq:ditto-bilevel}~的双层优化问题
+\begin{equation}
+\label{eq:apfl}
+\begin{array}{cl}
+\minimize\limits_{\omega_k} & h_k(\omega_k, \theta^*) := f_k( \alpha_k \omega_k + (1 - \alpha_k) \theta^* ), \\
+\text{subject to} & \theta^* \in \argmin\limits_{\theta} \frac{1}{K} \sum\limits_{k=1}^K (f_1(\theta) + \cdots + f_K(\theta)),
+\end{array}
+\end{equation}
+其中$\alpha_k \in (0, 1)$被称作是混合权重 (Mixture Weights)。可以看到，与问题格式~\eqref{eq:ditto-bilevel}~最主要的区别是，外层问题对应的模型个性化的方法，采用了个性化模型参数$\omega_k$与全局模型$\theta^*$的凸组合$\alpha_k \omega_k + (1 - \alpha_k) \theta^*,$ 而不是临近项$\frac{\mu}{2} \lVert \omega_k - \theta^* \rVert^2$的的形式；而混合权重$\alpha_k$起到临近项中罚参数$\mu$类似的调节子节点上模型个性化程度的作用。文献\parencite{deng2020_apfl}针对这一双层优化问题~\eqref{eq:apfl}~提出了自适应个性化联邦学习算法\texttt{APFL}，其伪代码可见算法~\ref{algo:apfl}。
 
 \input{algorithms/apfl}
+
+待写。。。。
 
 \subsection*{动态正则化联邦学习算法\texttt{FedDyn}}
 % NOT finished
