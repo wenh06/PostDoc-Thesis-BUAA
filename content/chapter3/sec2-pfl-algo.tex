@@ -143,7 +143,7 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 这样以伴随全局模型的更新而不断修正临近算子的中心项$\theta^{(t)},$ 而完成双层优化问题~\eqref{eq:ditto-bilevel}~外层问题的求解。这是自然的，因为这部分更新是双层优化问题的外层问题的迭代更新，而\texttt{FedSplit}算法、\texttt{pFedMe}算法相应的则是内循环以及内层问题的更新。
 
 \subsection*{自适应个性化联邦学习算法\texttt{APFL}}
-% NOT finished
+% almost finished
 
 比\parencite{li_2021_ditto}稍早的文献\parencite{deng2020_apfl}也考虑了类似~\eqref{eq:ditto-bilevel}~的双层优化问题
 \begin{equation}
@@ -165,7 +165,7 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 \text{其中} & \omega_k^* = \argmin\limits_{\omega_k \in \dom f_k} f_k( \alpha_k \omega_k + (1 - \alpha_k) \theta^* ).
 \end{array}
 \end{equation}
-值得特别注意的是，当$\dom f_k$是全空间$\R^d$的一个真子集时，通过式~\eqref{eq:apfl-per-model}个性化模型$\hat{\omega}_k$可能并非目标函数$f_k$的极小点。具体如图~\ref{fig:apfl}~所示，当取$\alpha_k = \frac{1}{2}，$ 同时假设$\dom f_k,$ 即$\omega_k$的搜索区域是图中浅灰色阴影区域时，凸组合$\alpha_k \omega_k^* + (1 - \alpha_k) \theta^*$能取到的区域实际上是图中深灰色区域。可以看到深灰色区域并不包含$f_k$的极小点。当$\omega_k$的搜索区域变大，变成图~\ref{fig:apfl}~中的区域$\widetilde{\dom f_k}$时，通过迭代搜索得到的$\omega_k^*$才能使得$\hat{\omega}_k$成为$f_k$的极小点。
+值得特别注意的是，当$\dom f_k$是全空间$\R^d$的一个真子集时，通过式~\eqref{eq:apfl-per-model}个性化模型$\hat{\omega}_k$可能并非目标函数$f_k$的极小点。具体如图~\ref{fig:apfl}~所示，当取$\alpha_k = \frac{1}{2},$ 同时假设$\dom f_k,$ 即$\omega_k$的搜索区域是图中浅灰色阴影区域时，凸组合$\alpha_k \omega_k^* + (1 - \alpha_k) \theta^*$能取到的区域实际上是图中深灰色区域。可以看到深灰色区域并不包含$f_k$的极小点。当$\omega_k$的搜索区域变大，变成图~\ref{fig:apfl}~中的区域$\widetilde{\dom f_k}$时，通过迭代搜索得到的$\omega_k^*$才能使得$\hat{\omega}_k$成为$f_k$的极小点。但是在这种情况下，$\hat{\omega}_k$完全可以脱离整个联邦学习的训练网络，通过直接极小化$f_k$ (即只使用节点$k$上自身的数据进行训练) 获取，这与个性化联邦学习算法的目的是相违背的。
 
 \input{tikz-figures/chap3-apfl}
 
