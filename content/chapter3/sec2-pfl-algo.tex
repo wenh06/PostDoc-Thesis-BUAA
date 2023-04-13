@@ -147,17 +147,27 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 
 比\parencite{li_2021_ditto}稍早的文献\parencite{deng2020_apfl}也考虑了类似~\eqref{eq:ditto-bilevel}~的双层优化问题
 \begin{equation}
-\label{eq:apfl}
+\label{eq:apfl-bilevel}
 \begin{array}{cl}
-\minimize\limits_{\omega_k} & h_k(\omega_k, \theta^*) := f_k( \alpha_k \omega_k + (1 - \alpha_k) \theta^* ), \\
+\minimize\limits_{\omega_k \in \dom f_k} & h_k(\omega_k, \theta^*) := f_k( \alpha_k \omega_k + (1 - \alpha_k) \theta^* ), \\
 \text{subject to} & \theta^* \in \argmin\limits_{\theta} \frac{1}{K} \sum\limits_{k=1}^K (f_1(\theta) + \cdots + f_K(\theta)),
 \end{array}
 \end{equation}
-其中$\alpha_k \in (0, 1)$被称作是混合权重 (Mixture Weights)。可以看到，与问题格式~\eqref{eq:ditto-bilevel}~最主要的区别是，外层问题对应的模型个性化的方法，采用了个性化模型参数$\omega_k$与全局模型$\theta^*$的凸组合$\alpha_k \omega_k + (1 - \alpha_k) \theta^*,$ 而不是临近项$\frac{\mu}{2} \lVert \omega_k - \theta^* \rVert^2$的的形式；而混合权重$\alpha_k$起到临近项中罚参数$\mu$类似的调节子节点上模型个性化程度的作用。文献\parencite{deng2020_apfl}针对这一双层优化问题~\eqref{eq:apfl}~提出了自适应个性化联邦学习算法\texttt{APFL}，其伪代码可见算法~\ref{algo:apfl}。
+其中$\alpha_k \in (0, 1)$被称作是混合权重 (Mixture Weights)。文献\parencite{deng2020_apfl}针对这一双层优化问题~\eqref{eq:apfl-bilevel}~基于随机梯度下降方法提出了自适应个性化联邦学习算法\texttt{APFL}，其伪代码可见算法~\ref{algo:apfl}。
 
 \input{algorithms/apfl}
 
-待写。。。。
+可以看到，与问题格式~\eqref{eq:ditto-bilevel}~最主要的区别是，\eqref{eq:apfl-bilevel}的外层问题对应的模型个性化的方法，采用了辅助模型参数$\omega_k$与全局模型$\theta^*$的凸组合$\alpha_k \omega_k + (1 - \alpha_k) \theta^*,$ 而不是临近项$\frac{\mu}{2} \lVert \omega_k - \theta^* \rVert^2$的的形式；而混合权重$\alpha_k$起到临近项中罚参数$\mu$类似的调节子节点上模型个性化程度的作用。最终得到的个性化模型为
+\begin{equation}
+\label{eq:apfl-per-model}
+\begin{array}{cl}
+& \hat{\omega}_k = \alpha_k \omega_k^* + (1 - \alpha_k) \theta^*, \\
+\text{其中} & \omega_k^* = \argmin\limits_{\omega_k \in \dom f_k} f_k( \alpha_k \omega_k + (1 - \alpha_k) \theta^* ).
+\end{array}
+\end{equation}
+值得特别注意的是，当$\dom f_k$是全空间$\R^d$的一个真子集时，通过式~\eqref{eq:apfl-per-model}个性化模型$\hat{\omega}_k$可能并非目标函数$f_k$的极小点。具体如图~\ref{fig:apfl}~所示，当取$\alpha_k = \frac{1}{2}，$ 同时假设$\dom f_k,$ 即$\omega_k$的搜索区域是图中浅灰色阴影区域时，凸组合$\alpha_k \omega_k^* + (1 - \alpha_k) \theta^*$能取到的区域实际上是图中深灰色区域。可以看到深灰色区域并不包含$f_k$的极小点。当$\omega_k$的搜索区域变大，变成图~\ref{fig:apfl}~中的区域$\widetilde{\dom f_k}$时，通过迭代搜索得到的$\omega_k^*$才能使得$\hat{\omega}_k$成为$f_k$的极小点。
+
+\input{tikz-figures/chap3-apfl}
 
 \subsection*{动态正则化联邦学习算法\texttt{FedDyn}}
 % NOT finished
