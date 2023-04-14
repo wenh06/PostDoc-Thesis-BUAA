@@ -10,7 +10,7 @@
 具体来说，在算法迭代的第$t+1$轮，每个子节点优化的目标函数从$f_k(\theta_k)$变为了如下的带临近项的函数
 \begin{equation}
 \label{eq:fedprox}
-h_k(\theta_k, \theta^{(t)}) := \left\{ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2  \right\},
+h_k(\theta_k, \theta^{(t)}) := f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2,
 \end{equation}
 上式中的$\mu$被称作罚参数 (Penalty Constant)\index{罚参数, Penalty Constant}。值得注意的是，上式临近项的中心为$\theta^{(t)},$ 即上一轮迭代得到的全局模型。实际上，联邦临近算法\texttt{FedProx}整体的优化问题可以建模为如下的约束优化问题
 \begin{equation}

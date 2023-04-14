@@ -1,0 +1,31 @@
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.6]
+% \coordinate (origin) at (0, 0);
+\draw (-4, -3) rectangle (5, 3);
+\node at (-3,-2.5) {$\dom f_k$};
+\draw[] plot [smooth cycle] coordinates {(-1, 0) (-0.7, -0.1) (-0.3, 0.2) (-0.5, 0.3) (-1.1, 0.1)};
+% \draw[] plot [smooth cycle] coordinates {(-1.3, -0.3) (-0.6, -0.6) (0.3, 0.7) (-0.1, 0.9) (-0.7, 0.7) (-1.6, 0.2)};
+\draw[] plot [smooth cycle] coordinates {(-1.6, -0.5) (-0.2, -1.2) (0.9, 1.2) (0.6, 1.6) (-0.7, 1.2) (-2.2, 0.3)};
+\draw[] plot [smooth cycle] coordinates {(-2.4, -1.1) (0.6, -2.6) (1.9, 1.9) (1.1, 2.7) (-0.9, 1.9) (-3.1, 0.1)};
+\node at (0.9, -0.5) (global) [circle, fill=black, inner sep=0pt ,minimum size=5pt, label=below:{$\theta^{(t)}$}] {};
+\node at (1.2, 0.5) (local) [circle, fill=black, inner sep=0pt, minimum size=5pt, label=above:{$\theta_k^{(t)}$}] {};
+\coordinate (min1) at (-0.7, 0.1);
+\draw plot[only marks, mark=triangle*, mark size=4pt, thick] coordinates {(min1)};
+\coordinate (min2) at (0.1, -0.6);
+\draw plot[only marks, mark=star, mark size=4pt, thick] coordinates {(min2)};
+\path (local) edge [draw, dashed, -{Stealth}] ($(local)!0.4!(min1)$);
+\path (local) edge [draw, dashed, -{Stealth}] ($(local)!0.5!(min2)$);
+\node at (0.6, 0.1) (next) [circle, fill=black, inner sep=0pt, minimum size=5pt, label=left:{$\theta_k^{(t+1)}$}] {};
+\path (local) edge [draw, -{Stealth}] (next);
+\begin{scope}
+\clip (-4, -3) rectangle (5, 3);
+\draw[dashed, thin] (global) circle (0.5);
+% \draw[dashed, thin] (global) circle (1.1);
+\draw[dashed, thin] (global) circle (1.9);
+\draw[dashed, thin] (global) circle (3.2);
+\end{scope}
+\end{tikzpicture}
+\caption{动态正则化联邦学习算法\texttt{FedDyn}子节点模型参数更新示意图}
+\label{fig:feddyn}
+\end{figure}
