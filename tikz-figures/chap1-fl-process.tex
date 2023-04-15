@@ -17,7 +17,9 @@
 
 \begin{figure}[ht]
 \centering
-\begin{tikzpicture}[scale=2.1]
+% \begin{tikzpicture}[scale=2.1]
+\begin{scaletikzpicturetowidth}{0.95\textwidth}
+\begin{tikzpicture}[scale=\tikzscale]
 \node[client] at (0, 0) (server) {server $\theta$};
 \node[client, below left = 1.5cm and 3.5cm of server.south] (client-1) {client $\theta_1$};
 \node[client, right = 0.4cm of client-1.east] (client-2) {client $\theta_2$};
@@ -31,13 +33,16 @@
 \node[text width=1.2cm, align=center, right=0.3cm of client-n.east] (local-update) {local update};
 \node[text width=1.8cm, align=center, above left=0.5cm and 0.1cm of local-update.north] () {params broadcast};
 \end{tikzpicture}
+\end{scaletikzpicturetowidth}
 \caption{中心节点将信息下发到子节点，子节点执行本地模型参数更新}
 \label{fig:broadcast-local-update}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
-\begin{tikzpicture}[scale=2.1]
+% \begin{tikzpicture}[scale=2.1]
+\begin{scaletikzpicturetowidth}{0.95\textwidth}
+\begin{tikzpicture}[scale=\tikzscale]
 \node[client] at (0, 0) (server) {server $\theta$};
 \node[client, below left = 1.5cm and 3.5cm of server.south] (client-1) {client $\theta_1$};
 \node[client, right = 0.4cm of client-1.east] (client-2) {client $\theta_2$};
@@ -51,6 +56,7 @@
 \node[text width=1.2cm, align=center, right=0.3cm of server.east] (global-update) {global update};
 \node[text width=1.8cm, align=center, below right=0.25cm and 0.1cm of global-update.south] () {aggregation};
 \end{tikzpicture}
+\end{scaletikzpicturetowidth}
 \caption{中心节点收集子节点更新的信息，并执行全局模型参数更新}
 \label{fig:agg-global-update}
 \end{figure}

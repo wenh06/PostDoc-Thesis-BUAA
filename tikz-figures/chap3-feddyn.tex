@@ -1,6 +1,8 @@
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[scale=1.8]
+% \begin{tikzpicture}[scale=1.8]
+\begin{scaletikzpicturetowidth}{0.95\textwidth}
+\begin{tikzpicture}[scale=\tikzscale]
 % \coordinate (origin) at (0, 0);
 \coordinate (rect1) at (-4, -2.1);
 \coordinate (rect2) at (3.6, 2.3);
@@ -32,6 +34,7 @@
 \draw[dashed, thin] (global) circle (3.2);
 \end{scope}
 \end{tikzpicture}
+\end{scaletikzpicturetowidth}
 \caption{动态正则化联邦学习算法\texttt{FedDyn}子节点模型参数更新示意图}
 \label{fig:feddyn}
 \end{figure}
