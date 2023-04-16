@@ -36,7 +36,7 @@ G(\Theta) := \begin{cases}
 
 文献\parencite{hanzely2020federated}对子节点上的目标函数做了进一步的假设，即假设$f_k$有有限和的结构
 \begin{equation}
-f_k(\theta_k) = \sum\limits_{j=1}^m f_{k,j}(\theta_k),
+f_k(\theta_k) = \sum\limits_{j=1}^m f_{k, j}(\theta_k),
 \end{equation}
 并结合随机Kaczmarz方法 (Randomized Kaczmarz Method)\index{随机Kaczmarz方法, Randomized Kaczmarz Method}\cite{Strohmer_2008_Kaczmarz,Needell_2015_Kaczmarz} 或者说结合基于采样的随机梯度下降法 (SGD Algorithm with Importance Sampling)\cite{Needell_2015_Kaczmarz,Zhao2015_sampling}，为问题~\eqref{eq:l2sgd}~的求解设计了所谓的无环随机梯度下降法，其伪代码见算法~\ref{algo:l2sgd}。实际上，随机梯度~\eqref{eq:l2sgd-grad}~也是基于采样的随机梯度。基于采样的随机梯度算法从收敛率到通信效率都有提升，是值得进一步研究的联邦学习优化算法。
 
@@ -231,7 +231,7 @@ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2
 % \end{equation}
 
 \subsection*{\texttt{pFedMac}算法}
-% NOT finished
+% almost finished
 
 动态正则化联邦学习算法\texttt{FedDyn}本质上是通过了使用某些特定的方向对个性化模型参数的迭代更新进行修正。有类似做法的是文献\parencite{li2021pfedmac}。其考虑的是如下的双层优化问题
 \begin{equation}
@@ -268,14 +268,25 @@ f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2
 \end{equation*}
 的下降方向进行修正。
 
-文献\parencite{li2021pfedmac}的另外贡献是，考虑了稀疏 (Sparse) 个性化模型的问题
+文献\parencite{li2021pfedmac}另外的贡献是，考察了稀疏 (Sparse) 个性化模型的问题
 \begin{equation}
 \label{eq:pfedmac-sparse}
 \begin{array}{cl}
 \minimize & F(\theta) = \frac{1}{K} \sum\limits_{k=1}^K F_i(\theta), \\
-\text{where} & F_k(\theta) := \min\limits_{\theta_k} \left\{ f_k(\theta_k) - \mu \langle \theta_k, \theta \rangle + \frac{\mu}{2} \lVert \theta \rVert^2_2 + \lVert \theta_k \rVert_1 \right\}
+\text{where} & F_k(\theta) := \min\limits_{\theta_k} \left\{ f_k(\theta_k) - \mu \langle \theta_k, \theta \rangle + \frac{\mu}{2} \lVert \theta \rVert^2_2 + \gamma \lVert \theta_k \rVert_1 \right\}
 \end{array}
 \end{equation}
-以及对联邦学习中心节点--子节点这一二元结构的进一步扩展，即利用中心节点--次中心节点--子节点的三层结构\cite{Liu_2020_Hierarchical}来实现个性化联邦学习
-
-模型待写。。。。
+以及对联邦学习中心节点--子节点这一二元结构的进一步扩展，即利用中心节点--次中心节点\footnote{一般称作边缘节点 (Edge)\cite{Liu_2020_Hierarchical} 或者枢纽 (Hub)\cite{proxskip-vr}}--子节点的三层结构\cite{Liu_2020_Hierarchical}来实现个性化联邦学习。具体来说，子节点以一定方式 (例如按地域分布) 形成一些集群 (Cluster)，每一个集群有一个次中心节点，用于聚合该集群内的子节点模型参数
+\begin{equation*}
+\theta_{k,1}, \ldots, \theta_{k, J_k},
+\end{equation*}
+并与中心节点通信。相应的模型可以写为
+\begin{equation}
+\label{eq:pfedmac-sh}
+\begin{array}{cl}
+\minimize & F(\theta) = \frac{1}{K} \sum\limits_{k=1}^K F_i(\theta), \\
+\text{where} & F_k(\theta) := \min\limits_{\theta_k} \left\{ \frac{1}{J_k} \sum\limits_{j=1}^{J_k} F_{k, j} (\theta_k) - \mu_2 \langle \theta_k, \theta \rangle + \frac{\mu_2}{2} \lVert \theta \rVert^2_2 \right\} \\
+& F_{k, j}(\theta_k) := \min\limits_{\theta_{k, j}} \left\{ f_{k, j} (\theta_{k, j}) - \mu_2 \langle \theta_{k, j}, \theta_k \rangle + \frac{\mu_2}{2} \lVert \theta_k \rVert^2_2 + \gamma \lVert \theta_{k, j} \rVert_1 \right\}.
+\end{array}
+\end{equation}
+随着联邦学习网络规模的扩大，类似的分层次的 (Hierarchical) 联邦学习结构的应用会越来越普遍。相应地，结合子节点聚类的联邦学习算法也越来越受到关注\cite{Sattler_2021_cfl, Ghosh_2022_cfl, fl_fpfc_2022, Zhang_2023_fedmds}。
