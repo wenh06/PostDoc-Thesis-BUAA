@@ -16,6 +16,6 @@
 本文主要关注的个性化联邦学习方法则是从优化目标入手，通过对整体的优化目标$\sum\limits_{k=1}^K f_k(\theta)$或者子节点上局部的优化目标$f_k(\theta)$引入特定形式、具有特殊含义的正则项，达到模型个性化的目的\cite{hanzely2020federated,t2020pfedme,deng2020_apfl,dinh2021fedu,li2021pfedmac,li_2021_ditto,acar2021feddyn}，其一般形式可以写作
 \begin{equation}
 \label{eq:pfl-general}
-\minimize \frac{1}{K}\sum\limits_{k=1}^K f_k(\theta_k) + \mathcal{R}(\theta, \theta_1, \cdots, \theta_K),
+\minimize \quad \frac{1}{K}\sum\limits_{k=1}^K f_k(\theta_k) + \mathcal{R}(\theta, \theta_1, \cdots, \theta_K),
 \end{equation}
 其中$\mathcal{R}$是关于全局公有模型参数$\theta$以及子节点上的局部模型参数$\theta_1, \ldots, \theta_K$的某种形式的正则项。广义上来说，这些方法属于正则化多任务学习方法\cite{Caruana_1997_mtl, evgeniou2004regularized}。从最优化角度来看，这类方法有较为坚实的理论基础与算法收敛性支撑，是被研究得最多的一类方法。

@@ -5,6 +5,9 @@
 % almost finished
 % indexed
 
+\subsection{已有联邦学习算法的问题}
+\label{subsec:chap2-os-intro}
+
 我们已经讨论过的通用加速技巧\cite{reddi2020fed_opt}，方差缩减技术\cite{karimireddy2020scaffold}，以及临近点方法\cite{sahu2018fedprox}，解决的都是联邦学习在各种各样场景下的收敛性、收敛率相关的问题，而算法收敛结果的正确性这一问题始终没有得到重视。我们来举一个非常简单的例子来说明这个问题。
 
 \begin{example}
@@ -122,7 +125,12 @@ G = \sum\limits_{i=0}^{R-1} ( I - \frac{1}{\mu} A_k^TA_k )^i, ~~ P_k = ( I + \fr
 一般情况下，这与联邦平均算法\texttt{FedAvg}的理论收敛点~\eqref{eq:lst-sol-fedgd}~以及联邦临近算法\texttt{FedProx}的的理论收敛点~\eqref{eq:lst-sol-fedprox}~并不一致。
 \end{rem}
 
-以上便是文献\parencite{pathak2020fedsplit}首先发现的大部分已有的联邦学习算法在收敛结果正确性方面的缺陷，因此需要需要重新考虑的优化问题~\eqref{eq:fl-basic}~的等价转换。我们再回到约束优化问题~\eqref{eq:fedavg-constraint}~的格式
+以上便是文献\parencite{pathak2020fedsplit}首先发现的大部分已有的联邦学习算法在收敛结果正确性方面的缺陷，因此需要需要重新考虑的优化问题~\eqref{eq:fl-basic}~的等价转换。
+
+\subsection{算子分裂算法}
+\label{subsec:chap2-os-alg}
+
+我们再回到约束优化问题~\eqref{eq:fedavg-constraint}~的格式
 \begin{equation*}
 \begin{array}{cl}
 \minimize & F(\Theta) := \frac{1}{K}  \sum\limits_{k=1}^K f_k(\theta_k), \\
@@ -304,6 +312,9 @@ z^{(t+1)} & = z^{(t)} + x^{(t+1)} - x^{(t+1/2)} \label{eq:drsm-4}
 z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 \end{equation}
 
+\subsection{联邦分裂算法\texttt{FedSplit}与\texttt{FedDR}}
+\label{subsec:chap2-os-fedsplit-feddr}
+
 我们现在回到我们想要求解的单调包含问题~\eqref{eq:fedsplit-mono-incl}，并将命题~\ref{prop:os}~应用到这个问题上。我们令
 \begin{equation}
 \label{eq:fedsplit-operator}
@@ -432,6 +443,14 @@ T = \left\lfloor \frac{C_1 [F(\theta^{(0)}) - F^*] + (C_2 + C_2)M}{\varepsilon^2
 \end{equation*}
 \end{itemize}
 \end{theorem}
+
+\subsection{算子分裂视角下的联邦平均算法\texttt{FedAvg}与联邦临近算法\texttt{FedProx}}
+\label{subsec:chap2-os-fedavg-fedprox}
+
+待写\cite{Malekmohammadi_2021_fl_os}
+
+\subsection{联邦学习中的算子分裂方法小结}
+\label{subsec:chap2-os-summarize}
 
 算子分裂法是分解算法 (Decomposition Algorithms)\index{分解算法, Decomposition Algorithms} 的一大类，分解算法基本思想是将大规模的问题分解成一系列小规模的问题，将每个子问题分开处理，使得迭代算法中的子问题更容易求解或者更容易并行化。PRSM以及DRSM都是将要求解的问题\ref{eq:fl-basic}分为了两部分 (见单调包含问题~\eqref{eq:fedsplit-mono-incl}~以及~\eqref{eq:feddr-mono-incl})，进行交替迭代求解。
 

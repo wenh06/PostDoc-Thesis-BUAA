@@ -8,7 +8,7 @@
     $\mathcal{S}^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
     broadcast $\theta^{(t)}$ to clients $k \in \mathcal{S}^{(t)}$\;
     \For{each client $k \in \mathcal{S}^{(t)}$ {\bfseries in parallel}}{
-        find a $\gamma$-inexact solution $\theta_k^{(t)}$ to $\argmin\limits_{\theta_k} h_k(\theta_k, \theta^{(t)}) := f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2.$\;
+        find a $\gamma$-inexact solution $\theta_k^{(t)}$ to $\argmin\limits_{\theta_k} h_k(\theta_k, \theta^{(t)}) := f_k(\theta_k) + \frac{\mu}{2} \lVert \theta_k - \theta^{(t)} \rVert^2$\;
         \tcc{Definition of $\gamma$-inexactness: $\nabla h_k(\theta_k^*, \theta^{(t)}) \leqslant \gamma h_k(\theta_k, \theta^{(t)}),$ where $\theta_k^*$ is the exact solution to $h_k.$}
         send $\theta_k^{(t)}$ to server\;
     }
