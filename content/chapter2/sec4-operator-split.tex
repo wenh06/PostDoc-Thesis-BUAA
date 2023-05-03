@@ -444,10 +444,30 @@ T = \left\lfloor \frac{C_1 [F(\theta^{(0)}) - F^*] + (C_2 + C_2)M}{\varepsilon^2
 \end{itemize}
 \end{theorem}
 
-\subsection{算子分裂视角下的联邦平均算法\texttt{FedAvg}与联邦临近算法\texttt{FedProx}}
-\label{subsec:chap2-os-fedavg-fedprox}
+\subsection{算子分裂视角下的联邦平均算法\texttt{FedAvg}}
+\label{subsec:chap2-os-fedavg}
 
-待写\cite{Malekmohammadi_2021_fl_os}
+事实上，我们在本节使用的分裂方法\eqref{eq:fixed-pt-pr}，即PRSM~\eqref{eq:prsm}~与DRSM~\eqref{eq:drsm}~，都属于向后-向前分裂 (Backward-Forward Splitting, BFS)\index{向后-向前分裂, Backward-Forward Splitting, BFS} 这一类的方法。考虑一个一般的单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$ 类似命题\ref{prop:os}~有\cite{ryu2022large}
+\begin{align*}
+0 \in \mathcal{A}(x) + \mathcal{B}(x) & \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{B})(x) - (\mathcal{I} - s\mathcal{A})(x) \\
+& \Longleftrightarrow (\mathcal{I} + s\mathcal{B})(x) \ni (\mathcal{I} - s\mathcal{A})(x) \\
+& \Longleftrightarrow x = \mathcal{R}_{s\mathcal{B}}(\mathcal{I} - s\mathcal{A})(x),
+\end{align*}
+相对应的算子分裂方法被称作向前-向后分裂 (Forward-Backward Splitting, FBS)\index{向前-向后分裂, Forward-Backward Splitting, FBS}，即先执行向前步 (Forward Step)\index{向前步, Forward Step}
+\begin{equation}
+\label{eq:forward_step}
+\mathcal{I} - s\mathcal{A},
+\end{equation}
+再执行向后步 (Backward Step)\index{向后步, Backward Step}
+\begin{equation}
+\label{eq:backward_step}
+\mathcal{R}_{s\mathcal{B}} = (\mathcal{I} + s\mathcal{B})^{-1}.
+\end{equation}
+具体应用到约束优化模型~\eqref{eq:fedavg-constraint}~并取$\mathcal{A} = \nabla F,$ $\mathcal{B} = \partial \iota_{\mathcal{E}},$ 即得到要进行迭代求解的不动点问题
+\begin{equation*}
+\Theta = \mathcal{R}_{s\partial\iota_{\mathcal{E}}}(\Theta - s\nabla F(\Theta)) = \prox_{s\iota_{\mathcal{E}}}(\Theta - s\nabla F(\Theta)) = \Pi_{\mathcal{E}}(\Theta - s\nabla F(\Theta)).
+\end{equation*}
+这也正好是联邦平均算法\texttt{FedAvg} (或者说投影梯度法, 见\S~\ref{subsec:chap2-overview-fedavg-opt}) 从单调算子理论的角度进行的另一种解读\cite{Malekmohammadi_2021_fl_os}。
 
 \subsection{联邦学习中的算子分裂方法小结}
 \label{subsec:chap2-os-summarize}
