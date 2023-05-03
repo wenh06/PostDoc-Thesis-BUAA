@@ -444,10 +444,10 @@ T = \left\lfloor \frac{C_1 [F(\theta^{(0)}) - F^*] + (C_2 + C_2)M}{\varepsilon^2
 \end{itemize}
 \end{theorem}
 
-\subsection{算子分裂视角下的联邦平均算法\texttt{FedAvg}}
-\label{subsec:chap2-os-fedavg}
+\subsection{算子分裂视角下的联邦平均算法\texttt{FedAvg}与联邦临近算法\texttt{FedProx}}
+\label{subsec:chap2-os-fedavg-fedprox}
 
-事实上，我们在本节使用的分裂方法\eqref{eq:fixed-pt-pr}，即PRSM~\eqref{eq:prsm}~与DRSM~\eqref{eq:drsm}~，都属于向后-向前分裂 (Backward-Forward Splitting, BFS)\index{向后-向前分裂, Backward-Forward Splitting, BFS} 这一类的方法。考虑一个一般的单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$ 类似命题\ref{prop:os}~有\cite{ryu2022large}
+事实上，本节使用的分裂方法\eqref{eq:fixed-pt-pr}，即PRSM~\eqref{eq:prsm}~与DRSM~\eqref{eq:drsm}~，都属于向后-向前分裂 (Backward-Forward Splitting, BFS)\index{向后-向前分裂, Backward-Forward Splitting, BFS} 这一类的方法。考虑一个一般的单调包含问题$0 \in \mathcal{A}(x) + \mathcal{B}(x),$ 类似命题\ref{prop:os}~有\cite{ryu2022large}
 \begin{align*}
 0 \in \mathcal{A}(x) + \mathcal{B}(x) & \Longleftrightarrow 0 \in (\mathcal{I} + s\mathcal{B})(x) - (\mathcal{I} - s\mathcal{A})(x) \\
 & \Longleftrightarrow (\mathcal{I} + s\mathcal{B})(x) \ni (\mathcal{I} - s\mathcal{A})(x) \\
@@ -463,15 +463,23 @@ T = \left\lfloor \frac{C_1 [F(\theta^{(0)}) - F^*] + (C_2 + C_2)M}{\varepsilon^2
 \label{eq:backward_step}
 \mathcal{R}_{s\mathcal{B}} = (\mathcal{I} + s\mathcal{B})^{-1}.
 \end{equation}
-具体应用到约束优化模型~\eqref{eq:fedavg-constraint}~并取$\mathcal{A} = \nabla F,$ $\mathcal{B} = \partial \iota_{\mathcal{E}},$ 即得到要进行迭代求解的不动点问题
-\begin{equation*}
+具体将向前-向后分裂法应用到约束优化模型~\eqref{eq:fedavg-constraint}~并取$\mathcal{A} = \nabla F,$ $\mathcal{B} = \partial \iota_{\mathcal{E}},$ 即得到要进行迭代求解的不动点问题
+\begin{equation}
+\label{eq:fedavg-fpi}
 \Theta = \mathcal{R}_{s\partial\iota_{\mathcal{E}}}(\Theta - s\nabla F(\Theta)) = \prox_{s\iota_{\mathcal{E}}}(\Theta - s\nabla F(\Theta)) = \Pi_{\mathcal{E}}(\Theta - s\nabla F(\Theta)).
-\end{equation*}
-这也正好是联邦平均算法\texttt{FedAvg} (或者说投影梯度法, 见\S~\ref{subsec:chap2-overview-fedavg-opt}) 从单调算子理论的角度进行的另一种解读\cite{Malekmohammadi_2021_fl_os}。
+\end{equation}
+这也正好是联邦平均算法\texttt{FedAvg}~\ref{algo:fedavg}~(或者说投影梯度法, 见\S~\ref{subsec:chap2-overview-fedavg-opt}) 从单调算子理论的角度进行的另一种解读\cite{Malekmohammadi_2021_fl_os}。
+
+类似地，同样使用约束优化模型~\eqref{eq:fedavg-constraint}，联邦临近算法\texttt{FedProx}~\ref{algo:fedprox}~对应的不动点问题迭代格式为
+\begin{equation}
+\label{eq:fedprox-fpi}
+\Theta = \mathcal{R}_{s\partial\iota_{\mathcal{E}}}(\mathcal{R}_{s\nabla F}(\Theta)) = \prox_{s\iota_{\mathcal{E}}}(\prox_{sF}(\Theta)) = \Pi_{\mathcal{E}}(\prox_{sF}(\Theta)),
+\end{equation}
+相当于执行了两步向后步，因此从算子分裂的角度看，是一种向后-向后分裂法 (Backward-Backward Splitting, BBS)\index{向后-向后分裂, Backward-Backward Splitting, BBS}。
 
 \subsection{联邦学习中的算子分裂方法小结}
 \label{subsec:chap2-os-summarize}
 
 算子分裂法是分解算法 (Decomposition Algorithms)\index{分解算法, Decomposition Algorithms} 的一大类，分解算法基本思想是将大规模的问题分解成一系列小规模的问题，将每个子问题分开处理，使得迭代算法中的子问题更容易求解或者更容易并行化。PRSM以及DRSM都是将要求解的问题\ref{eq:fl-basic}分为了两部分 (见单调包含问题~\eqref{eq:fedsplit-mono-incl}~以及~\eqref{eq:feddr-mono-incl})，进行交替迭代求解。
 
-分解算法在理论分析与数值效果上都有着独特的优势。通过定理~\ref{thm:fedsplit-correctness}以及定理~\ref{thm:feddr-convergence}，我们可以看到分裂算法的确能够收敛到我们想要求解问题的极值点或者稳定点，这相较于联邦平均算法\texttt{FedAvg}~\ref{algo:fedavg}，联邦邻近算法\texttt{FedProx}~\ref{algo:fedprox}~是极大的进步。其代价，或者说缺点，就是除了模型参数本身，每一个计算节点 (包括中心服务器与子节点) 还有一些额外的辅助参数需要维护，增加了相关的存储以及运算的负担。
+分解算法在理论分析上，能将很多联邦学习的算法纳入这一框架进行统一的理论分析；同时，分解算法在数值效果上也有着独特的优势。通过定理~\ref{thm:fedsplit-correctness}以及定理~\ref{thm:feddr-convergence}，我们可以看到一些分裂算法的确能够收敛到我们想要求解问题的极值点或者稳定点，这相较于联邦平均算法\texttt{FedAvg}~\ref{algo:fedavg}，联邦邻近算法\texttt{FedProx}~\ref{algo:fedprox}~是极大的进步。其代价，或者说缺点，就是除了模型参数本身，每一个计算节点 (包括中心服务器与子节点) 还有一些额外的辅助参数需要维护，增加了相关的存储以及运算的负担。
