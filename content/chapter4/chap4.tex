@@ -1,132 +1,14 @@
 %\mbox{}\newpage
-\chapter{\hspace{-1mm}\bf 联邦学习仿真系统的设计与实现}
+\chapter{\hspace{-1mm}\bf 个性化联邦学习中的算子分裂算法}
 \label{chap4}
 \addcontentsline{toe}{chapter}{{{\bf Chapter 4\ \
- Design and Implementation of a Federated Learning Simulation System}}\numberline\,}
+Operator Splitting Algorithms for Personalized Federated Learning }}\numberline\,}
 \markboth{第\,4\,章\ \
-联邦学习仿真软件设计与实现}{北京航空航天大学博士后研究工作报告}
-
-\newcommand{\urlgithub}{\url{https://github.com/wenh06/pFedSplit}}
-\newcommand{\urlgitee}{\url{https://gitee.com/wenh06/pFedSplit}}
+个性化联邦学习中的算子分裂算法}{北京航空航天大学博士后研究工作报告}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{仿真系统设计}
-\addcontentsline{toe}{section}{{4.1\ \ Design of the Simulation System}\numberline\,}
-\label{sec:chap4-design}
 
-% NOT finished
-% NOT indexed
+\input{content/chapter4/sec1-problem-formulation}
 
-本文实现的联邦学习仿真系统采用Python语言编写，整体结构借鉴了FedML\footnote{\url{https://github.com/FedML-AI/FedML}}\cite{he_2020_fedml}以及\texttt{FedProx}\footnote{\url{https://github.com/litian96/FedProx}}\cite{sahu2018fedprox}。实现的基本思路是基于配置文件 (或者Python类)，将数据集读取、模型参数初始化、节点分配等工作自动化。同时将节点与算法解耦合，节点需要执行的通用操作，例如通讯、获取模型参数等进行统一实现，算法相关的操作通过预留接口的方式完成。这样，利用这一套仿真系统，可以专注于联邦学习优化算法的实现与验证工作。
-
-本文实现的联邦学习仿真系统主要包含以下几个模块
-\begin{itemize}
-    \item \texttt{data\_processing}: 待写。。。。
-    \item \texttt{models}: 待写。。。。
-    \item \texttt{optimizers}: 待写。。。。
-    \item \texttt{algorithms}: 待写。。。。
-\end{itemize}
-
-我们定义了一个抽象基类 (Abstract Base Class, ABC)\index{抽象基类, Abstract Base Class, ABC} \texttt{Node}作为子节点的类\texttt{Client}以及中心节点\texttt{Server}的公共基类,在其中约定所有类型的节点都必须实现的操作，包括
-\begin{itemize}
-    \item \texttt{communicate}: 节点间通信的操作
-    \item \texttt{update}: 节点执行迭代，更新节点上各种类型参数 (主要是更新正在训练的模型参数) 的操作
-    \item \texttt{\_post\_init}, \texttt{required\_config\_fields}: 检查初始化是否合法相关的操作
-    \item \texttt{get\_detached\_model\_parameters}: 用于获取当前模型参数
-\end{itemize}
-\texttt{Node}的实现具体可见代码~\ref{lst:node}。
-
-\begin{lstlisting}[language=Python, caption=基类\texttt{Node}的Python代码,label={lst:node}]
-from abc import ABC, abstractmethod
-
-from torch_ecg.utils import ReprMixin
-
-
-class Node(ReprMixin, ABC):
-    """An abstract base class for the server and client nodes."""
-
-    __name__ = "Node"
-
-    @abstractmethod
-    def communicate(self, target: "Node") -> None:
-        """Communicate with the target node.
-
-        The current node communicates model parameters, gradients, etc. to `target` node.
-        For example, a client node communicates its local model parameters to server node via
-
-        .. code-block:: python
-
-            target._received_messages.append(
-                ClientMessage(
-                    {
-                        "client_id": self.client_id,
-                        "parameters": self.get_detached_model_parameters(),
-                        "train_samples": self.config.num_epochs * self.config.num_steps * self.config.batch_size,
-                        "metrics": self._metrics,
-                    }
-                )
-            )
-
-        For a server node, global model parameters are communicated to clients via
-
-        .. code-block:: python
-
-            target._received_messages = {"parameters": self.get_detached_model_parameters()}
-
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def update(self) -> None:
-        """Update model parameters, gradients, etc.
-        according to `self._reveived_messages`.
-        """
-        raise NotImplementedError
-
-    def _post_init(self) -> None:
-        """Check if all required field in the config are set."""
-        assert all(
-            [hasattr(self.config, k) for k in self.required_config_fields]
-        ), f"missing required config fields: {list(set(self.required_config_fields) - set(self.config.__dict__))}"
-
-    @property
-    @abstractmethod
-    def required_config_fields(self) -> List[str]:
-        """The list of required fields in the config."""
-        raise NotImplementedError
-
-    def get_detached_model_parameters(self) -> List[Tensor]:
-        """Get the detached model parameters."""
-        return [p.detach().clone() for p in self.model.parameters()]
-\end{lstlisting}
-
-中心节点以及子节点分别继承\texttt{Node}类，实现相应类型节点特有的一些操作，例如中心节点\texttt{Server}实现的通用操作有
-\begin{itemize}
-    \item \texttt{\_setup\_clients}, \texttt{\_allocate\_devices}: 为子节点分配训练数据，初始化模型参数，分配内存或显存空间等
-    \item \texttt{\_sample\_clients}: 待写。。。。
-    \item \texttt{add\_parameters}, \texttt{avg\_parameters}: 待写。。。。
-\end{itemize}
-
-本文实现的联邦学习仿真系统的总体架构图可以总结为图 待写。。。。相关的代码地址为：
-\begin{itemize}
-    \item GitHub: \urlgithub
-    \item gitee: \urlgitee
-\end{itemize}
-
-\section{联邦学习数据集}
-\addcontentsline{toe}{section}{{4.2\ \ Datasets for Federated Learning}\numberline\,}
-\label{sec:chap4-datasets}
-
-% NOT finished
-% NOT indexed
-
-待写。。。。
-
-\section{待写}
-\addcontentsline{toe}{section}{{4.3\ \ To write}\numberline\,}
-
-% NOT finished
-% NOT indexed
-
-待写。。。。
+\input{content/chapter4/sec2-algorithm}

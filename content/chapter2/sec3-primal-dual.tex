@@ -62,7 +62,7 @@ $\Lambda = \col(\lambda_1, \ldots, \lambda_K)$被称作对偶变量 (Dual Variab
 \argmin \widetilde{\mathcal{L}}(\theta_{k}) = \frac{s}{s+\gamma} \theta_k^{(t,r)} + \frac{\gamma}{s+\gamma} \theta_{k, 0}^{(t)} - \frac{s\gamma}{s+\gamma}(g_k^{(t,r)} + \lambda_k^{(t)}).
 \end{equation*}
 
-其次，是``跳步''更新技术的使用。我们可以看到，在联邦原始对偶算法 FedPD~\ref{algo:fedpd}~中，外循环以大小为$p$的概率被跳过，也就是说，在迭代格式~\eqref{eq:al-iter}~中，迭代步~\eqref{eq:al-iter-global}~有概率$p$不执行。在前一个循环的迭代步~\eqref{eq:al-iter-global}~不执行的情况下，迭代步~\eqref{eq:al-iter-local}~以及~\eqref{eq:al-iter-dual}~中的$\theta^{(t)}$实际上是$\theta_k^{(t)} + s \lambda_k^{(t)},$ 也就是说联邦原始对偶算法 FedPD~\ref{algo:fedpd}~的迭代格式实际上是
+其次，是``跳步更新''技术的使用。我们可以看到，在联邦原始对偶算法 FedPD~\ref{algo:fedpd}~中，外循环以大小为$p$的概率被跳过，也就是说，在迭代格式~\eqref{eq:al-iter}~中，迭代步~\eqref{eq:al-iter-global}~有概率$p$不执行。在前一个循环的迭代步~\eqref{eq:al-iter-global}~不执行的情况下，迭代步~\eqref{eq:al-iter-local}~以及~\eqref{eq:al-iter-dual}~中的$\theta^{(t)}$实际上是$\theta_k^{(t)} + s \lambda_k^{(t)},$ 也就是说联邦原始对偶算法 FedPD~\ref{algo:fedpd}~的迭代格式实际上是
 \begin{subequations}
 \label{eq:fedpd-iter}
 \begin{align}
