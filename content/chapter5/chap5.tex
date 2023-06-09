@@ -24,11 +24,11 @@
 \begin{itemize}
     \item \texttt{data\_processing}: 联邦学习数据集数据处理模块，主要基于已有的一些研究型联邦学习框架LEAF\cite{caldas2018_leaf}，应用型联邦学习框架FedML\cite{he_2020_fedml}，以及之前的一些联邦学习领域影响力较大的工作\cite{mcmahan2017fed_avg,sahu2018fedprox,reddi2020fed_opt}提出的联邦数据集，包括图像分类的数据集MNIST\cite{Lecun_1998_mnist}, EMNIST\cite{cohen2017emnist}, Federated-EMNIST\cite{caldas2018_leaf,sahu2018fedprox}，文本情感分类数据集Sent140\cite{sent140,caldas2018_leaf},文本数据集Shakespeare (用于下一字符预测任务, Next Character Prediction)\cite{mcmahan2017fed_avg,caldas2018_leaf}等。每一个数据集以Python类的形式提供，其中打包了数据集自动下载，数据预处理(例如图像数据增强、归一化以及文本数据的向量化等操作)，为节点分配数据，创建模型训练用的数据加载器 (PyTorch DataLoader)，计算模型预测结果指标 (例如平均损失 (Mean Loss)，准确度 (Accuracy) 等) 等功能，并提供了该数据集常用模型的列表供选择使用。
     \item \texttt{models}: 此模块主要聚合了一些已有的联邦学习文献\cite{mcmahan2017fed_avg,zhang2020fedpd,sahu2018fedprox,Ghosh_2022_cfl,he_2020_fedml}中使用过的试验模型，包括一些卷积神经网络 (Convolutional Neural Network, CNN)\index{卷积神经网络, Convolutional Neural Network, CNN}, 循环神经网络 (Recurrent Neural Network, RNN)\index{循环神经网络, Recurrent Neural Network, RNN}，多层感知机 (Multi-Layer Perceptron, MLP)\index{多层感知机, Multi-Layer Perceptron, MLP} 等，为\texttt{data\_processing}模块中的数据集提供备选的试验模型。
-    \item \texttt{optimizers}: 待写。。。。
-    \item \texttt{algorithms}: 待写。。。。
+    \item \texttt{optimizers}: (子节点上的) 内循环问题求解器。由于大部分试验用模型是神经网络模型，内循环问题的求解大部分基于随机梯度下降算法，包括临近问题的求解，拉格朗日函数的求解。大部分求解器支持方差缩减技术的应用。
+    \item \texttt{algorithms}: 这一模块包含了基于本文构建的联邦学习框架复现的部分典型的联邦学习算法，可以用作基准对比算法。本文已复现的联邦学习算法详细信息见表~\ref{tab:algorithms}.
 \end{itemize}
 
-% \input{tables/algorithms}
+\input{tables/algorithms}
 
 我们定义了一个抽象基类 (Abstract Base Class, ABC)\index{抽象基类, Abstract Base Class, ABC} \texttt{Node}作为子节点的类\texttt{Client}以及中心节点\texttt{Server}的公共基类，实现了所有类型的节点都要执行的公有操作：
 \begin{itemize}
@@ -44,8 +44,8 @@
 
 中心节点基类\texttt{Server}以及子节点基类\texttt{Client}分别继承\texttt{Node}基类，实现相应类型节点公有的一些操作。其中，中心节点基类\texttt{Server}实现的主要公有操作有：
 \begin{itemize}
-    \item \texttt{\_setup\_clients}, \texttt{\_allocate\_devices}: 为子节点分配训练数据，初始化模型参数，分配内存或显存空间等
-    \item \texttt{\_sample\_clients}: 待写。。。。
+    \item \texttt{\_setup\_clients}, \texttt{\_allocate\_devices}: 为子节点分配训练数据，初始化模型参数，分配内存或显存空间等。
+    \item \texttt{\_sample\_clients}: 对节点进行采样，
     \item \texttt{add\_parameters}, \texttt{avg\_parameters}: 待写。。。。
     \item \texttt{train}：待写。。。。
 \end{itemize}
