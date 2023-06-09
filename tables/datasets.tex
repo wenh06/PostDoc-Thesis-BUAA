@@ -1,17 +1,22 @@
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|c|c|c|c|}
+\begin{threeparttable}[b]
+\begin{tabular}{|c|c|c|c|c|}
 \hlineB{3.5}
-数据集名称 & 规模 & 任务 & 样本类型 \\
+数据集名称 & 规模 & 默认节点数目 & 任务 & 样本类型 \\
 \hline \hline
-MNIST & 60000 & 图像分类 & $28\times 28$的单通道灰度图像 \\
-EMNIST & 749068 & 图像分类 & $28\times 28$的单通道灰度图像 \\
-CIFAR10 & 60000 & 图像分类 & $32\times 32$的RGB3通道图像 \\
-Shakespeare & 18424 & 下一字符预测 & 文本 \\
-Sent140 & 40783 & 文本情感分类 & 文本 \\
-Synthetic & N/A & 分类 & 随机生成的高维向量 \\
+MNIST & 60000 & 1000 & 图像分类 & $28\times 28$的单通道灰度图像 \\
+EMNIST & 749068 & 3400 & 图像分类 & $28\times 28$的单通道灰度图像 \\
+CIFAR10/100 & 60000 & 500 & 图像分类 & $32\times 32$的RGB3通道图像 \\
+Shakespeare & 18424 & 715 & 下一字符预测 & 文本 \\
+Sent140 & 40783 & 715 & 文本情感分类 & 文本 \\
+Synthetic($\alpha, \beta$)\tnote{$\ast$} & N/A & N/A & 分类 & 随机生成的高维向量 \\
 \hlineB{3.5}
 \end{tabular}
-\caption{to wirte}
+\begin{tablenotes}
+\item[$\ast$] 参数$\alpha, \beta$
+\end{tablenotes}
+\caption{本文开发的联邦学习仿真系统内置的数据集}
 \label{tab:datasets}
+\end{threeparttable}
 \end{table}
