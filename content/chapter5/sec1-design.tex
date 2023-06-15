@@ -8,13 +8,19 @@
 % almost finished
 % indexed
 
-为了方便对联邦学习算法进行数值试验的对比与验证，本文开发了一套用于单机模拟的联邦学习仿真系统。本文实现的联邦学习仿真系统采用Python语言编写，整体结构借鉴了FedML\footnote{\url{https://github.com/FedML-AI/FedML}}\parencite{he_2020_fedml}，\texttt{FedProx}\footnote{\url{https://github.com/litian96/FedProx}}\parencite{sahu2018fedprox}以及pFL-Bench\footnote{\url{https://github.com/alibaba/FederatedScope/tree/master/benchmark/pFL-Bench}}\parencite{chen_2022_pfl_bench}等已有的一些工业应用型以及研究型的联邦学习框架。
+为了方便对联邦学习算法进行数值试验的对比与验证，本文开发了一套用于单机模拟的联邦学习仿真系统\texttt{fl-sim}。本文实现的联邦学习仿真系统采用Python语言编写，整体结构借鉴了FedML\footnote{\url{https://github.com/FedML-AI/FedML}}\parencite{he_2020_fedml}，\texttt{FedProx}\footnote{\url{https://github.com/litian96/FedProx}}\parencite{sahu2018fedprox}以及pFL-Bench\footnote{\url{https://github.com/alibaba/FederatedScope/tree/master/benchmark/pFL-Bench}}\parencite{chen_2022_pfl_bench}等已有的一些工业应用型以及研究型的联邦学习框架。
 
 一套设计、实现质量良好的仿真系统能够极大地促进联邦学习算法的研究，并保障其持续的进行。本文开发的联邦学习仿真系统的基本设计思路是基于配置文件 (或者Python类)，将数据集读取、模型参数初始化、节点分配等工作自动化。同时将节点与算法解耦合，节点需要执行的通用操作，例如通讯、获取模型参数等进行统一实现，算法相关的操作通过预留接口的方式完成。这样，利用这一套仿真系统，可以专注于联邦学习优化算法的实现与验证工作。
 
+本文实现的联邦学习仿真系统相关的代码地址为：
+\begin{itemize}
+    \item GitHub: \urlgithub
+    \item gitee: \urlgitee
+\end{itemize}
+
 \subsection{仿真系统的主要模块}
 
-本文实现的联邦学习仿真系统主要包含以下几个模块
+本文实现的联邦学习仿真系统\texttt{fl-sim}主要包含以下几个模块
 \begin{itemize}
     \item \texttt{data\_processing}: 联邦学习数据集数据处理模块，主要基于已有的一些研究型联邦学习框架LEAF\cite{caldas2018_leaf}，应用型联邦学习框架FedML\cite{he_2020_fedml}，以及之前的一些联邦学习领域影响力较大的工作\cite{mcmahan2017fed_avg,sahu2018fedprox,reddi2020fed_opt}提出的联邦数据集，包括图像分类的数据集MNIST\cite{Lecun_1998_mnist}, EMNIST\cite{cohen2017emnist}, Federated-EMNIST\cite{caldas2018_leaf,sahu2018fedprox}，文本情感分类数据集Sent140\cite{sent140,caldas2018_leaf},文本数据集Shakespeare (用于下一字符预测任务, Next Character Prediction)\cite{mcmahan2017fed_avg,caldas2018_leaf}等。每一个数据集以Python类的形式提供，其中打包了数据集自动下载，数据预处理(例如图像数据增强、归一化以及文本数据的向量化等操作)，为节点分配数据，创建模型训练用的数据加载器 (PyTorch DataLoader)，计算模型预测结果指标 (例如平均损失 (Mean Loss)，准确度 (Accuracy) 等) 等功能，并提供了该数据集常用模型的列表供选择使用。本文随后的章节\S\ref{sec:chap5-datasets}将对已集成的联邦学习数据集进行更具体的介绍。
     \item \texttt{models}: 此模块主要聚合了一些已有的联邦学习文献\cite{mcmahan2017fed_avg,zhang2020fedpd,sahu2018fedprox,Ghosh_2022_cfl,he_2020_fedml}中使用过的试验模型，包括一些卷积神经网络 (Convolutional Neural Network, CNN)\index{卷积神经网络, Convolutional Neural Network, CNN}, 循环神经网络 (Recurrent Neural Network, RNN)\index{循环神经网络, Recurrent Neural Network, RNN}，多层感知机 (Multi-Layer Perceptron, MLP)\index{多层感知机, Multi-Layer Perceptron, MLP} 等，为\texttt{data\_processing}模块中的数据集提供备选的试验模型。
@@ -52,10 +58,62 @@
 
 \subsection{仿真系统的易用性和可扩展性}
 
-待写。。。。
+为了让联邦学习仿真系统\texttt{fl-sim}简单易用，我们为其设计封装了一个命令行接口 (Command Line Interface, CLI)\index{命令行接口, Command Line Interface, CLI}, 通过读取YAML\footnote{\url{https://yaml.org/}}配置文件的方式，执行相应的试验。如下是\href{https://github.com/wenh06/fl-sim/blob/master/example-configs/all-alg-fedprox-femnist.yml}{配置文件}的示例：
+\begin{lstlisting}[language=yaml]
+# Example config file for fl-sim command line interface
 
-本文实现的联邦学习仿真系统相关的代码地址为：
+strategy:
+  matrix:
+    algorithm:
+    - Ditto
+    - FedDR
+    - FedAvg
+    - FedAdam
+    - FedProx
+    - FedPD
+    - FedSplit
+    - IFCA
+    - pFedMac
+    - pFedMe
+    - ProxSkip
+    - SCAFFOLD
+    clients_sample_ratio:
+    - 0.1
+    - 0.3
+    - 0.7
+    - 1.0
+
+algorithm:
+  name: ${{ matrix.algorithm }}
+  server:
+    num_clients: null
+    clients_sample_ratio: ${{ matrix.clients_sample_ratio }}
+    num_iters: 100
+    p: 0.3  # for FedPD, ProxSkip
+    lr: 0.03  # for SCAFFOLD
+    num_clusters: 10  # for IFCA
+    log_dir: all-alg-fedprox-femnist
+  client:
+    lr: 0.03
+    num_epochs: 10
+    batch_size: null  # null for default batch size
+    scheduler:
+      name: step  # StepLR
+      step_size: 1
+      gamma: 0.99
+dataset:
+  name: FedProxFEMNIST
+  datadir: null  # default dir
+  transform: none  # none for static transform (only normalization, no augmentation)
+model:
+  name: cnn_femmist_tiny
+seed: 0
+\end{lstlisting}
+其中，strategy字段定义了我们执行``超参数网格搜索''的策略，在这个例子中，我们对列出的12种算法\texttt{Ditto}、\texttt{FedDR}、\texttt{FedAvg}、\texttt{FedAdam}、\texttt{FedProx}、\texttt{FedPD}、\texttt{FedSplit}、\texttt{IFCA}、\texttt{pFedMac}、\texttt{pFedMe}、\texttt{ProxSkip}、\texttt{SCAFFOLD}都执行子节点参与率分别为$0.1, 0.3, 0.7, 1.0$的4次试验，共计48次试验。algorithm字段下的name子字段指定了单次试验的联邦学习算法，server以及client子字段分别指定了中心节点以及子节点的超参数设置。dataset以及model字段分别指定了单次试验使用的联邦学习数据集以及试验模型。
+
+联邦学习仿真系统\texttt{fl-sim}也有极强的可扩展性。我们设计了如下的几个``注册''装饰器 (Python decorator\footnote{\url{https://peps.python.org/pep-0318/}}):
 \begin{itemize}
-    \item GitHub: \urlgithub
-    \item gitee: \urlgitee
+    \item \verb|register_algorithm| (在模块 \href{https://github.com/wenh06/fl-sim/blob/master/fl_sim/algorithms/_register.py}{\texttt{fl\_sim.algorithms}} 中实现)
+    \item \verb|register_fed_dataset| (在模块 \href{https://github.com/wenh06/fl-sim/blob/master/fl_sim/data_processing/_register.py}{\texttt{fl\_sim.data\_processing}} 中实现)
 \end{itemize}
+使用者可以利用这些装饰器装饰自行实现的联邦学习算法以及数据集相关的Python类，同时将配置文件中的algorithm, dataset等字段的name子字段配置为相应的文件地址即可。
