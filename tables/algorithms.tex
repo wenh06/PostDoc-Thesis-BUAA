@@ -1,12 +1,15 @@
 \begin{table}[htbp]
 \centering
 \begin{threeparttable}[b]
+\caption{基于本文开发的联邦学习仿真系统复现的典型联邦学习算法}
+\label{tab:algorithms}
 \begin{tabular}{|c|c|c|}
 \hlineB{3.5}
 算法 & 发表杂志/会议 & 官方代码库 \\
 \hline \hline
+\href{https://github.com/wenh06/fl-sim/tree/master/fl_sim/algorithms/fedopt}{\texttt{FedAvg}}\tnote{$\ast$} & \href{https://proceedings.mlr.press/v54/mcmahan17a.html}{AISTATS2017}\cite{mcmahan2017fed_avg} & N/A \\
+\href{https://github.com/wenh06/fl-sim/tree/master/fl_sim/algorithms/fedopt}{\texttt{FedOpt}}\tnote{$\dagger$} & \href{https://arxiv.org/abs/2003.00295}{arXiv:2003.00295}\cite{reddi2020fed_opt} & N/A \\
 \href{https://github.com/wenh06/fl-sim/tree/master/fl_sim/algorithms/fedprox}{\texttt{FedProx}} & \href{https://proceedings.mlsys.org/paper_files/paper/2020/hash/1f5fe83998a09396ebe6477d9475ba0c-Abstract.html}{MLSys2020}\cite{sahu2018fedprox} & \url{https://github.com/litian96/FedProx} \\
-\href{https://github.com/wenh06/fl-sim/tree/master/fl_sim/algorithms/fedopt}{\texttt{FedOpt}}\tnote{$\ast$} & \href{https://arxiv.org/abs/2003.00295}{arXiv:2003.00295}\cite{reddi2020fed_opt} & N/A \\
 \href{https://github.com/wenh06/fl-sim/tree/master/fl_sim/algorithms/pfedme}{\texttt{pFedMe}} & \href{https://proceedings.neurips.cc/paper_files/paper/2020/hash/f4f1f13c8289ac1b1ee0ff176b56fc60-Abstract.html}{NeurIPS2020}\cite{t2020pfedme} & \url{https://github.com/CharlieDinh/pFedMe} \\
 \href{https://github.com/wenh06/fl-sim/tree/master/fl_sim/algorithms/fedsplit}{\texttt{FedSplit}} & \href{https://proceedings.neurips.cc/paper/2020/hash/4ebd440d99504722d80de606ea8507da-Abstract.html}{NeurIPS2020}\cite{pathak2020fedsplit} & N/A \\
 \href{https://github.com/wenh06/fl-sim/tree/master/fl_sim/algorithms/feddr}{\texttt{FedDR}} & \href{https://papers.nips.cc/paper/2021/hash/fe7ee8fc1959cc7214fa21c4840dff0a-Abstract.html}{NeurIPS2021}\cite{tran2021feddr} & \url{https://github.com/unc-optimization/FedDR} \\
@@ -19,9 +22,8 @@
 \hlineB{3.5}
 \end{tabular}
 \begin{tablenotes}
-\item[$\ast$] {\smaller \texttt{FedAvg} (还包括\texttt{FedAdam}、\texttt{FedYogi}等) 是\texttt{FedOpt}的特例。}
+\item[$\ast$] {\smaller \texttt{FedAvg}作为\texttt{FedOpt}的特例被实现。}
+\item[$\dagger$] {\smaller 包括\texttt{FedAdam}、\texttt{FedYogi}、\texttt{FedAdagrad}等算法。}
 \end{tablenotes}
-\caption{基于本文开发的联邦学习仿真系统复现的典型联邦学习算法}
-\label{tab:algorithms}
 \end{threeparttable}
 \end{table}
