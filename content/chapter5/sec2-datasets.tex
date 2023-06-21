@@ -2,8 +2,8 @@
 \addcontentsline{toe}{section}{{\currentchapter .2\ \ Datasets for Federated Learning}\numberline\,}
 \label{sec:chap5-datasets}
 
-% NOT finished
-% NOT indexed
+% almost finished
+% indexed
 
 正如本文\S\ref{sec:chap1-fl-applications}~中提到的，联邦学习所涉及、处理的实际数据往往具有强烈的统计异质性，因此用于联邦学习仿真试验的试验数据集需要以多种方式、从多个角度尽量模拟、贴近这种统计异质性。比较幸运的是，在本章\S\ref{sec:chap5-design}中提到的一些联邦学习代码框架，包括FedML\cite{he_2020_fedml}, LEAF\cite{caldas2018_leaf}，以及\texttt{FedProx}\cite{sahu2018fedprox}, \texttt{IFCA}\cite{Ghosh_2022_cfl}等联邦学习算法文献，已经将多个数据集依照联邦学习场景的特点进行了相应的适配以及标准化，方便进行联邦学习算法的对比研究，以及效果复现等工作。
 
@@ -47,17 +47,35 @@ CIFAR10/100数据集\cite{cifar}由抓取自互联网并统一降采样为$32\ti
     \item \texttt{FedRotatedCIFAR10}：生成方式与\texttt{FedRotatedMNIST}\cite{Ghosh_2022_cfl}类似，不同之处在于基础数据集从MNIST替换为了CIFAR10。
 \end{itemize}
 
-Shakespeare数据集是构建自莎士比亚全集 (The Complete Works of William Shakespeare，主要是戏剧)\footnote{\url{https://www.gutenberg.org/ebooks/100}} 的联邦学习数据集，首次提出是在参考文献\parencite{mcmahan2017fed_avg}中。随后联邦学习相关的软件库LEAF\cite{caldas2018_leaf}， TensorFlow Federated，以及FedML\cite{he_2020_fedml}等都对Shakespeare数据集进行了调整。本文实现的联邦学习仿真系统\texttt{fl-sim}提供的相关联邦学习数据集\texttt{FedShakespeare}主要遵循了FedML\cite{he_2020_fedml}的处理方式，将Shakespeare数据集按戏剧作品的角色分为了715份 (715个子节点), 即每份数据都是同一个戏剧角色的台词。
+以上是本文实现的联邦学习仿真系统\texttt{fl-sim}集成的主要的一些计算机视觉相关的联邦数据集，相关的用于基准测试的任务是图像分类预测，损失函数为交叉熵损失。\texttt{fl-sim}为这些数据集预置了几个典型\cite{mcmahan2017fed_avg, zhang2020fedpd, sahu2018fedprox}的卷积神经网络模型以及多层感知机模型作为基准测试模型。
 
-Sent140  待写。。。
+Shakespeare数据集是构建自莎士比亚全集 (The Complete Works of William Shakespeare，主要是戏剧)\footnote{\url{https://www.gutenberg.org/ebooks/100}} 的联邦学习数据集，首次提出是在参考文献\parencite{mcmahan2017fed_avg}中。随后联邦学习相关的软件库LEAF\cite{caldas2018_leaf}， TensorFlow Federated，以及FedML\cite{he_2020_fedml}等都对Shakespeare数据集进行了调整。本文实现的联邦学习仿真系统\texttt{fl-sim}提供的相关联邦学习数据集\texttt{FedShakespeare}主要遵循了FedML\cite{he_2020_fedml}的处理方式，将Shakespeare数据集按戏剧作品的角色分为了715份 (715个子节点), 即每份数据都是同一个戏剧角色的台词。数据集\texttt{FedShakespeare}相关的机器学习任务一般是下一字符预测。本文实现的联邦学习仿真系统\texttt{fl-sim}预置了一个循环神经网络模型\cite{mcmahan2017fed_avg}作为基准测试模型。
 
-Synthetic  待写。。。
+Sent140数据集\cite{sent140}是从社交网站推特 (Twitter) 爬取的数据集，其内容是推特用户发表的个人动态 (有字数限制)，经过人工打标签，分为正面情绪、负面情绪两类。Sent140数据集由参考文献\parencite{sahu2018fedprox}首次引入联邦学习的研究领域。本文实现的联邦学习仿真系统\texttt{fl-sim}提供的相关联邦数据集\texttt{FedProxSent140}遵循了参考文献\parencite{sahu2018fedprox}的处理方式：按用户将数据集Sent140分为772份 (772个子节点)，即每份数据都是同一个用户在推特发表的个人动态。联邦数据集\texttt{FedProxSent140}预置的基准测试模型是一个循环神经网络模型\cite{sahu2018fedprox}，做二分类的正、负面情感分类。
 
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=\textwidth]{figures/fedproxfemnist.pdf}
-% \caption{待写}
-% \label{fig:fedproxfemnist-experiment}
-% \end{figure}
-
-待写。。。。
+除了以上的计算机视觉以及自然语言处理相关的联邦数据集之外，本文实现的联邦学习仿真系统\texttt{fl-sim}还集成了参考文献\parencite{sahu2018fedprox}提出的人造数据集 (Synthetic Dataset)，命名为\texttt{FedSynthetic}。具体来说，子节点$k$上的数据$(x, y)$依照如下的关系 (一个简单的线性模型) 生成
+\begin{equation}
+\label{eq:fed-synthetic}
+y = \argmax \left( \operatorname{softmax} \left( W_kx + b_k \right) \right),
+\end{equation}
+其中$x \in \R^{n}, W_k \in \R^{c \times n}, b_k \in \R^{c},$ $c$是可以设置的分类问题类别数目，$n$是是可以设置的特征维数。矩阵$W_k, b_k$的元素随机选取自均值为$u_k,$ 方差为$1$的正态分布：
+\begin{equation*}
+W_k \sim \mathcal{N}(u_k, 1), \quad b_k \sim \mathcal{N}(u_k, 1),
+\end{equation*}
+而$u_k$本身也随机选取自均值为$0,$ 方差为$\alpha \in \R$的正态分布：
+\begin{equation*}
+u_k \sim \mathcal{N}(0, \alpha).
+\end{equation*}
+自变量 (特征) $x$随机选取均值为$v_k \in \R^n,$ 协方差矩阵为$\Sigma$的正态分布：
+\begin{equation*}
+x \sim \mathcal{N}(v_k, \Sigma),
+\end{equation*}
+其中协方差矩阵$\Sigma$为对角矩阵，且满足$\Sigma_{jj} = j^{-1.2},$ $j = 1, \ldots, n;$ 均值向量$v$的元素选取自均值为$B_k,$ 方差为$1$的正态分布
+\begin{equation*}
+v_k \sim \mathcal{N}(B_k, 1),
+\end{equation*}
+而$B_k$本身选取自均值为$0,$ 方差为$\beta \in \R$的正态分布：
+\begin{equation*}
+B_k \sim \mathcal{N}(0, \beta).
+\end{equation*}
+可以看到，若$\alpha$或者$\beta$取$0,$ 那么相应的$u_k$或者$B_k$只能取值为$0,$ 从而$W_k, b_k$或者$v_k$只能取与$k$无关的同一个正态分布，或是标准正态分布$\mathcal{N}(0, 1),$ 或是$\mathcal{N}(0, \Sigma).$ 可以说$\alpha$和$\beta$决定了联邦数据集\texttt{FedSynthetic}的统计异质性的特点。此联邦数据集预置的基准测试模型是多层感知机模型。

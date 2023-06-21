@@ -14,14 +14,14 @@
     \item 支持关键字形式的数值曲线合并，合并为均值曲线$\pm$误差界 (Error Bound) 的形式。误差界有4种选择，分别是标准差 (Standard Deviation, STD)，样本均值的估计标准误差 (Standard Error of the Mean, SEM)，四分位数 (Quartile)以及四分位距 (Interquartile Range, IQR).
 \end{itemize}
 
-图\ref{fig:panel-init}~是可视化的面板系统\texttt{Panel}的初始化界面。图\ref{fig:panel-init}~是可视化的面板系统\texttt{Panel}的使用示例，图中为使用CIFAR10数据集对\texttt{IFCA}算法\cite{Ghosh_2022_cfl}进行10轮试验 (5个不同的随机种子$\times$2种不同的数据增强组合)，同时以\texttt{FedAvg}算法以及局部训练作为对比方法的试验结果 (模型在验证集上的准确率)。可以清楚地看到\texttt{IFCA}算法相较于\texttt{FedAvg}算法在这一组试验上有明显的数值优势。
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{figures/panel-init.png}
     \caption{可视化的面板系统\texttt{Panel}的初始化界面}
     \label{fig:panel-init}
 \end{figure}
+
+图\ref{fig:panel-init}~是可视化的面板系统\texttt{Panel}的初始化界面。图\ref{fig:panel-init}~是可视化的面板系统\texttt{Panel}的使用示例，图中为使用CIFAR10数据集对\texttt{IFCA}算法\cite{Ghosh_2022_cfl}进行10轮试验 (5个不同的随机种子$\times$2种不同的数据增强组合)，同时以\texttt{FedAvg}算法以及局部训练作为对比方法的试验结果 (模型在验证集上的准确率)。可以清楚地看到\texttt{IFCA}算法相较于\texttt{FedAvg}算法在这一组试验上有明显的数值优势。
 
 \begin{figure}[ht]
     \centering
