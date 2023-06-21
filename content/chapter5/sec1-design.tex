@@ -2,7 +2,7 @@
 \newcommand{\urlgitee}{\url{https://gitee.com/wenh06/fl-sim}}
 
 \section{仿真系统设计}
-\addcontentsline{toe}{section}{{5.1\ \ Design of the Simulation System}\numberline\,}
+\addcontentsline{toe}{section}{{\currentchapter .1\ \ Design of the Simulation System}\numberline\,}
 \label{sec:chap5-design}
 
 % almost finished
@@ -34,6 +34,7 @@
 \begin{itemize}
     \item \texttt{get\_detached\_model\_parameters}：获取当前节点分离形式 (即从PyTorch的计算图 (Computation Graph) \index{计算图, Computation Graph}) 的模型参数。
     \item \texttt{get\_gradients}：获取当前被训练模型 (或者说目标函数) 的梯度，或者梯度的范数。
+    \item \texttt{get\_norm}：计算模型以及一些中间变量的范数。主要用于调试联邦学习算法，例如观察算法是否陷入局部最优。
 \end{itemize}
 同时，以抽象方法 (Python abstractmethod) 的形式，约定所有类型的节点都必须实现的操作，包括
 \begin{itemize}
@@ -58,8 +59,8 @@
 
 \subsection{仿真系统的易用性和可扩展性}
 
-为了让本文设计的联邦学习仿真系统\texttt{fl-sim}简单易用，我们为其设计封装了一个命令行接口 (Command Line Interface, CLI)\index{命令行接口, Command Line Interface, CLI}, 通过读取YAML\footnote{具体介绍可见\url{https://yaml.org/}}配置文件的方式，执行相应的试验。如下是\href{https://github.com/wenh06/fl-sim/blob/master/example-configs/all-alg-fedprox-femnist.yml}{配置文件}的示例：
-\begin{lstlisting}[language=yaml]
+为了让本文设计的联邦学习仿真系统\texttt{fl-sim}简单易用，我们为其设计、封装了一个命令行接口 (Command Line Interface, CLI)\index{命令行接口, Command Line Interface, CLI}, 通过读取YAML\footnote{具体介绍可见\url{https://yaml.org/}}配置文件的方式，执行相应的试验。如下是\href{https://github.com/wenh06/fl-sim/blob/master/example-configs/all-alg-fedprox-femnist.yml}{配置文件}的示例：
+\begin{lstlisting}[language=yaml, caption={一份典型的联邦学习仿真系统\texttt{fl-sim}命令行接口配置文件},label={lst:fl-sim-config}]
 # Example config file for fl-sim command line interface
 
 strategy:

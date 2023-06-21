@@ -1,5 +1,5 @@
 \section{联邦学习数据集}
-\addcontentsline{toe}{section}{{5.2\ \ Datasets for Federated Learning}\numberline\,}
+\addcontentsline{toe}{section}{{\currentchapter .2\ \ Datasets for Federated Learning}\numberline\,}
 \label{sec:chap5-datasets}
 
 % NOT finished
@@ -20,7 +20,7 @@ MNIST数据集 (\textbf{M}odified \textbf{N}ational \textbf{I}nstitute of \textb
 \label{fig:mnist_random_grid_view}
 \end{figure}
 
-MNIST是非常经典的机器学习数据集，经常用作测试机器学习模型，特别是深度学习模型分类效果的基准数据集。尽管随着深度学习的发展，MNIST数据集由于规模偏小，已经不适用于评测计算机视觉领域的大模型，特别是近年来涌现的Vision Transformer\cite{dosovitskiy2021_vit}，逐渐被ImageNet\cite{deng2009imagenet}, JFT-300M\cite{Sun_2017_JFT-300M}等大型数据集所取代，但经过合适处理\cite{mcmahan2017fed_avg,sahu2018fedprox}的MNIST数据集，作为联邦学习，特别是跨设备 (Cross-Silo) 场景的联邦学习的算法评测基准数据集，仍然是非常合适以及常用的\cite{reddi2020fed_opt, tran2021feddr, Ghosh_2022_cfl, li2021pfedmac, t2020pfedme}。
+MNIST是非常经典的机器学习数据集，经常用作测试机器学习模型，特别是深度学习模型分类效果的基准数据集。尽管随着深度学习的发展，MNIST数据集由于规模偏小，已经不适用于评测计算机视觉领域的大模型，特别是近年来涌现的Vision Transformer\cite{dosovitskiy2021_vit}，逐渐被ImageNet\cite{deng2009imagenet}, JFT-300M\cite{Sun_2017_JFT-300M}等大型数据集所取代，但经过合适处理\cite{mcmahan2017fed_avg, caldas2018_leaf, sahu2018fedprox}的MNIST数据集，作为联邦学习，特别是跨设备 (Cross-Silo) 场景的联邦学习的算法评测基准数据集，仍然是非常合适以及常用的\cite{reddi2020fed_opt, tran2021feddr, Ghosh_2022_cfl, li2021pfedmac, t2020pfedme}。
 
 EMNIST数据集 (Extended MNIST database)\cite{cohen2017emnist} 是MNIST数据集的一个扩展,添加了手写的有大小写之分的26个英文字母图片，共计62类。EMNIST数据集也是常用的联邦学习的算法评测基准数据集\cite{sahu2018fedprox, zhang2020fedpd, acar2021feddyn}。数据集MNIST和EMNIST都来源于美国国家标准技术研究所 (National Institute of Standards and Technology, NIST)的手写表格和字符数据库 (Handprinted Forms and Characters Database)\cite{nist-19}。
 
@@ -32,7 +32,7 @@ EMNIST数据集 (Extended MNIST database)\cite{cohen2017emnist} 是MNIST数据�
     \item \texttt{FedRotatedMNIST}：(依照参考文献\parencite{Ghosh_2022_cfl}特殊处理的MNIST数据集) 将每幅图片旋转多个角度 (例如$0^\circ, 90^\circ, 180^\circ, 270^\circ$)，并将数据平均分配成多份 (多个子节点)，保证每一份数据上图片旋转的角度一致 (例如都旋转了$90^\circ$)。这样一来，参与联邦学习训练的节点自然形成了多个聚落 (Cluster)，非常适合用于评测聚类联邦学习相关的算法。
 \end{itemize}
 
-CIFAR10/100数据集\cite{cifar}由抓取自互联网并统一降采样为$32\times 32$像素大小的RGB~3通道图片组成，共有60000张图片，分为10/100类，以作者的工作单位加拿大高等研究所 (Canadian Institute for Advanced Research) 命名。图\ref{fig:cifar10_random_grid_view}~是从CIFAR10数据集中随机抽取$8\times 16$张图片组成的网格图。CIFAR10/100也是目前联邦学习理论及算法研究中最常用的基准数据集之一\cite{zhang2020fedpd,acar2021feddyn,Ghosh_2022_cfl}。
+CIFAR10/100数据集\cite{cifar}由抓取自互联网并统一降采样为$32\times 32$像素大小的RGB~3通道图片组成，共有60000张图片，分为10/100类，以作者的工作单位加拿大高等研究所 (Canadian Institute for Advanced Research) 命名。图\ref{fig:cifar10_random_grid_view}~是从CIFAR10数据集中随机抽取$8\times 16$张图片组成的网格图。CIFAR10/100也是目前联邦学习理论及算法研究中最常用的基准数据集之一\cite{zhang2020fedpd, acar2021feddyn, Ghosh_2022_cfl}。
 
 \begin{figure}[ht]
 \centering
@@ -47,7 +47,7 @@ CIFAR10/100数据集\cite{cifar}由抓取自互联网并统一降采样为$32\ti
     \item \texttt{FedRotatedCIFAR10}：生成方式与\texttt{FedRotatedMNIST}\cite{Ghosh_2022_cfl}类似，不同之处在于基础数据集从MNIST替换为了CIFAR10。
 \end{itemize}
 
-Shakespeare  待写。。。
+Shakespeare数据集是构建自莎士比亚全集 (The Complete Works of William Shakespeare，主要是戏剧)\footnote{\url{https://www.gutenberg.org/ebooks/100}} 的联邦学习数据集，首次提出是在参考文献\parencite{mcmahan2017fed_avg}中。随后联邦学习相关的软件库LEAF\cite{caldas2018_leaf}， TensorFlow Federated，以及FedML\cite{he_2020_fedml}等都对Shakespeare数据集进行了调整。本文实现的联邦学习仿真系统\texttt{fl-sim}提供的相关联邦学习数据集\texttt{FedShakespeare}主要遵循了FedML\cite{he_2020_fedml}的处理方式，将Shakespeare数据集按戏剧作品的角色分为了715份 (715个子节点), 即每份数据都是同一个戏剧角色的台词。
 
 Sent140  待写。。。
 
