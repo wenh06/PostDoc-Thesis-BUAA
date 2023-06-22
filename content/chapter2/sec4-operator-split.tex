@@ -12,7 +12,7 @@
 
 \begin{example}
 \label{eg:correctness}
-假设我们要拟合线性模型$y = mx$, $m$为需要拟合的变量，使用均方误差 (Mean Squared Error, MSE)\index{均方误差, Mean Squared Error, MSE} 做损失函数(目标函数)，即我们考虑的是一个最小二乘问题 (Least Square Problem, LSP)\index{最小二乘问题, Least Square Problem, LSP)}。假设我们有两个参与方，参与方1的拥有的训练数据为$\{ (0, 2), (1, 2) \},$ 相应的目标函数为
+假设我们要拟合线性模型$y = mx$, $m$为需要拟合的变量，使用均方误差 (Mean Squared Error, MSE)\index{均方误差, Mean Squared Error, MSE} 做损失函数(目标函数)，即我们考虑的是一个最小二乘问题 (Least Square Problem, LSP)\index{最小二乘问题, Least Square Problem, LSP}。假设我们有两个参与方，参与方1的拥有的训练数据为$\{ (0, 2), (1, 2) \},$ 相应的目标函数为
 \begin{equation*}
 f_1(m_1) = \frac{1}{2} (4 + (m_1 - 2)^2);
 \end{equation*}
@@ -137,7 +137,7 @@ G = \sum\limits_{i=0}^{R-1} ( I - \frac{1}{\mu} A_k^TA_k )^i, ~~ P_k = ( I + \fr
 \text{subject to} & \Theta = \col(\theta_1, \cdots, \theta_K) \in \mathcal{E}，
 \end{array}
 \end{equation*}
-我们通过使用$\mathcal{E}$的指示函数 (Indicator Function)\index{指示函数, Indicator Function)} 作为罚函数的方式将以上问题转换为无约束优化问题
+我们通过使用$\mathcal{E}$的指示函数 (Indicator Function)\index{指示函数, Indicator Function} 作为罚函数的方式将以上问题转换为无约束优化问题
 \begin{equation}
 \label{eq:fedsplit-pen}
 \minimize \quad F(\Theta) + \iota_{\mathcal{E}}(\Theta) = \frac{1}{K} \sum\limits_{k=1}^K f_k(\theta_k) + \iota_{\mathcal{E}}(\Theta).
