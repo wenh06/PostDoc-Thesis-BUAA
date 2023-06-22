@@ -5,7 +5,7 @@
 % almost finished
 % indexed
 
-本文已经在\S~\ref{sec:chap2-primal-dual}~初步涉及了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用，并提出了\texttt{ProxSkip}算法，其伪代码见算法~\ref{algo:proxskip}。需要注意的是，此算法在文献\parencite{proxskip}中实际上被当做一般性的跳步算法在联邦学习中的应用，并将其命名为\texttt{Scaffnew}。我们也很容易从算法~\ref{algo:proxskip}~中看出，它在某种意义上来说就是\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~结合了跳步更新技术的改进算法。
+本报告已经在\S~\ref{sec:chap2-primal-dual}~初步涉及了使用``跳步'' (Skipping) 更新技术的联邦学习算法了。事实上，最早的联邦学习算法，联邦平均算法\texttt{FedAvg}\cite{mcmahan2017fed_avg}在子节点上的内循环执行多步梯度下降的做法，在某种意义上也可以视作是跳步更新的方法。文献\cite{proxskip,proxskip-vr}进一步深入探讨了跳步更新这一技术在联邦学习优化算法中的应用，并提出了\texttt{ProxSkip}算法，其伪代码见算法~\ref{algo:proxskip}。需要注意的是，此算法在文献\parencite{proxskip}中实际上被当做一般性的跳步算法在联邦学习中的应用，并将其命名为\texttt{Scaffnew}。我们也很容易从算法~\ref{algo:proxskip}~中看出，它在某种意义上来说就是\texttt{SCAFFOLD}算法~\ref{algo:scaffold}~结合了跳步更新技术的改进算法。
 
 \input{algorithms/proxskip}
 

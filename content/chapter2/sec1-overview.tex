@@ -11,7 +11,7 @@
 
 这里还需要强调的是，联邦平均算法\texttt{FedAvg}相对于\texttt{FedSGD}的另一个关键的改进是，子节点与中心节点之间传输的信息，从梯度改为了模型参数。这在某种程度上规避了从梯度泄露联邦学习参与方私密训练数据\cite{zhu2019deep_leakage}的潜在风险。
 
-联邦学习在数学上来说，其本质是一个极小化经验风险函数 (Minimization of Empirical Risk Function, 见下文的式~\eqref{eq:fl-basic})的优化问题。沿用式~\eqref{eq:general-hfl}~中的记号，本文考虑的联邦学习中的优化问题，其最基本的格式如下
+联邦学习在数学上来说，其本质是一个极小化经验风险函数 (Minimization of Empirical Risk Function, 见下文的式~\eqref{eq:fl-basic})的优化问题。沿用式~\eqref{eq:general-hfl}~中的记号，本报告考虑的联邦学习中的优化问题，其最基本的格式如下
 \begin{equation}
 \label{eq:fl-basic-dist}
 \begin{array}{cl}
@@ -69,7 +69,7 @@ f^* := \inf\limits_{\theta \in \R^d} f(\theta) > - \infty
 \label{eq:iid-2}
 \sum\limits_{k=1}^K \lVert \nabla f_k(\theta) \rVert^2 = \lVert f(\theta) \rVert^2, ~ \forall \theta \in \left\{ \theta \in \R^d ~ \middle| ~ \lVert f(\theta) \rVert^2 > \varepsilon \right\}.
 \end{equation}
-\item[(A4-2)] 数据非独立同分布 (Non-I.I.D.)，这个时候我们需要有一个量，用来度量这种统计上的异质性的程度。这个量可以有多种定义方式\cite{karimireddy2020scaffold, zhang2020fedpd, li2019convergence, sahu2018fedprox}，本文采用文献\parencite{karimireddy2020scaffold}以及文献\parencite{zhang2020fedpd}中定义的梯度差异有界性 (Bounded Gradient Dissimilarity, BGD)\index{梯度差异有界性, Bounded Gradient Dissimilarity, BGD}，记作$(G; B)$-BGD. 具体来说，存在常数$G > 0,$ 以及$B \geqslant 0,$ 满足
+\item[(A4-2)] 数据非独立同分布 (Non-I.I.D.)，这个时候我们需要有一个量，用来度量这种统计上的异质性的程度。这个量可以有多种定义方式\cite{karimireddy2020scaffold, zhang2020fedpd, li2019convergence, sahu2018fedprox}，本报告采用文献\parencite{karimireddy2020scaffold}以及文献\parencite{zhang2020fedpd}中定义的梯度差异有界性 (Bounded Gradient Dissimilarity, BGD)\index{梯度差异有界性, Bounded Gradient Dissimilarity, BGD}，记作$(G; B)$-BGD. 具体来说，存在常数$G > 0,$ 以及$B \geqslant 0,$ 满足
 \begin{equation}
 \label{eq:bdd_grad_dissim}
 \dfrac{1}{K} \sum\limits_{k=1}^K \lVert \nabla f_k(\theta) \rVert^2 \leqslant G^2 + B^2 \lVert \nabla f(\theta) \rVert^2, ~ \forall \theta \in \R^d.
@@ -111,7 +111,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 \text{subject to} & \theta_k = \theta, ~ k = 1, \ldots, K.
 \end{array}
 \end{equation}
-我们很容易看出~\eqref{eq:fl-basic-constraint}~与~\eqref{eq:fl-basic}~这两种格式的等价性。格式~\eqref{eq:fl-basic-constraint}~在分布式优化中被称作共识优化问题 (Consensus Problem)\index{共识优化问题, Consensus Problem}。这种格式的好处是，目标函数变成了分块可分离的 (Block Separable)\index{分块可分离, Block Separable)}。目标函数的分块可分离性对于设计可并行化的算法是巨大的便利。我们会在本文随后的章节中进一步发现，约束优化的格式~\eqref{eq:fl-basic-constraint}~及其变体，更有利于我们对算法进行理论分析，进而对算法的改进做出指导。
+我们很容易看出~\eqref{eq:fl-basic-constraint}~与~\eqref{eq:fl-basic}~这两种格式的等价性。格式~\eqref{eq:fl-basic-constraint}~在分布式优化中被称作共识优化问题 (Consensus Problem)\index{共识优化问题, Consensus Problem}。这种格式的好处是，目标函数变成了分块可分离的 (Block Separable)\index{分块可分离, Block Separable)}。目标函数的分块可分离性对于设计可并行化的算法是巨大的便利。我们会在本报告随后的章节中进一步发现，约束优化的格式~\eqref{eq:fl-basic-constraint}~及其变体，更有利于我们对算法进行理论分析，进而对算法的改进做出指导。
 
 \subsection{联邦平均算法}
 \label{subsec:chap2-overview-fedavg}

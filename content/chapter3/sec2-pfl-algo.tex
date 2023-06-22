@@ -5,7 +5,7 @@
 % NOT finished
 % NOT indexed
 
-本节主要介绍已有的一些基于正则化目标函数的个性化联邦学习算法，此类算法的基本形式见上一节\S~\ref{sec:chap3-pfl}~的式~\eqref{eq:pfl-general}。本文称这一类的基于正则化目标函数的最优化问题为弱共识问题 (Weak Consensus Problem)\index{弱共识问题, Weak Consensus Problem}。本节将介绍一些基于此类问题而提出的个性化联邦学习算法。
+本节主要介绍已有的一些基于正则化目标函数的个性化联邦学习算法，此类算法的基本形式见上一节\S~\ref{sec:chap3-pfl}~的式~\eqref{eq:pfl-general}。本报告称这一类的基于正则化目标函数的最优化问题为弱共识问题 (Weak Consensus Problem)\index{弱共识问题, Weak Consensus Problem}。本节将介绍一些基于此类问题而提出的个性化联邦学习算法。
 
 \subsection*{无环随机梯度下降算法\texttt{L2SGD}}
 % almost finished
@@ -135,7 +135,7 @@ F_k(\theta) = \mathcal{M}_{f_k, \lambda} (\theta) := \inf\limits_{\theta_k} \lef
 \label{eq:ditto-local-1}
 \omega_k^{(t+1)} \gets \prox_{f_k, \mu} (\theta^{(t)}) = \argmin\limits_{\omega_k} \left\{ f_k(\omega_k) + \frac{\mu}{2} \lVert \omega_k - \theta^{(t)} \rVert^2 \right\}.
 \end{equation}
-与本文之前介绍的算法 (\texttt{FedSplit}算法~\ref{algo:fedsplit}、\texttt{pFedMe}算法~\ref{algo:pfedme}~等) 不同之处在于，\texttt{Ditto}算法在每次循环对以上问题的求解只执行一步 (随机) 梯度下降
+与本报告之前介绍的算法 (\texttt{FedSplit}算法~\ref{algo:fedsplit}、\texttt{pFedMe}算法~\ref{algo:pfedme}~等) 不同之处在于，\texttt{Ditto}算法在每次循环对以上问题的求解只执行一步 (随机) 梯度下降
 \begin{equation}
 \label{eq:ditto-local-2}
 \omega_k^{(t+1)} \gets \omega_k^{(t)} - \eta \left( \nabla f_k(\omega_k^{(t)}) + \mu (\omega_k^{(t)} - \theta^{(t)}) \right),

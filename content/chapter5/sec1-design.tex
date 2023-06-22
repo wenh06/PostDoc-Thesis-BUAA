@@ -8,11 +8,11 @@
 % almost finished
 % indexed
 
-为了方便对联邦学习算法进行数值试验的对比与验证，本文开发了一套用于单机模拟的联邦学习仿真系统\texttt{fl-sim}。本文实现的联邦学习仿真系统采用Python语言编写，整体结构借鉴了FedML\footnote{\url{https://github.com/FedML-AI/FedML}}\parencite{he_2020_fedml}，\texttt{FedProx}\footnote{\url{https://github.com/litian96/FedProx}}\parencite{sahu2018fedprox}以及pFL-Bench\footnote{\url{https://github.com/alibaba/FederatedScope/tree/master/benchmark/pFL-Bench}}\parencite{chen_2022_pfl_bench}等已有的一些工业应用型以及研究型的联邦学习框架。
+为了方便对联邦学习算法进行数值试验的对比与验证，笔者开发了一套用于单机模拟的联邦学习仿真系统\texttt{fl-sim}。联邦学习仿真系统\texttt{fl-sim}采用Python语言编写，整体结构借鉴了FedML\footnote{\url{https://github.com/FedML-AI/FedML}}\parencite{he_2020_fedml}，\texttt{FedProx}\footnote{\url{https://github.com/litian96/FedProx}}\parencite{sahu2018fedprox}以及pFL-Bench\footnote{\url{https://github.com/alibaba/FederatedScope/tree/master/benchmark/pFL-Bench}}\parencite{chen_2022_pfl_bench}等已有的一些工业应用型以及研究型的联邦学习框架。
 
-一套设计、实现质量良好的仿真系统能够极大地促进联邦学习算法的研究，并保障其持续的进行。本文开发的联邦学习仿真系统的基本设计思路是基于配置文件 (或者Python类)，将数据集读取、模型参数初始化、节点分配等工作自动化。同时将节点与算法解耦合，节点需要执行的通用操作，例如通讯、获取模型参数等进行统一实现，算法相关的操作通过预留接口的方式完成。这样，利用这一套仿真系统，可以专注于联邦学习优化算法的实现与验证工作。
+一套设计、实现质量良好的仿真系统能够极大地促进联邦学习算法的研究，并保障其持续的进行。联邦学习仿真系统\texttt{fl-sim}的基本设计思路是基于配置文件 (或者Python类)，将数据集读取、模型参数初始化、节点分配等工作自动化。同时将节点与算法解耦合，节点需要执行的通用操作，例如通讯、获取模型参数等进行统一实现，算法相关的操作通过预留接口的方式完成。这样，利用这一套仿真系统，可以专注于联邦学习优化算法的实现与验证工作。
 
-本文实现的联邦学习仿真系统相关的代码地址为：
+本章介绍的联邦学习仿真系统\texttt{fl-sim}相关的代码地址为：
 \begin{itemize}
     \item GitHub: \urlgithub
     \item gitee: \urlgitee
@@ -20,12 +20,12 @@
 
 \subsection{仿真系统的主要模块}
 
-本文实现的联邦学习仿真系统\texttt{fl-sim}主要包含以下几个模块
+联邦学习仿真系统\texttt{fl-sim}主要包含以下几个模块
 \begin{itemize}
-    \item \texttt{data\_processing}: 联邦学习数据集数据处理模块，主要基于已有的一些研究型联邦学习框架LEAF\cite{caldas2018_leaf}，应用型联邦学习框架FedML\cite{he_2020_fedml}，以及之前的一些联邦学习领域影响力较大的工作\cite{mcmahan2017fed_avg, sahu2018fedprox, reddi2020fed_opt}提出的联邦数据集，包括图像分类的数据集MNIST\cite{Lecun_1998_mnist}, EMNIST\cite{cohen2017emnist}, Federated-EMNIST\cite{caldas2018_leaf, sahu2018fedprox}，文本情感分类数据集Sent140\cite{sent140, caldas2018_leaf},文本数据集Shakespeare (用于下一字符预测任务, Next Character Prediction)\cite{mcmahan2017fed_avg, caldas2018_leaf}等。每一个数据集以Python类的形式提供，其中打包了数据集自动下载，数据预处理(例如图像数据增强、归一化以及文本数据的向量化等操作)，为节点分配数据，创建模型训练用的数据加载器 (PyTorch DataLoader)，计算模型预测结果指标 (例如平均损失 (Mean Loss)，准确度 (Accuracy) 等) 等功能，并提供了该数据集常用模型的列表供选择使用。本文随后的章节\S\ref{sec:chap5-datasets}将对已集成的联邦学习数据集进行更具体的介绍。
+    \item \texttt{data\_processing}: 联邦学习数据集数据处理模块，主要基于已有的一些研究型联邦学习框架LEAF\cite{caldas2018_leaf}，应用型联邦学习框架FedML\cite{he_2020_fedml}，以及之前的一些联邦学习领域影响力较大的工作\cite{mcmahan2017fed_avg, sahu2018fedprox, reddi2020fed_opt}提出的联邦数据集，包括图像分类的数据集MNIST\cite{Lecun_1998_mnist}, EMNIST\cite{cohen2017emnist}, Federated-EMNIST\cite{caldas2018_leaf, sahu2018fedprox}，文本情感分类数据集Sent140\cite{sent140, caldas2018_leaf},文本数据集Shakespeare (用于下一字符预测任务, Next Character Prediction)\cite{mcmahan2017fed_avg, caldas2018_leaf}等。每一个数据集以Python类的形式提供，其中打包了数据集自动下载，数据预处理(例如图像数据增强、归一化以及文本数据的向量化等操作)，为节点分配数据，创建模型训练用的数据加载器 (PyTorch DataLoader)，计算模型预测结果指标 (例如平均损失 (Mean Loss)，准确度 (Accuracy) 等) 等功能，并提供了该数据集常用模型的列表供选择使用。本报告随后的章节\S\ref{sec:chap5-datasets}将对已集成的联邦学习数据集进行更具体的介绍。
     \item \texttt{models}: 此模块主要聚合了一些已有的联邦学习文献\cite{mcmahan2017fed_avg, zhang2020fedpd, sahu2018fedprox, Ghosh_2022_cfl, he_2020_fedml}中使用过的试验模型，包括一些卷积神经网络 (Convolutional Neural Network, CNN)\index{卷积神经网络, Convolutional Neural Network, CNN}, 循环神经网络 (Recurrent Neural Network, RNN)\index{循环神经网络, Recurrent Neural Network, RNN}，多层感知机 (Multi-Layer Perceptron, MLP)\index{多层感知机, Multi-Layer Perceptron, MLP}，逻辑回归 (Logistic Regression) \index{逻辑回归, Logistic Regression}，支持向量机 (Support Vector Machine, SVM) \index{支持向量机, Support Vector Machine, SVM}等，为\texttt{data\_processing}模块中的数据集提供备选的试验模型。
     \item \texttt{optimizers}: (子节点上的) 内循环问题求解器。由于大部分试验用模型是神经网络模型，内循环问题的求解大部分基于随机梯度下降算法，包括临近子问题\eqref{eq:prox-op}~的求解，拉格朗日函数子问题\eqref{eq:al-iter-local}~的求解。大部分求解器支持方差缩减技术的应用。
-    \item \texttt{algorithms}: 这一模块包含了基于本文构建的联邦学习仿真系统复现的部分典型的联邦学习算法，可以用作基准对比算法。本文已复现的联邦学习算法详细信息见表~\ref{tab:algorithms}.
+    \item \texttt{algorithms}: 这一模块包含了基于联邦学习仿真系统\texttt{fl-sim}复现的部分典型的联邦学习算法，可以用作基准对比算法。联邦学习仿真系统\texttt{fl-sim}内部已复现的联邦学习算法详细信息见表~\ref{tab:algorithms}.
 \end{itemize}
 
 \input{tables/algorithms}
@@ -55,11 +55,11 @@
     \item \texttt{evaluate}：利用子节点本地数据对当前模型进行评测。
     \item \texttt{set\_parameters}: 对子节点的本地模型参数进行赋值。这一操作主要是在子节点收到中心节点的全局模型参数等信息后，对本地模型进行更新。
 \end{itemize}
-利用本文实现的联邦学习仿真系统具体实现某一个算法的时候，只需要分别继承\texttt{Server}以及\texttt{Client}这两个类，将算法的主要步骤在之前提到的\texttt{communicate}, \texttt{update}等几个主要的待实现的方法中进行实现即可。
+利用联邦学习仿真系统\texttt{fl-sim}具体实现某一个算法的时候，只需要分别继承\texttt{Server}以及\texttt{Client}这两个类，将算法的主要步骤在之前提到的\texttt{communicate}, \texttt{update}等几个主要的待实现的方法中进行实现即可。
 
 \subsection{仿真系统的易用性和可扩展性}
 
-为了让本文设计的联邦学习仿真系统\texttt{fl-sim}简单易用，我们为其设计、封装了一个命令行接口 (Command Line Interface, CLI)\index{命令行接口, Command Line Interface, CLI}, 通过读取YAML\footnote{具体介绍可见\url{https://yaml.org/}}配置文件的方式，执行相应的试验。如下是\href{https://github.com/wenh06/fl-sim/blob/master/example-configs/all-alg-fedprox-femnist.yml}{配置文件}的示例：
+为了让联邦学习仿真系统\texttt{fl-sim}简单易用，我们为其设计、封装了一个命令行接口 (Command Line Interface, CLI)\index{命令行接口, Command Line Interface, CLI}, 通过读取YAML\footnote{具体介绍可见\url{https://yaml.org/}}配置文件的方式，执行相应的试验。如下是\href{https://github.com/wenh06/fl-sim/blob/master/example-configs/all-alg-fedprox-femnist.yml}{配置文件}的示例：
 \begin{lstlisting}[language=yaml, caption={一份典型的联邦学习仿真系统\texttt{fl-sim}命令行接口配置文件},label={lst:fl-sim-config}]
 # Example config file for fl-sim command line interface
 
@@ -127,7 +127,7 @@ seed: ${{ matrix.seed }}
     \item \texttt{seed}字段指定了试验的随机种子。
 \end{itemize}
 
-本文实现的联邦学习仿真系统\texttt{fl-sim}也有极强的可扩展性。\texttt{fl-sim}系统内部设计了如下的几个``注册''装饰器 (Python decorator\footnote{具体介绍可见\url{https://peps.python.org/pep-0318/}}):
+联邦学习仿真系统\texttt{fl-sim}也有极强的可扩展性。\texttt{fl-sim}系统内部设计了如下的几个``注册''装饰器 (Python decorator\footnote{具体介绍可见\url{https://peps.python.org/pep-0318/}}):
 \begin{itemize}
     \item \verb|register_algorithm| (在模块 \href{https://github.com/wenh06/fl-sim/blob/master/fl_sim/algorithms/_register.py}{\texttt{fl\_sim.algorithms}} 中实现)
     \item \verb|register_fed_dataset| (在模块 \href{https://github.com/wenh06/fl-sim/blob/master/fl_sim/data_processing/_register.py}{\texttt{fl\_sim.data\_processing}} 中实现)
