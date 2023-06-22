@@ -12,7 +12,7 @@
     $\mathcal{S}^{(t)} \gets$ (random set of clients) $\subseteq [K]$\;
     broadcast $\theta^{(t)}$ to clients $k \in \mathcal{S}^{(t)}$\;
     \For{each client $k \in \mathcal{S}^{(t)}$ {\bfseries in parallel}}{
-        \tcc{solve the local sub-problem of $G(\dot)$ inexactly starting from $\theta^{(t)}$ to obtain $\theta_k^{(t)}$}
+        \tcc{solve the local sub-problem of $G$ inexactly starting from $\theta^{(t)}$ to obtain $\theta_k^{(t)}$}
         $\theta_k^{(t)} \gets \operatorname{\mathbf{UpdateGlobal}}(\theta^{(t)}, f_k)$\;
         \tcc{update the personalized model via solving the proximal problem}
         $\omega_k^{(t+1)} \gets \omega_k^{(t)} - \eta \left( \nabla f_k(\omega_k^{(t)}) + \mu (\omega_k^{(t)} - \theta^{(t)}) \right)$\;
