@@ -1,10 +1,10 @@
 \section{算子分裂法在个性化联邦学习中应用的初探}
-\addcontentsline{toe}{section}{{\currentchapter .2\ \ A Short Survey on Operator Splitting Methods for Personalized Federated Learning}\numberline\,}
+\addcontentsline{toe}{section}{{\currentchapter .3\ \ A Short Survey on Operator Splitting Methods for Personalized Federated Learning}\numberline\,}
 \label{sec:chap3-pfl-os}
 
-% chapter 4 is commented out and moved to this short section
+% Chapter 4 is commented out and moved to this short section
 
-% NOT finished
+% almost finished
 % indexed
 
 本报告已经在\S\ref{sec:chap2-operator-split}~中介绍了算子分裂法在联邦学习中的一些应用。算子分裂法以其对收敛结果正确性的保证\cite{pathak2020fedsplit}以及优美的收敛性理论\cite{ryu2022large}而在联邦学习的领域受到越来越多的关注。但是到本报告撰写的期间为止，还没有将算子分裂法应用到联邦学习个性化这一问题的研究出现。
@@ -20,4 +20,6 @@
  & \omega_1 = \cdots = \omega_K.
 \end{array}
 \end{equation}
-其中$g$是某种形式的正则项。以上问题的格式在优化目标内将目标函数$f$与正则项$g$进行了变量分离，那么可以考虑设计定制化的DR分裂方法 (Customized Douglas-Rachford Splitting Method)\cite{Han_2013_CDRSM} \index{定制化的DR分裂方法, Customized Douglas-Rachford Splitting Method)}进行优化求解。
+其中$g$是某种形式的正则项。以上问题的格式在优化目标内将目标函数$f$与正则项$g$进行了变量分离，那么可以考虑设计定制化的DR分裂方法 (Customized Douglas-Rachford Splitting Method)\cite{Han_2013_CDRSM}\index{定制化的DR分裂方法, Customized Douglas-Rachford Splitting Method)}进行优化求解。如何设计适合联邦学习场景的定制DR分裂方法，是一件有挑战性的工作。
+
+同时，我们也注意到了，参考文献\parencite{tran2021feddr}~实质上把联邦学习的优化问题建模为了一个三项求和形式的问题 (见式\eqref{eq:feddr-pen})。为了将DRSM用到这个问题的求解上，参考文献\parencite{tran2021feddr}~将后两项求和视为一项。事实上，对于这类问题的处理，可以直接利用Davis–Yin分裂方法(Davis–Yin Splitting Method, DYSM)\cite{ryu2022large, Davis_2017_DYS}\index{Davis–Yin分裂方法, Davis–Yin Splitting Method, DYSM}，相关算法的研究工作在联邦学习领域将会是开创性的。
