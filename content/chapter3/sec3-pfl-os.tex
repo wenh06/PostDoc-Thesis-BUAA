@@ -1,0 +1,23 @@
+\section{算子分裂法在个性化联邦学习中应用的初探}
+\addcontentsline{toe}{section}{{\currentchapter .2\ \ A Short Survey on Operator Splitting Methods for Personalized Federated Learning}\numberline\,}
+\label{sec:chap3-pfl-os}
+
+% chapter 4 is commented out and moved to this short section
+
+% almost finished
+% indexed
+
+本报告已经在\S\ref{sec:chap2-operator-split}~中介绍了算子分裂法在联邦学习中的一些应用。算子分裂法以其对收敛结果正确性的保证\cite{pathak2020fedsplit}以及优美的收敛性理论\cite{ryu2022large}而在联邦学习的领域受到越来越多的关注。但是到本报告撰写的期间为止，还没有将算子分裂法应用到联邦学习个性化这一问题的研究出现。
+
+首先值得考虑的问题是，个性化联邦学习的一般形式\eqref{eq:pfl-general}中的正则项$\mathcal{R}.$ 已有的大部分关于个性化联邦学习的研究\cite{hanzely2020federated, li_2021_ditto, t2020pfedme}都采用的是二次罚项。是否有更合适的正则项，来达到个性化的目的，是值得研究的问题。
+
+其次，考虑如下建模方式的个性化联邦学习问题
+\begin{equation}
+\label{eq:customized-drsm}
+\begin{array}{cl}
+ \minimize & \sum\limits_{k=1}^K \left\{ f_k(\theta_k) + g(\delta_k) \right\}, \\
+ \text{s.t.} & \omega_i = \theta_k - \delta_k, \\
+ & \omega_1 = \cdots = \omega_K.
+\end{array}
+\end{equation}
+其中$g$是某种形式的正则项。以上问题的格式在优化目标内将目标函数$f$与正则项$g$进行了变量分离，那么可以考虑设计定制化的DR分裂方法 (Customized Douglas-Rachford Splitting Method)\cite{Han_2013_CDRSM} \index{定制化的DR分裂方法, Customized Douglas-Rachford Splitting Method)}进行优化求解。
