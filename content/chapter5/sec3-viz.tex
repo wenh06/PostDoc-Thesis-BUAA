@@ -7,7 +7,7 @@
 
 联邦学习，乃至更广范围的机器学习领域，过程与结果的可视化是一个比较重要的方面，例如著名的深度学习软件包TensorFlow\cite{tensorflow}有配套的可视化工具TensorBoard\footnote{\url{https://www.tensorflow.org/tensorboard}}，以及以Weight \& Biases\footnote{\url{https://wandb.ai/site}}为代表的专业化的机器学习全过程可视化工具，都对机器学习、深度学习等领域的研究起到了极大的促进作用。
 
-联邦学习仿真系统\texttt{fl-sim}包含了为联邦学习量身定制的试验结果可视化面板系统\texttt{Panel}以及与之配套的试验日志系统。日志系统将试验过程中的模型评测数值同时以结构化的JSON文件，以及符合人类阅读习惯的文本文件的形式进行存储。可视化的面板系统\texttt{Panel}基于Jupyter Widgets\cite{Granger_2021_Jupyter}\footnote{\url{https://github.com/jupyter-widgets/ipywidgets}}开发，需要配合Jupyter Notebook\cite{jupyter_2016}或者类似的环境 (例如Jupyter Lab\cite{Granger_2021_Jupyter}, Google Colab\footnote{\url{https://colab.research.google.com/}}, Amazon Sagemaker\footnote{\url{https://studiolab.sagemaker.aws/}}等) 进行使用，具备如下主要功能与特性
+联邦学习仿真系统\texttt{fl-sim}包含了为联邦学习量身定制的试验结果可视化面板系统\texttt{Panel}以及与之配套的试验日志系统。日志系统将试验过程中的模型评测数值同时以结构化的JSON文件，以及符合人类阅读习惯的文本文件的形式进行存储。可视化的面板系统\texttt{Panel}基于Jupyter Widgets\footnote{\url{https://github.com/jupyter-widgets/ipywidgets}}开发，需要配合Jupyter Notebook\cite{jupyter_2016}或者类似的环境 (例如Jupyter Lab\cite{Granger_2021_Jupyter}, Google Colab\footnote{\url{https://colab.research.google.com/}}, Amazon Sagemaker\footnote{\url{https://studiolab.sagemaker.aws/}}等) 进行使用，具备如下主要功能与特性
 \begin{itemize}
     \item 自动从日志文件夹中搜索、列出所有完整试验的日志文件。
     \item 自动解析日志文件，完成模型评测数值曲线绘制。

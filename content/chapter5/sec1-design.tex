@@ -8,7 +8,7 @@
 % almost finished
 % indexed
 
-为了方便对联邦学习算法进行数值试验的对比与验证，笔者开发了一套用于单机模拟的联邦学习仿真系统\texttt{fl-sim}。联邦学习仿真系统\texttt{fl-sim}采用Python语言编写，整体结构借鉴了FedML\footnote{\url{https://github.com/FedML-AI/FedML}}\parencite{he_2020_fedml}，\texttt{FedProx}\footnote{\url{https://github.com/litian96/FedProx}}\parencite{sahu2018fedprox}以及pFL-Bench\footnote{\url{https://github.com/alibaba/FederatedScope/tree/master/benchmark/pFL-Bench}}\parencite{chen_2022_pfl_bench}等已有的一些工业应用型以及研究型的联邦学习框架。
+为了方便对联邦学习算法进行数值试验的对比与验证，笔者开发了一套用于单机模拟的联邦学习仿真系统\texttt{fl-sim}。联邦学习仿真系统\texttt{fl-sim}采用Python语言编写，底层的优化器，模型训练以及推理等基础功能基于深度学习框架PyTorch\cite{pytorch}构建。\texttt{fl-sim}整体结构借鉴了FedML\footnote{\url{https://github.com/FedML-AI/FedML}}\parencite{he_2020_fedml}，\texttt{FedProx}\footnote{\url{https://github.com/litian96/FedProx}}\parencite{sahu2018fedprox}以及pFL-Bench\footnote{\url{https://github.com/alibaba/FederatedScope/tree/master/benchmark/pFL-Bench}}\parencite{chen_2022_pfl_bench}等已有的一些工业应用型以及研究型的联邦学习框架。
 
 一套设计、实现质量良好的仿真系统能够极大地促进联邦学习算法的研究，并保障其持续的进行。联邦学习仿真系统\texttt{fl-sim}的基本设计思路是基于配置文件 (或者Python类)，将数据集读取、模型参数初始化、节点分配等工作自动化。同时将节点与算法解耦合，节点需要执行的通用操作，例如通讯、获取模型参数等进行统一实现，算法相关的操作通过预留接口的方式完成。这样，利用这一套仿真系统，可以专注于联邦学习优化算法的实现与验证工作。
 

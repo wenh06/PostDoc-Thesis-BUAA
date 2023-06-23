@@ -22,4 +22,4 @@
 \end{equation}
 其中$g$是某种形式的正则项。以上问题的格式在优化目标内将目标函数$f$与正则项$g$进行了变量分离，那么可以考虑设计定制化的DR分裂方法 (Customized Douglas-Rachford Splitting Method)\cite{Han_2013_CDRSM}\index{定制化的DR分裂方法, Customized Douglas-Rachford Splitting Method)}进行优化求解。如何设计适合联邦学习场景的定制DR分裂方法，是一件有挑战性的工作。
 
-同时，我们也注意到了，参考文献\parencite{tran2021feddr}~实质上把联邦学习的优化问题建模为了一个三项求和形式的问题 (见式\eqref{eq:feddr-pen})。为了将DRSM用到这个问题的求解上，参考文献\parencite{tran2021feddr}~将后两项求和视为一项。事实上，对于这类问题的处理，可以直接利用Davis–Yin分裂方法(Davis–Yin Splitting Method, DYSM)\cite{ryu2022large, Davis_2017_DYS}\index{Davis–Yin分裂方法, Davis–Yin Splitting Method, DYSM}，相关算法的研究工作在联邦学习领域将会是开创性的。
+同时，我们也注意到了，参考文献\parencite{tran2021feddr}~实质上把联邦学习的优化问题建模为了一个三项求和形式的问题 (见式\eqref{eq:feddr-pen})。为了将DRSM用到这个问题的求解上，参考文献\parencite{tran2021feddr}~将后两项求和视为一项。事实上，对于这类问题的处理，可以直接利用Davis–Yin分裂方法(Davis–Yin Splitting Method, DYSM)\cite{ryu2022large, Davis_2017_DYS, Liu_2019_DYS}\index{Davis–Yin分裂方法, Davis–Yin Splitting Method, DYSM}，相关算法的研究工作在联邦学习领域将会是开创性的。
