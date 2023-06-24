@@ -62,12 +62,11 @@
 \renewcommand{\currentchapter}{6}
 \include{content/chapter7/chap7}
 
-% \phantomsection
 \addcontentsline{toe}{chapter}{{{\bf References}}\numberline~}
 % \markboth{参~考~文~献}{北京航空航天大学文豪博士后研究工作报告}
 \printbibliography[heading=bibintoc,title=参考文献]
 
-% \phantomsection
+\clearpage % required for Index to have correct page number in toe
 \addcontentsline{toe}{chapter}{{{\bf Index}}\numberline~}
 % \markboth{名~词~索~引}{北京航空航天大学文豪博士后研究工作报告}
 \printindex
