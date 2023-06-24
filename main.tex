@@ -36,30 +36,28 @@
 \tableofengcontents
 \mainmatter
 
-\let\cleardoublepage=\clearpage
+\let\cleardoublepage=\clearpage  % compact main body
 
-\newcommand{\currentchapter}{1}
+\newcounter{currentchapter}
+\setcounter{currentchapter}{1}
 \include{content/chapter1/chap1}
 
-\renewcommand{\currentchapter}{2}
+\stepcounter{currentchapter}
 \include{content/chapter2/chap2}
 
-\renewcommand{\currentchapter}{3}
+\stepcounter{currentchapter}
 \include{content/chapter3/chap3}
 
-% \renewcommand{\currentchapter}{4}
+% \stepcounter{currentchapter}
 % \include{content/chapter4/chap4}  # NOT finished
 
-% \renewcommand{\currentchapter}{5}
-\renewcommand{\currentchapter}{4}
+\stepcounter{currentchapter}
 \include{content/chapter5/chap5}
 
-% \renewcommand{\currentchapter}{6}
-\renewcommand{\currentchapter}{5}
+\stepcounter{currentchapter}
 \include{content/chapter6/chap6}
 
-% \renewcommand{\currentchapter}{7}
-\renewcommand{\currentchapter}{6}
+\stepcounter{currentchapter}
 \include{content/chapter7/chap7}
 
 \addcontentsline{toe}{chapter}{{{\bf References}}\numberline~}
