@@ -1,4 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%定义英文目录命令%%%%%%%%%%%%%%%
+% https://tex.stackexchange.com/questions/170912/contents-page-in-two-different-languages
+
 \makeatletter
 \newcommand\engcontentsname{Contents}
 \newcommand\tableofengcontents{%
@@ -19,3 +21,4 @@
 \makeatother
 
 \newcommand\esection[1]{\addengcontents{section}{#1}}
+\newcommand\echapter[1]{\addengcontents{chapter}{#1}}
