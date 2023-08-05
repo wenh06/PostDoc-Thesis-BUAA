@@ -6,7 +6,7 @@
 % almost finished
 % indexed
 
-优化算法自从联邦学习这一概念诞生起，便一直是相关研究的中心问题之一。联邦学习开创性的文献\parencite{mcmahan2017fed_avg}中，最重要也是最为人所熟知的便是联邦平均算法\texttt{FederatedAveraging} (Federated Averaging Algorithm, 简记为\texttt{FedAvg})\index{联邦平均算法, \texttt{FedAvg}} 的提出。
+联邦优化算法自从联邦学习这一概念诞生起，便一直是相关研究的中心问题之一。联邦学习开创性的文献\parencite{mcmahan2017fed_avg}中，最重要也是最为人所熟知的便是联邦平均算法\texttt{FederatedAveraging} (Federated Averaging Algorithm, 简记为\texttt{FedAvg})\index{联邦平均算法, \texttt{FedAvg}} 的提出。
 
 联邦学习优化算法最重要的设计原则，是计算效率以及通信效率并重，甚至很多时候通信效率是更重要的一个方面。这也是联邦学习与传统的分布式优化最显著的区别之一。实际上，分布式优化在联邦学习被提出之前就是一个被研究得比较多的问题，从具体的问题，例如分布式主成分分析 (Principal Component Analysis, PCA)\cite{dist_pca_2014_nips}，到一般的算法理论\cite{Mangasarian_1995_parallel,boyd2011distributed}都有研究人员进行了研究。当时这些研究往往仅从计算效率以及效果出发，往往不考虑通信效率、通信保密性等问题。文献\parencite{mcmahan2017fed_avg}正是从实际问题出发，发现了这些需求，基于一种分布式梯度下降算法\cite{chen2016_revisit} (该算法在文献\parencite{mcmahan2017fed_avg}中被称作\texttt{FedSGD}算法)，做了上文提到的改进而提出了\texttt{FedAvg}算法。
 
