@@ -188,7 +188,8 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
     \item \texttt{FedAdam}:
     \begin{equation*}
     \begin{aligned}
-    v^{(t)} & \gets \beta_2 v^{(t-1)} + (1 - \beta_2) ( \Delta^{(t)} )^2 & \gets \theta^{(t)} + \eta_g \Delta^{(t)} / (\sqrt{v^{(t)}}+\tau)
+    v^{(t)} & \gets \beta_2 v^{(t-1)} + (1 - \beta_2) ( \Delta^{(t)} )^2 \\
+    \theta^{(t+1)} & \gets \theta^{(t)} + \eta_g \Delta^{(t)} / (\sqrt{v^{(t)}}+\tau)
     \end{aligned}
     \end{equation*}
 \end{itemize}
