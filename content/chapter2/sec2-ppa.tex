@@ -6,7 +6,7 @@
 % almost finished
 % indexed
 
-基于减小数据非独立同分布情形下，每一轮的子节点更新对整体模型的影响，文献\parencite{sahu2018fedprox}首先提在子节点上的局部模型中增加邻近项的联邦临近算法\texttt{FedProx}\index{联邦临近算法, \texttt{FedProx}}，达到了算法收敛更快、更加稳定的目的。相较于\texttt{SCAFFOLD}算法\ref{algo:scaffold}，使用临近项的方案不需要进行额外 (关于梯度信息) 参数的维护与传递，没有通信开销以及安全性上的额外代价。
+基于减小数据非独立同分布情形下，每一轮的子节点更新对整体模型影响的考虑，文献\parencite{sahu2018fedprox}首先提出在子节点上的局部模型中增加邻近项的联邦临近算法\texttt{FedProx}\index{联邦临近算法, \texttt{FedProx}}，达到了算法收敛更快、更加稳定的目的。相较于\texttt{SCAFFOLD}算法\ref{algo:scaffold}，使用临近项的方案不需要进行额外 (关于梯度信息) 参数的维护与传递，没有通信开销以及安全性上的额外代价。
 
 具体来说，在算法迭代的第$t+1$轮，每个子节点优化的目标函数从$f_k(\theta_k)$变为了如下的带临近项的函数
 \begin{equation}

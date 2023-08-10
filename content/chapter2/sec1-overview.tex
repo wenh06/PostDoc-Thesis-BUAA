@@ -193,7 +193,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
     \end{equation*}
 \end{itemize}
 
-\texttt{FedOpt}将机器学习领域内常用的一些加速的技巧应用于联邦学习的场景，是\texttt{FedAvg}较为平凡的推广，它的另一个更重要的意义在于充分表明了联邦学习子节点与中心节点的计算的解耦合的性质。
+\texttt{FedOpt}将机器学习领域内常用的一些加速的技巧应用于联邦学习的场景，是\texttt{FedAvg}较为平凡但又重要的推广，在数值上有非常不错的效果。它的另一个更重要的意义在于充分表明了联邦学习子节点与中心节点的计算的解耦合的性质。
 
 联邦平均算法\texttt{FedAvg}以及自适应联邦学习算法\texttt{FedOpt}考虑的主要是数据在各子节点之间独立同分布的场景。对于更具有实际意义的数据非独立同分布的场景，我们需要引入一些别的工具来处理这种情况。此时，各子节点上的梯度在分布上是有差异的，一个很自然的想法就是引入一些额外的参数，与模型参数一起更新，利用这些额外的参数对子节点的梯度进行修正，减小各子节点上的梯度在分布上的差异，进而达到使算法收敛更稳定以及加速收敛的目的。这种技术就是方差缩减 (Variance Reduction, VR)\index{方差缩减, Variance Reduction, VR} 技术\cite{johnson2013accelerating}，由文献\parencite{karimireddy2020scaffold}以算法\texttt{SCAFFOLD} (Stochastic Controlled Averaging algorithm) 的形式首次引入联邦学习中，其伪代码可见算法\ref{algo:scaffold}。
 
