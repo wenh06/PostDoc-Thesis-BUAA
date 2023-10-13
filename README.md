@@ -10,6 +10,13 @@ One can compile locally, or `Import from GitHub` using [Overleaf](https://www.ov
 
 ![Import from GitHub](figures/overleaf-import-from-github.png)
 
+This project is compiled successfully with
+
+```
+Compiler: XeLaTeX
+Tex Live version: 2022
+```
+
 ## Code for the thesis
 
 [fl-sim](https://github.com/wenh06/fl-sim): a simulation framework for federated learning, introduced in details in the [penultimate chapter](content/chapter5).
