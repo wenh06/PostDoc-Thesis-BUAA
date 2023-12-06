@@ -87,6 +87,7 @@ jobs:
           environ
           subcaption
           tikzmark
+          xstring
     - name: Install latexmk and pandoc and extra software
       run: |
         sudo apt install latexmk -y
