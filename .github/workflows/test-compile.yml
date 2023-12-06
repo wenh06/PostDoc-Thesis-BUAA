@@ -58,7 +58,6 @@ jobs:
           biber
           biblatex
           biblatex-gb7714-2015
-          tikz
           pgf
           pgfplots
           relsize
@@ -67,18 +66,14 @@ jobs:
           xecjk
           ifoddpage
           graphics
-          graphicx
           etoolbox
-          mathrsfs
+          jknapltx
           mathtools
           anysize
           titlesec
           fancyhdr
-          tabularx
           multirow
-          multicol
           float
-          bm
           arydshln
           setspace
           boxedminipage
@@ -87,7 +82,7 @@ jobs:
           tocbibind
           listings
           xcolor
-          boldline
+          shipunov
           threeparttable
           environ
     - name: Install latexmk and pandoc and extra software
