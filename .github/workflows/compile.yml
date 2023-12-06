@@ -5,14 +5,20 @@ name: Test Compile with latexmk
 on:
   push:
     branches: [ master ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  ARTIFACT_NAME: thesis
+  ARTIFACT_DIR: build
+
 jobs:
-  build:
+  compile:
     # Don't run on forked repos.
     if: contains(fromJson('["wenh06"]'), github.repository_owner)
 
@@ -105,3 +111,41 @@ jobs:
         python compile.py
         # assert there exists on pdf file in build folder
         ls build/*.pdf | wc -l | grep -q 1
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      # if is a tag, upload the pdf to the release
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.ARTIFACT_DIR }}
+
+  github-release:
+    # github release and changelog
+    needs: compile
+    runs-on: ubuntu-20.04
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build Changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_DIR }}
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+          files: |
+            ${{ env.ARTIFACT_DIR }}/*.pdf
+          token: ${{ secrets.GITHUB_TOKEN }}
