@@ -85,6 +85,7 @@ jobs:
           shipunov
           threeparttable
           environ
+          subcaption
     - name: Install latexmk and pandoc and extra software
       run: |
         sudo apt install latexmk -y
