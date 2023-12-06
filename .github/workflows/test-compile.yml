@@ -91,6 +91,7 @@ jobs:
           rsfs
           calrsfs
           psnfss
+          newtx
           newtxsf
     - name: Install latexmk and pandoc and extra software
       run: |
