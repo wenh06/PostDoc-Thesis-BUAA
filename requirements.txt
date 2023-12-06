@@ -1,3 +1,4 @@
 bib-lookup>=0.0.22
 cjklib3
 pypinyin
+pre-commit

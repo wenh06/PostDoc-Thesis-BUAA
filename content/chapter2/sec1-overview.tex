@@ -156,7 +156,7 @@ f(\theta') \geqslant f(\theta) + \langle \theta' - \theta, \nabla f (\theta) \ra
 
 收敛速度是最优化算法的一个重要指标，自从联邦平均算法\texttt{FedAvg}算法被提出以来，一直有学者从联邦学习面临的几大核心挑战(见\S~\ref{sec:chap1-fl-applications})出发，对联邦平均算法加以改进，提出一些收敛速度更快\cite{reddi2020fed_opt}、通信资源要求更少\cite{karimireddy2020scaffold}、鲁棒性更强\cite{sahu2018fedprox}的算法。
 
-因为联邦平均算法是以随机梯度下降法为基础的，那么一个自然的想法就是将随机梯度下降法的一些加速的技巧\cite{adagrad, adam, Zaheer_2018_yogi, adamw_amsgrad}引入联邦学习整个算法体系内。由于联邦学习子节点与中心节点的计算相对独立无耦合，所以这种做法并不需要对联邦学习整个算法框架做大改动，是一种可行的方法。事实上，联邦平均算法的作者在随后发表的文章\parencite{reddi2020fed_opt}中实践了这一想法，提出了一个泛用性更强的自适应联邦学习算法框架\texttt{FedOpt}，其伪代码见算法\ref{algo:fedopt}. 
+因为联邦平均算法是以随机梯度下降法为基础的，那么一个自然的想法就是将随机梯度下降法的一些加速的技巧\cite{adagrad, adam, Zaheer_2018_yogi, adamw_amsgrad}引入联邦学习整个算法体系内。由于联邦学习子节点与中心节点的计算相对独立无耦合，所以这种做法并不需要对联邦学习整个算法框架做大改动，是一种可行的方法。事实上，联邦平均算法的作者在随后发表的文章\parencite{reddi2020fed_opt}中实践了这一想法，提出了一个泛用性更强的自适应联邦学习算法框架\texttt{FedOpt}，其伪代码见算法\ref{algo:fedopt}.
 
 \input{algorithms/fedopt.tex}
 

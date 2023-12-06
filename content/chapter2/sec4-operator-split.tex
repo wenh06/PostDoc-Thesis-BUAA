@@ -416,7 +416,7 @@ z^{(t+1)} = z^{(t)} + 2\tau (x^{(t+1)} - x^{(t+1/2)}).
 \begin{itemize}
 \item[(1)] 中心服务器上的全局模型参数与子节点上的模型参数的差有界
 \begin{equation*}
-\lVert \overline{\theta}^{(t)} - \theta_k^{(t)} \rVert^2 \leqslant \frac{2(1+s^2L^2)}{\alpha} \left[ (1+\gamma_1) \lVert \theta_k^{(t+1)} - \theta_k^{(t)} \rVert^2 \right. 
+\lVert \overline{\theta}^{(t)} - \theta_k^{(t)} \rVert^2 \leqslant \frac{2(1+s^2L^2)}{\alpha} \left[ (1+\gamma_1) \lVert \theta_k^{(t+1)} - \theta_k^{(t)} \rVert^2 \right.
 \left. + \frac{2(1+\gamma_1)}{\gamma_1} \left( \lVert e_k^{(t+1)} \rVert^2 + \lVert e_k^{(t)} \rVert^2 \right) \right],
 \end{equation*}
 其中$\gamma_1$是任意一个大于0的实数。也就是说 (经过正则项修正的) 全局模型与局部模型的差被局部模型相邻迭代步的差以及临近算子非精确求解的误差界所控制。

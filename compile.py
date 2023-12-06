@@ -7,7 +7,6 @@ import time
 from pathlib import Path
 from typing import List, Tuple, Union
 
-
 project_dir = Path(__file__).resolve().parent
 build_dir = project_dir / "build"
 if not build_dir.exists():

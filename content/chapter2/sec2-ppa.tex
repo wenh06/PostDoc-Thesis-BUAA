@@ -67,4 +67,3 @@ B(\theta) := \frac{\expectation_k [\lVert \nabla f_k(\theta) \rVert^2]}{\lVert \
 \end{rem}
 
 联邦临近算法\texttt{FedProx}的积极意义在于，首次将临近点算法 (Proximal Point Algorithms, PPA)\index{临近点算法, Proximal Point Algorithms, PPA)} 引入联邦学习领域中，虽然临近点算法只是用做了 (内循环问题的) 子节点上的子问题的求解器，而\texttt{FedProx}算法整体严格意义上来看并不是临近点算法。临近点算法不仅仅在理论分析上可以提供一个好的框架，在算法设计上也能提供一个支撑。后续在\$\ref{chap3}~中我们将要详细研究的有关个性化联邦学习的工作\cite{hanzely2020federated,acar2021feddyn,li_2021_ditto,t2020pfedme,li2021pfedmac}都依赖于引入临近项 (或者类似的项) 作为模型个性化的主要技术手段。关于临近点算法本身在联邦学习的进一步研究，也有将临近点算法与方差缩减技术相结合(\texttt{FedProxVR}算法)\cite{Dinh_2020_FL_PSVRG}等方面的工作。
-
