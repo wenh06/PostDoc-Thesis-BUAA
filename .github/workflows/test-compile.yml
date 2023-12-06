@@ -1,0 +1,101 @@
+# This workflow will build the docs using Sphinx and check for errors.
+
+name: Test Compile with latexmk
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    # Don't run on forked repos.
+    if: contains(fromJson('["wenh06"]'), github.repository_owner)
+
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ["3.9"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Clear unnecessary system components
+      run: |
+        echo "Free space before cleanup:"
+        df -h
+        sudo rm -rf /usr/local/lib/android # will release about 10 GB if you don't need Android
+        sudo rm -rf /usr/share/dotnet # will release about 20GB if you don't need .NET
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/share/boost
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        echo "Free space after cleanup:"
+        df -h
+    - name: Install system libraries
+      run: |
+        sudo apt update
+        sudo apt install build-essential -y
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip' # caching pip dependencies
+    - name: List existing Python packages
+      run: |
+        python -m pip list
+    - name: Setup TeX Live
+      # This is used to render the tikz plots, algorithm2e, etc.
+      uses: teatimeguest/setup-texlive-action@v2
+      with:
+        # List of TeXLive-packages contained in the scheme-basic
+        # https://gist.github.com/zr-tex8r/86b3b28f6bf21e0c24b151ce10840387
+        packages: >-
+          scheme-basic
+          algorithm2e
+          biber
+          biblatex
+          biblatex-gb7714-2015
+          tikz
+          pgf
+          pgfplots
+          relsize
+          standalone
+          xetex
+          xecjk
+          ifoddpage
+          graphics
+          graphicx
+          etoolbox
+          mathrsfs
+          mathtools
+          anysize
+          titlesec
+          fancyhdr
+          tabularx
+          multirow
+          multicol
+          float
+          bm
+          arydshln
+          setspace
+          boxedminipage
+          hyperref
+          imakeidx
+          tocbibind
+          listings
+          xcolor
+          boldline
+          threeparttable
+          environ
+    - name: Install latexmk and pandoc and extra software
+      run: |
+        sudo apt install latexmk -y
+        sudo apt install texlive-pictures texlive-latex-extra pdf2svg -y
+    - name: Compile the document
+      run: |
+        python compile.py
+        # assert there exists on pdf file in build folder
+        ls build/*.pdf | wc -l | grep -q 1
