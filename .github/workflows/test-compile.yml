@@ -91,6 +91,7 @@ jobs:
           rsfs
           calrsfs
           psnfss
+          newtxsf
     - name: Install latexmk and pandoc and extra software
       run: |
         sudo apt install latexmk -y
