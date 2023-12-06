@@ -88,10 +88,13 @@ jobs:
           caption
           tikzmark
           xstring
+          rsfs
+          calrsfs
+          psnfss
     - name: Install latexmk and pandoc and extra software
       run: |
         sudo apt install latexmk -y
-        sudo apt install texlive-pictures texlive-latex-extra pdf2svg -y
+        sudo apt install texlive-pictures texlive-latex-extra texlive-fonts-recommended pdf2svg -y
     - name: Compile the document
       run: |
         python compile.py
