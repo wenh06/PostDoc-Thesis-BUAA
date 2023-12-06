@@ -1,5 +1,9 @@
 # PostDoc-Thesis-BUAA
 
+[![compile-test](https://github.com/wenh06/PostDoc-Thesis-BUAA/actions/workflows/compile.yml/badge.svg)](https://github.com/wenh06/PostDoc-Thesis-BUAA/actions/workflows/compile.yml)
+![GitHub Release Date - Published_At](https://img.shields.io/github/release-date/wenh06/PostDoc-Thesis-BUAA)
+![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/wenh06/PostDoc-Thesis-BUAA/latest)
+
 BUAA Post-doctor thesis with topics on federated learning optimization algorithms.
 
 ~~Edited using [Overleaf](https://www.overleaf.com/).~~

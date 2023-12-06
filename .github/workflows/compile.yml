@@ -53,7 +53,6 @@ jobs:
       run: |
         python -m pip list
     - name: Setup TeX Live
-      # This is used to render the tikz plots, algorithm2e, etc.
       uses: teatimeguest/setup-texlive-action@v2
       with:
         # List of TeXLive-packages contained in the scheme-basic
@@ -109,13 +108,13 @@ jobs:
     - name: Compile the document
       run: |
         python compile.py
-        # assert there exists on pdf file in build folder
+        # assert there exists one pdf file in build folder
         ls build/*.pdf | wc -l | grep -q 1
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       # if is a tag, or manually triggered,
       # upload the pdf to the release
-      if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+      if: startsWith(github.ref, 'refs/tags/')
       with:
         name: ${{ env.ARTIFACT_NAME }}
         path: ${{ env.ARTIFACT_DIR }}
@@ -124,7 +123,7 @@ jobs:
     # github release and changelog
     needs: compile
     runs-on: ubuntu-20.04
-    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -142,8 +141,6 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ github.ref }}
-          tag_name: ${{ github.ref }}
           body: ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
