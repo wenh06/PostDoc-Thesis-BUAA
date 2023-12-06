@@ -113,8 +113,9 @@ jobs:
         ls build/*.pdf | wc -l | grep -q 1
     - name: Upload artifact
       uses: actions/upload-artifact@v3
-      # if is a tag, upload the pdf to the release
-      if: startsWith(github.ref, 'refs/tags/')
+      # if is a tag, or manually triggered,
+      # upload the pdf to the release
+      if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
       with:
         name: ${{ env.ARTIFACT_NAME }}
         path: ${{ env.ARTIFACT_DIR }}
@@ -123,7 +124,7 @@ jobs:
     # github release and changelog
     needs: compile
     runs-on: ubuntu-20.04
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
