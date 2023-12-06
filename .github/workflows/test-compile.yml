@@ -85,7 +85,7 @@ jobs:
           shipunov
           threeparttable
           environ
-          subcaption
+          caption
           tikzmark
           xstring
     - name: Install latexmk and pandoc and extra software
