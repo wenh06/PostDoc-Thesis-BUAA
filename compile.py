@@ -104,7 +104,7 @@ def main():
     shutil.copy(generated_pdf_file, backup_pdf_file)
 
     # clean up
-    cmd = f"""latexmk -c -outdir="{str(project_dir)}" "{str(tex_entry_file)}" """
+    cmd = f"""latexmk -C -outdir="{str(project_dir)}" "{str(tex_entry_file)}" """
     exitcode, _ = execute_cmd(cmd)
     if exitcode != 0:
         sys.exit(exitcode)
