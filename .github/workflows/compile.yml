@@ -98,7 +98,7 @@ jobs:
           psnfss
           newtx
           newtxsf
-    - name: Install latexmk and pandoc and extra software
+    - name: Install latexmk and extra software
       run: |
         sudo apt install latexmk -y
         sudo apt install texlive-pictures texlive-latex-extra texlive-fonts-recommended pdf2svg -y
