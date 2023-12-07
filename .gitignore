@@ -37,6 +37,11 @@ dist
 *.abs
 *.sav
 *.bcf
+*.xdv
+*.synctex\(busy\)
+*.synctex
+*.synctex.gz\(busy\)
+*.synctex.gz
 
 tensorboard_data
 .ipynb_checkpoints
