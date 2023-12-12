@@ -37,6 +37,8 @@ dist
 *.abs
 *.sav
 *.bcf
+*.nav
+*.snm
 *.xdv
 *.synctex\(busy\)
 *.synctex

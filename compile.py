@@ -86,8 +86,10 @@ def main():
         raise RuntimeError("Usage: python compile.py [tex_entry_file]")
     if len(sys.argv) == 1:
         tex_entry_file = main_tex_file
+        handout = True
     else:
         tex_entry_file = Path(sys.argv[1]).expanduser().resolve()
+        handout = False
 
     # specifying outdir for latexmk may result in errors: https://tex.stackexchange.com/q/323820
     cmd = (
@@ -99,10 +101,10 @@ def main():
         sys.exit(exitcode)
     generated_pdf_file = project_dir / f"{main_tex_file.stem}.pdf"
     suffix = time.strftime("%Y%m%d-%H%M%S")
-    if main_tex_file.stem == "main":
+    if main_tex_file.stem == "main" and handout:
         backup_pdf_file = build_dir / f"PostDoc-Thesis-BUAA-{suffix}.pdf"
     else:
-        backup_pdf_file = build_dir / f"{main_tex_file.stem}-{suffix}.pdf"
+        backup_pdf_file = build_dir / f"{main_tex_file.stem}.pdf"
     shutil.copy(generated_pdf_file, backup_pdf_file)
 
     # clean up

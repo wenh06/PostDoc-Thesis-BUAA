@@ -55,10 +55,12 @@ jobs:
     - name: Setup TeX Live
       uses: teatimeguest/setup-texlive-action@v2
       with:
-        # List of TeXLive-packages contained in the scheme-basic
-        # https://gist.github.com/zr-tex8r/86b3b28f6bf21e0c24b151ce10840387
+      with:
+        # List of TeXLive-packages contained in the scheme-small
+        # https://trac.macports.org/wiki/TeXLivePackages
+        # tlmgr info --list scheme-small
         packages: >-
-          scheme-basic
+          scheme-small
           algorithm2e
           biber
           biblatex
