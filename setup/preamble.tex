@@ -198,14 +198,15 @@
 % Chinese fonts
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\setCJKmainfont[Path = fonts/, BoldFont = simhei.ttf]{simsun.ttc}
-\setCJKsansfont[Path = fonts/, BoldFont = simhei.ttf]{simsun.ttc}
-\setCJKmonofont[Path = fonts/, BoldFont = simhei.ttf]{simsun.ttc}
-
 \newCJKfontfamily\kaishu[Path=fonts/]{simkai.ttf}
 \newCJKfontfamily\songti[Path=fonts/]{simsun.ttf}
 \newCJKfontfamily\heiti[Path=fonts/]{simhei.ttf}
 \newCJKfontfamily\fangsong[Path=fonts/]{simfang.ttf}
+
+\setCJKmainfont[Path = fonts/, AutoFakeBold=3.5, ItalicFont=simkai.ttf]{simsun.ttc}
+\setCJKsansfont[Path = fonts/, AutoFakeBold=3.5]{simhei.ttf}
+\setCJKmonofont[Path = fonts/, AutoFakeBold=3.5]{simfang.ttf}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % miscellaneous settings
