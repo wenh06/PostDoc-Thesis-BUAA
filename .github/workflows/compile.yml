@@ -62,14 +62,47 @@ jobs:
         # List of TeXLive-packages contained in the scheme-small
         # https://trac.macports.org/wiki/TeXLivePackages
         # tlmgr info --list scheme-small
-        packages: scheme-small
-    - name: Enable auto install of TeX packages
-      run: |
-        tlmgr option repository https://mirror.ctan.org/systems/texlive/tlnet
-        tlmgr option install_docfiles 0
-        tlmgr option install_srcfiles 0
-        tlmgr option autobackup 0
-        tlmgr option auto_install 1
+        packages: >-
+          scheme-small
+          algorithm2e
+          biber
+          biblatex
+          biblatex-gb7714-2015
+          pgf
+          pgfplots
+          relsize
+          standalone
+          xetex
+          xecjk
+          ifoddpage
+          graphics
+          etoolbox
+          jknapltx
+          mathtools
+          anysize
+          titlesec
+          fancyhdr
+          multirow
+          float
+          arydshln
+          setspace
+          boxedminipage
+          hyperref
+          imakeidx
+          tocbibind
+          listings
+          xcolor
+          shipunov
+          threeparttable
+          environ
+          caption
+          tikzmark
+          xstring
+          rsfs
+          calrsfs
+          psnfss
+          newtx
+          newtxsf
     - name: Install latexmk and extra software
       run: |
         sudo apt install latexmk -y
