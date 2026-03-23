@@ -63,6 +63,7 @@ jobs:
         # https://trac.macports.org/wiki/TeXLivePackages
         # tlmgr info --list scheme-small
         packages: scheme-full
+        texlive_version: 2022
     - name: Install extra software
       run: |
         # latexmk and texlive-* packages are already provided by scheme-full above;
