@@ -109,6 +109,13 @@
 
 \newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
 
+% listings v1.11+ dropped xeCJK's expected version guard, so apply the "First Aid" manually.
+% This disables XeTeX inter-character class tokens inside every listing, preventing
+% the "! Improper discretionary list." emergency stop caused by \lst@@discretionary.
+\makeatletter
+\lst@AddToHook{PreSet}{\XeTeXinterchartokenstate=\z@}
+\makeatother
+
 % from newtxmath
 \DeclareFontFamily{U}{ntxmia}{}
 \DeclareFontShape{U}{ntxmia}{m}{it}{<-> ntxmia }{}
@@ -205,7 +212,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newCJKfontfamily\kaishu[Path=fonts/]{simkai.ttf}
-\newCJKfontfamily\songti[Path=fonts/]{simsun.ttf}
+\newCJKfontfamily\songti[Path=fonts/]{simsun.ttc}
 \newCJKfontfamily\heiti[Path=fonts/]{simhei.ttf}
 \newCJKfontfamily\fangsong[Path=fonts/]{simfang.ttf}
 
