@@ -63,11 +63,11 @@ jobs:
         # https://trac.macports.org/wiki/TeXLivePackages
         # tlmgr info --list scheme-small
         packages: scheme-full
-    - name: Install latexmk and extra software
+    - name: Install extra software
       run: |
-        sudo apt install latexmk -y
-        sudo apt install texlive-pictures texlive-latex-extra texlive-fonts-recommended pdf2svg -y
-        # sudo tlmgr install collection-fontsrecommended
+        # latexmk and texlive-* packages are already provided by scheme-full above;
+        # installing them via apt would shadow TeX Live 2026 with older Ubuntu versions.
+        sudo apt install pdf2svg -y
         echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
         sudo apt-get install ttf-mscorefonts-installer
     - name: Compile the document
